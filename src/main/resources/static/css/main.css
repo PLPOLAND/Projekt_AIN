@@ -1,0 +1,124 @@
+:root{
+	--background-color: #0b006d;
+	--background-image: url(../img/1.PNG);
+}
+body{
+    background-color: #cccccc;
+    color: #f1f1f1;
+    font-size: large;
+    height: 100%;
+    margin: 0;
+}
+.background-container{
+	position: fixed;
+	display: block;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	top: 0;
+	left: 0;
+	background-image: var(--background-image);
+	background-size: cover; 
+	background-position: center;
+	background-color: #000000;
+	background-attachment: fixed;
+	filter: blur(10px);
+	transform: scale(1.1);
+}
+#contener{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+#visualization{
+    float: left;
+    width: calc(50% - 10px);
+    height: calc(100% - 10px);
+    padding: 5px;
+    /* background-color: #ff8f8f; */
+}
+#init_data{
+    float: right;
+    width: calc(50% - 20px);
+    height: calc(100% - 20px);
+    padding: 10px;
+    /* background-color: #bdffb7; */
+}
+#init_data > h1{
+    text-align: center;
+}
+#visualization  h1{
+    text-align: center;
+}
+
+
+
+#kwadraty{
+    background-color: #b8b7ff;
+    
+    max-width: 500px;
+    max-height: 500px;
+    width: 100%;
+
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+.row{
+    width: 100%;
+}
+.wiersz{
+    width: 100%;
+    margin-top: 5px;
+}
+.komorka{
+    background-color: red;
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: #000000;
+    float: left;
+}
+
+.active{
+    background-color: #80ff74;
+}
+.dead{
+    background-color: #ff4949;
+}
+
+#nav{
+    width: calc( 5 * 50px);
+    min-height: 50px;
+    margin: auto;
+}
+.multirunhide{
+    display: none;
+}
+.viz_button{
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    margin: 5px;
+    padding: 0;
+    background-color: #a5a5a5;
+    float: left;
+}
+.viz_button:hover{
+    background-color: #818181;
+}
+.viz_button:active{
+    background-color: #111111;
+    
+}
+#viz_number{
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0px;
+}
