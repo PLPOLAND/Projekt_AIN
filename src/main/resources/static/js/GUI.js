@@ -1,5 +1,11 @@
-const DEAD = "#FF1100";
-const ALIVE = "#00FF52";
+const DEAD = "#000000";
+const ALIVE = "#FFFFFF";
+const KOL = "#0000FF";
+const GOL = "#FF0000";
+const KOL2 = "#00FF00";
+const GOL2 = "#FFFF00";
+
+
 
 var size = 50;
 
@@ -13,8 +19,11 @@ $(document).ready(function () {
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
             t = Math.random();
-            if ( t < 0.1) {
-                koloruj(i, j, ALIVE);
+            if ( t < 0.2) {
+                koloruj(i, j, KOL);
+            } 
+            else if(t>=0.2  && t< 0.4){
+                koloruj(i,j,GOL);
             } else {
                 koloruj(i, j, DEAD);
             }

@@ -1,9 +1,9 @@
 // Uchwyty
 var sliderMultiRun;
 var sliderMultiNRun;
-var deadValue;
-var GLValue;
-var KLValue;
+var aliveProbability;
+var GLProbability;
+var KLProc;
 
 //!uchwyty
 
@@ -12,12 +12,12 @@ var playTimer;
 $(document).ready(function () {
     sliderMultiRun = $(".multirunhide");
     sliderMultiNRun = $(".multirunNhide");
-    deadValue = $("#dead_proc");
-    GLValue = $("#GoLLife");
-    KLValue = $("#KoLLife");
+    aliveProbability = $("#life"); 
+    GLProbability = $("#GoLLife");
+    KLProc = $("#KOL_proc");
 
 
-    uaktualnij_dead_value();
+    uaktualnij_KL_value();
     $("#viz_number").prop('max', parseInt($("#iteracji").val()));
 
     $("#multirun").click(function() {
@@ -30,31 +30,28 @@ $(document).ready(function () {
             show(sliderMultiNRun);
         }
     })
-    GLValue.change(function () {
-        var gl = parseFloat(GLValue.val(), 10);
-        var kl = parseFloat(KLValue.val(), 10);
-        if (gl+kl >= 1 ) {
-            gl = 1 - kl;
-            GLValue.val(roundTo(1 - kl, 2));
+    GLProbability.change(function () {//TODO
+        var gl = parseFloat(GLProbability.val(), 10);
+        if (gl>= 1 ) {
+            gl = 1;
+            GLProbability.val(1);
         }
-        else if  (gl + kl <0) {
+        else if  (gl <0) {
             gl = 0.01
-            GLValue.val(gl);
+            GLProbability.val(gl);
         }
-        uaktualnij_dead_value();
+        uaktualnij_KL_value();
     })
-    KLValue.change(function () {
-        var gl = parseFloat(GLValue.val(), 10);
-        var kl = parseFloat(KLValue.val(), 10);
-        if (gl + kl >= 1){ 
-            kl = 1 - kl;
-            KLValue.val(roundTo(1 - gl,2));
+    aliveProbability.change(function () {//TOD
+        var al = parseFloat(aliveProbability.val(), 10);
+        if (al >= 1){ 
+            ak = 1
+            aliveProbability.val(1);
         }
-        else if (gl + kl < 0) {
+        else if (al < 0) {
             kl = 0.01
-            KLValue.val(0.01);
+            aliveProbability.val(0.01);
         }
-        uaktualnij_dead_value();
     })
 
     $("#wymiar").keypress(function (e) {
@@ -140,7 +137,10 @@ $(document).ready(function () {
             for (let j = 0; j < size; j++) {
                 t = Math.random();
                 if (t < 0.2) {
-                    koloruj(i, j, ALIVE);
+                    koloruj(i, j, KOL);
+                }
+                else if (t >= 0.2 && t < 0.4) {
+                    koloruj(i, j, GOL);
                 } else {
                     koloruj(i, j, DEAD);
                 }
@@ -169,7 +169,10 @@ $(document).ready(function () {
             for (let j = 0; j < size; j++) {
                 t = Math.random();
                 if (t < 0.2) {
-                    koloruj(i, j, ALIVE);
+                    koloruj(i, j, KOL);
+                }
+                else if (t >= 0.2 && t < 0.4) {
+                    koloruj(i, j, GOL);
                 } else {
                     koloruj(i, j, DEAD);
                 }
@@ -190,7 +193,10 @@ $(document).ready(function () {
             for (let j = 0; j < size; j++) {
                 t = Math.random();
                 if (t < 0.2) {
-                    koloruj(i, j, ALIVE);
+                    koloruj(i, j, KOL);
+                }
+                else if (t >= 0.2 && t < 0.4) {
+                    koloruj(i, j, GOL);
                 } else {
                     koloruj(i, j, DEAD);
                 }
@@ -203,6 +209,16 @@ $(document).ready(function () {
     $("#stop").click(function(){
         clearTimeout(playTimer);
     })
+    $("#sym_type").change(function() {
+        // alert(); 
+        if ($("#sym_type option:selected").val() == 2) {
+            $(".sym_type_hide").show();
+        }
+        else{
+            $(".sym_type_hide").hide();
+        }
+    })
+    $("#sym_type").change();
 });
 function play(){
     $("#viz_number").val(parseInt($("#viz_number").val(), 10) + 1)
@@ -216,7 +232,10 @@ function play(){
         for (let j = 0; j < size; j++) {
             t = Math.random();
             if (t < 0.2) {
-                koloruj(i, j, ALIVE);
+                koloruj(i, j, KOL);
+            }
+            else if (t >= 0.2 && t < 0.4) {
+                koloruj(i, j, GOL);
             } else {
                 koloruj(i, j, DEAD);
             }
@@ -224,10 +243,9 @@ function play(){
     }
     playTimer = setTimeout(play, parseInt($("#speed").val()));
 }
-function uaktualnij_dead_value(){
-    var gl = parseFloat(GLValue.val(),10);
-    var kl = parseFloat(KLValue.val(),10)
-    deadValue.html(roundTo(1 - (gl + kl),2));
+function uaktualnij_KL_value(){//TODO
+    var gl = parseFloat(GLProbability.val(),10);
+    KLProc.html(roundTo(1 - gl,2));
 }
 
 function changeActive(disable,butt) {
