@@ -133,19 +133,7 @@ $(document).ready(function () {
             $(this).val($(this).prop('min'))
         }
 
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                t = Math.random();
-                if (t < 0.2) {
-                    koloruj(i, j, KOL);
-                }
-                else if (t >= 0.2 && t < 0.4) {
-                    koloruj(i, j, GOL);
-                } else {
-                    koloruj(i, j, DEAD);
-                }
-            }
-        }
+        randomujkolory();
     });
     $("#seed_rand").change(function(){
         changeActive($("#seed"), $(this))
@@ -165,19 +153,7 @@ $(document).ready(function () {
             $("#viz_number").val($("#viz_number").prop('min'))
             return;
         }
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                t = Math.random();
-                if (t < 0.2) {
-                    koloruj(i, j, KOL);
-                }
-                else if (t >= 0.2 && t < 0.4) {
-                    koloruj(i, j, GOL);
-                } else {
-                    koloruj(i, j, DEAD);
-                }
-            }
-        }
+        randomujkolory();
     })
     $("#right").click(function(){
         $("#viz_number").val(parseInt($("#viz_number").val(),10)+1)
@@ -189,19 +165,7 @@ $(document).ready(function () {
             $("#viz_number").val($("#viz_number").prop('min'))
             return;
         }
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                t = Math.random();
-                if (t < 0.2) {
-                    koloruj(i, j, KOL);
-                }
-                else if (t >= 0.2 && t < 0.4) {
-                    koloruj(i, j, GOL);
-                } else {
-                    koloruj(i, j, DEAD);
-                }
-            }
-        }
+        randomujkolory();
     })
     $("#play").click(function () {
         playTimer = setTimeout(play, parseInt($("#speed").val()));
@@ -218,6 +182,12 @@ $(document).ready(function () {
             $(".sym_type_hide").hide();
         }
     })
+    
+    
+    $(".komorka").click(function(){
+        changeAlgoType($(this));
+    });
+    
     $("#sym_type").change();
 });
 function play(){
@@ -228,19 +198,7 @@ function play(){
         return;
     }
 
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            t = Math.random();
-            if (t < 0.2) {
-                koloruj(i, j, KOL);
-            }
-            else if (t >= 0.2 && t < 0.4) {
-                koloruj(i, j, GOL);
-            } else {
-                koloruj(i, j, DEAD);
-            }
-        }
-    }
+    randomujkolory()
     playTimer = setTimeout(play, parseInt($("#speed").val()));
 }
 function uaktualnij_KL_value(){//TODO
@@ -268,4 +226,16 @@ function hide(what) {
 function roundTo(value, places) {
     var power = Math.pow(10, places);
     return Math.round(value * power) / power;
+}
+
+function changeAlgoType(element) {
+    if (!$("#manual").prop("checked"))
+        return;
+    tmp = parseInt(element.prop("algo"),10);
+    tmp += 1;
+    if (tmp>2) {
+        tmp = 0;
+    }
+    element.prop("algo",tmp)
+    kolorujEl2(element,tmp);
 }

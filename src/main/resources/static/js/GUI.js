@@ -1,13 +1,13 @@
 const DEAD = "#000000";
 const ALIVE = "#FFFFFF";
-const KOL = "#0000FF";
-const GOL = "#FF0000";
-const KOL2 = "#00FF00";
-const GOL2 = "#FFFF00";
+const KL = "#0000FF";
+const GL = "#FF0000";
+const KL2 = "#00FF00";
+const GL2 = "#FFFF00";
 
 
 
-var size = 50;
+var size = 10;
 
 
 
@@ -15,23 +15,12 @@ $(document).ready(function () {
     $(window).resize(function(){$("#kwadraty").css("height", $("#kwadraty").css("width"))});
     $(window).resize(function(){ustaw_wymiary_komorek(size,size)})
     $("#kwadraty").css("height", $("#kwadraty").css("width"));
-    podziel_na_komorki(size,size);
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            t = Math.random();
-            if ( t < 0.2) {
-                koloruj(i, j, KOL);
-            } 
-            else if(t>=0.2  && t< 0.4){
-                koloruj(i,j,GOL);
-            } else {
-                koloruj(i, j, DEAD);
-            }
-        }
-    }
+    podziel_na_komorki(size);
+    randomujkolory();
     
 });
-function podziel_na_komorki(x,y) {
+function podziel_na_komorki(x) {
+    y = x;
     $("#kwadraty").children().remove();
     for (let i = 0; i < x; i++) {
         row =$('<div class="row"></div>')
@@ -58,10 +47,14 @@ function podziel_na_komorki(x,y) {
 function ustaw_wymiary_komorek(x,y){
     $(".komorka").css("height",( $("#kwadraty").height() /y )- 2);
     $(".komorka").css("width", ($("#kwadraty").width() /x)- 2);
-    // console.log($(".komorka"));
-    // console.log($("#kwadraty").height() / y);
 }
 
+/**
+ * 
+ * @param {Number} x - wspolrzedna komorki x
+ * @param {Number} y - wspolrzedna komorki y
+ * @param {*} kolor - kolor hex
+ */
 function koloruj(x,y,kolor) {
     id = "";
     if (x < 10) {
@@ -77,4 +70,71 @@ function koloruj(x,y,kolor) {
     // console.log(kolor);
     $("#"+id).css("background-color",kolor)
 
+}
+/**
+ * 
+ * @param {*} element - element do pokolorwania
+ * @param {*} kolor - kolor hex
+ */
+function kolorujEl(element,kolor) {
+    element.css("background-color",kolor)
+}
+function kolorujEl2(element,type) {
+    switch (type) {
+        case 0:
+            element.css("background-color", DEAD)
+            break;
+    
+        case 1:
+            element.css("background-color", GL)
+            break;
+    
+        case 2:
+            element.css("background-color", KL)
+            break;
+        
+        case 3:
+            element.css("background-color", GL2)
+            break;
+        
+        case 4:
+            element.css("background-color", KL2)
+            break;
+        
+        default:
+            break;
+    }
+}
+function getCell(x,y){
+    id = "";
+    if (x < 10) {
+        id = id + "0" + x;
+    }
+    else
+        id = id + x;
+    if (y < 10) {
+        id = id + "0" + y;
+    }
+    else
+        id = id + y;
+    return id;
+}
+
+function randomujkolory() {
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            t = Math.random();
+            if (t < 0.2) {
+                koloruj(i, j, KL);
+                $("#" + getCell(i,j)).prop("algo", "2");
+            }
+            else if (t >= 0.2 && t < 0.4) {
+                koloruj(i, j, GL);
+                $("#" + getCell(i,j)).prop("algo", "1");
+            } else {
+                koloruj(i, j, DEAD);
+                $("#" + getCell(i,j)).prop("algo", "0");
+            }
+        }
+    }
 }
