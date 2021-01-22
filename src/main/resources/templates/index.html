@@ -41,7 +41,7 @@
             <div class="wiersz">N: <input id="wymiar" name="wymiar" type="number" min="2" max="100" value="10"><button id="setSize">Ustaw</button></div>
             <div class="wiersz">Max iteration number: <input id="iteracji" name="iteracji" type="number" min="1" value="100"></div>
             <div class="wiersz">Seed: <input id="seed" name="seed" type="number" min = "0" value="1"> <label><input id="seed_rand" type ="checkbox" title="random"> random</label></div>
-            <div class="wiersz"><label>Ustaw wartości ręcznie<input id="manual" type ="checkbox" title="Ustaw wartości ręcznie"></label></div>
+            <div class="wiersz"><label>Set cells manual<input id="manual" type ="checkbox" title="Set cells manual"></label></div>
             <div class="wiersz">Algorithm: 
                 <select name="sym_type" id="sym_type">
                     <option value="0">Game of Life</option>
@@ -49,7 +49,7 @@
                     <option value="2">Competition for living space</option>
                 </select>
             </div>
-            <div class="wiersz"><h3>Probability</h3></div>
+            <!-- <div class="wiersz"><h3>Probability</h3></div> -->
             <div class="wiersz">Probability to be alive: <input name="life" id="life" type="number" step="0.01" min="0" max="1" value="0.2"></div>
             <div class="wiersz sym_type_hide">Probability to become Game of Life: <input name="GoLLife" id="GoLLife" type="number" step="0.01" min="0" max="1"  value="0.2"></div>
             <div class="wiersz sym_type_hide">Probability to become Kaleidoscope of Life: <span id="KOL_proc"></span></div>
