@@ -1,6 +1,8 @@
 package ca.algorithms;
 import java.util.Random;
-
+/**
+ * @author Bartłomiej Kozłowski
+ */
 public class CellularAutomata {
 
     /**
