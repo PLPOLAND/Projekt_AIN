@@ -7,6 +7,8 @@ var KLProc;
 
 //!uchwyty
 
+
+var vizData;
 var playTimer;
 
 $(document).ready(function () {
@@ -106,7 +108,7 @@ $(document).ready(function () {
         if(parseInt($(this).val(), 10) < $(this).prop('min')){
             $(this).val($(this).prop('min'))
         }
-        $("#viz_number").prop('max', parseInt($(this).val()));
+        $("#viz_number").prop('max', parseInt($(this).val() - 1));
     });
     
     $("#multirun_num").change(function (e) {
@@ -133,7 +135,7 @@ $(document).ready(function () {
             $(this).val($(this).prop('min'))
         }
 
-        randomujkolory();
+        kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
     });
     $("#seed_rand").change(function(){
         changeActive($("#seed"), $(this))
@@ -153,7 +155,7 @@ $(document).ready(function () {
             $("#viz_number").val($("#viz_number").prop('min'))
             return;
         }
-        randomujkolory();
+        kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
     })
     $("#right").click(function(){
         $("#viz_number").val(parseInt($("#viz_number").val(),10)+1)
@@ -165,7 +167,7 @@ $(document).ready(function () {
             $("#viz_number").val($("#viz_number").prop('min'))
             return;
         }
-        randomujkolory();
+        kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
     })
     $("#play").click(function () {
         playTimer = setTimeout(play, parseInt($("#speed").val()));
@@ -188,6 +190,10 @@ $(document).ready(function () {
         changeAlgoType($(this));
     });
     
+    $("#start").click(function() {
+       glParam(); 
+    });
+
     $("#sym_type").change();
 });
 function play(){
@@ -198,7 +204,7 @@ function play(){
         return;
     }
 
-    randomujkolory()
+    kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
     playTimer = setTimeout(play, parseInt($("#speed").val()));
 }
 function uaktualnij_KL_value(){//TODO
@@ -238,4 +244,23 @@ function changeAlgoType(element) {
     }
     element.prop("algo",tmp)
     kolorujEl2(element,tmp);
+}
+
+function glParam() {
+    $.ajax({
+        url: "/api/glparam",
+        type: 'get',
+        data: {
+            seed : $("#seed").val(),
+            N: $("#wymiar").val(),
+            iter : $("#iteracji").val(),
+            prob: aliveProbability.val()
+        },
+        success: function (response) {
+            console.log(response);
+            vizData = response;
+            kolorujzDanych(vizData,5,0);
+        }
+    });
+
 }

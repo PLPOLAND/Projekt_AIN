@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-
+import ca.CASymulation;
+import ca.algorithms.CellularAutomata;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,5 +21,14 @@ import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping("/api")
 public class MainRESTController {
+    CellularAutomata ca = new CellularAutomata();
+    @RequestMapping("/glparam")
+    public int[][][] glParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter, @RequestParam("prob") double prob) {
+        return ca.gl(prob, n, iter, seed);
+    }
+    @RequestMapping("/gl")
+    public int[][][] gl(@RequestParam("iter") int iter, @RequestParam("tab") int[][] tab) {
+        return ca.gl(tab,iter);
+    }
 
 }

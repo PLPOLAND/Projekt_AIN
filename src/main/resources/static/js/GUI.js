@@ -7,7 +7,7 @@ const GL2 = "#FFFF00";
 
 
 
-var size = 10;
+var size = 5;
 
 
 
@@ -135,6 +135,15 @@ function randomujkolory() {
                 koloruj(i, j, DEAD);
                 $("#" + getCell(i,j)).prop("algo", "0");
             }
+        }
+    }
+}
+
+function kolorujzDanych(dane,N, iteracja) {
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            kolorujEl2($("#" + getCell(i, j)), dane[iteracja][i][j]);
+            $("#" + getCell(i, j)).prop("algo", dane[iteracja][i][j]);
         }
     }
 }
