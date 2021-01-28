@@ -1,11 +1,19 @@
 package ca.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,13 +30,54 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/api")
 public class MainRESTController {
     CellularAutomata ca = new CellularAutomata();
+
     @RequestMapping("/glparam")
-    public int[][][] glParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter, @RequestParam("prob") double prob) {
+    public int[][][] glParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
+            @RequestParam("prob") double prob) {
         return ca.gl(prob, n, iter, seed);
     }
-    @RequestMapping("/gl")
-    public int[][][] gl(@RequestParam("iter") int iter, @RequestParam("tab") int[][] tab) {
-        return ca.gl(tab,iter);
+
+    @RequestMapping(value = "gl", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public int[][][] gl(@RequestParam("iter") int iter, @RequestParam("tab") String tab) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        int[][] tmp;
+        try {
+            tmp = mapper.readValue(tab, int[][].class);
+            return ca.gl(tmp,iter);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @RequestMapping("/klparam")
+    public int[][][] klParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
+            @RequestParam("prob") double prob) {
+        return ca.kl(prob, n, iter, seed);
+    }
+
+    @RequestMapping(value = "kl", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public int[][][] kl(@RequestParam("iter") int iter, @RequestParam("tab") String tab) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        int[][] tmp;
+        try {
+            tmp = mapper.readValue(tab, int[][].class);
+            return ca.kl(tmp,iter);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

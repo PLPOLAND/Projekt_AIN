@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     uaktualnij_KL_value();
     $("#viz_number").prop('max', parseInt($("#iteracji").val()));
-
+    $("#wymiar").val(size);
     $("#multirun").click(function() {
         if ($("#multirun").prop('checked')) {
             show(sliderMultiRun);
@@ -144,6 +144,18 @@ $(document).ready(function () {
         n = parseInt($("#wymiar").val(),10);
         size = n;
         podziel_na_komorki(n,n);
+
+        dane = [];
+        dane[0] = [];
+        for (let i = 0; i < n; i++) {
+            dane[0][i] = [];
+            for (let j = 0; j < n; j++) {
+                dane[0][i][j] = 0;
+                
+            }
+        }
+
+        kolorujzDanych(dane,size,0);
     })
     $("#left").click(function(){
         $("#viz_number").val(parseInt($("#viz_number").val(),10)-1)
@@ -187,11 +199,29 @@ $(document).ready(function () {
     
     
     $(".komorka").click(function(){
-        changeAlgoType($(this));
+        changeAlgoTypeOfCell_Viz($(this));
     });
     
     $("#start").click(function() {
-       glParam(); 
+        if ($("#sym_type option:selected").val() == 0){
+            if ($("#manual").prop("checked")) {
+                gl();
+            }
+            else {
+                glParam(); 
+            }
+        }
+        else if ($("#sym_type option:selected").val() == 1){
+            if ($("#manual").prop("checked")) {
+                kl();
+            }
+            else {
+                klParam();
+            }
+        }
+        else if ($("#sym_type option:selected").val() == 2){
+
+        }
     });
 
     $("#sym_type").change();
@@ -234,7 +264,7 @@ function roundTo(value, places) {
     return Math.round(value * power) / power;
 }
 
-function changeAlgoType(element) {
+function changeAlgoTypeOfCell_Viz(element) {
     if (!$("#manual").prop("checked"))
         return;
     tmp = parseInt(element.prop("algo"),10);
@@ -263,4 +293,73 @@ function glParam() {
         }
     });
 
+}
+function gl(){
+    console.log(readCells());
+    $.ajax({
+        url: "/api/gl",
+        type: 'get',
+        data: {
+            iter: $("#iteracji").val(),
+            tab: JSON.stringify(readCells())
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            vizData = response;
+            kolorujzDanych(vizData, 5, 0);
+        }
+    });
+}
+function klParam() {
+    $.ajax({
+        url: "/api/klparam",
+        type: 'get',
+        data: {
+            seed : $("#seed").val(),
+            N: $("#wymiar").val(),
+            iter : $("#iteracji").val(),
+            prob: aliveProbability.val()
+        },
+        success: function (response) {
+            console.log(response);
+            vizData = response;
+            kolorujzDanych(vizData,5,0);
+        }
+    });
+
+}
+function kl(){
+    $.ajax({
+        url: "/api/kl",
+        type: 'get',
+        data: {
+            iter: $("#iteracji").val(),
+            tab: JSON.stringify(readCells())
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            console.log(response);
+            vizData = response;
+            kolorujzDanych(vizData, 5, 0);
+        }
+    });
+}
+/**
+ * 
+ */
+ function readCells() {
+    N = $("#wymiar").val();
+    dane = [];
+    for (let i = 0; i < N; i++) {
+        dane[i] = [];
+        for (let j = 0; j < N; j++) {
+            dane[i][j] = parseInt($("#" + getCell(i, j)).prop("algo"));
+        }
+    }
+    console.log(dane);
+    return dane;
 }

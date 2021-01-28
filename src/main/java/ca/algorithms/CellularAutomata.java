@@ -74,8 +74,15 @@ public class CellularAutomata {
      */
     public int[][][] gl(int[][] tab, int i){
         int n = tab[0].length;
+        
+        // Przepisanie danych do nowej tablicy ( potrzebne żeby działało ;) )
         int[][][] tab2 =new int[i][n][n];
-        tab2[i] = tab;
+        tab2[i-1] = tab;
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                tab2[0][x][y] = tab[x][y];
+            }
+        }
         //gen - generation
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
@@ -139,7 +146,13 @@ public class CellularAutomata {
     public int[][][] kl(int[][] tab, int i){
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
-
+        //Przepisanie danych do nowej tablicy
+        tab2[i - 1] = tab;
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                tab2[0][x][y] = tab[x][y];
+            }
+        }
         for (int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
