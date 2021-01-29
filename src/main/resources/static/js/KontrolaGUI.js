@@ -137,8 +137,8 @@ $(document).ready(function () {
 
         kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
     });
-    $("#seed_rand").change(function(){
-        changeActive($("#seed"), $(this))
+    $("#seed_rand").click(function(){
+        $("#seed").val(Math.floor(Math.random()*1000000000));
     })
     $("#setSize").click(function(){
         n = parseInt($("#wymiar").val(),10);
@@ -265,14 +265,40 @@ function roundTo(value, places) {
 }
 
 function changeAlgoTypeOfCell_Viz(element) {
-    if (!$("#manual").prop("checked"))
+    if (!$("#manual").prop("checked")){
         return;
-    tmp = parseInt(element.prop("algo"),10);
-    tmp += 1;
-    if (tmp>2) {
-        tmp = 0;
     }
-    element.prop("algo",tmp)
+    tmp = parseInt(element.prop("algo"),10);
+    if ($("#sym_type option:selected").val() == 0) {
+        console.log("0");
+        console.log(tmp);
+        if (tmp == 0) {
+            element.prop("algo",1);
+        }
+        else{
+            element.prop("algo", 0);
+        }
+    }
+    else if ($("#sym_type option:selected").val() == 1){
+        console.log("1");
+        console.log(tmp);
+        if (tmp == 0) {
+            element.prop("algo", 2);
+        }
+        else {
+            element.prop("algo", 0);
+        }
+    }
+    else{
+        console.log("2");
+        console.log(tmp);
+        tmp += 1;
+        if (tmp>5) {
+            tmp = 0;
+        }
+        element.prop("algo",tmp)
+    }
+    tmp = parseInt(element.prop("algo"), 10);
     kolorujEl2(element,tmp);
 }
 
@@ -287,9 +313,20 @@ function glParam() {
             prob: aliveProbability.val()
         },
         success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.html("Odebrano dane do wizualizacji");
+            msgbox.show(500);
+            setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData,5,0);
+        },
+        fail: function(){
+            alert();
+            msgbox = $("#msgWindow");
+            msgbox.html = response.error + ": " +response.message;
+            msgbox.show(500);
+            setTimeout(hideMsgBox,5000);
         }
     });
 
@@ -306,9 +343,20 @@ function gl(){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.html("Odebrano dane do wizualizacji");
+            msgbox.show(500);
+            setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData, 5, 0);
+        },
+        fail: function(){
+            alert();
+            msgbox = $("#msgWindow");
+            msgbox.html = response.error + ": " +response.message;
+            msgbox.show(500);
+            setTimeout(hideMsgBox,5000);
         }
     });
 }
@@ -323,9 +371,20 @@ function klParam() {
             prob: aliveProbability.val()
         },
         success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.html("Odebrano dane do wizualizacji");
+            msgbox.show(500);
+            setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData,5,0);
+        },
+        fail: function(){
+            alert();
+            msgbox = $("#msgWindow");
+            msgbox.html = response.error + ": " +response.message;
+            msgbox.show(500);
+            setTimeout(hideMsgBox,5000);
         }
     });
 
@@ -342,11 +401,25 @@ function kl(){
         dataType: "json",
 
         success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.html("Odebrano dane do wizualizacji");
+            msgbox.show(500);
+            setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData, 5, 0);
+        },
+        done: function(){
+            alert();
+            msgbox = $("#msgWindow");
+            msgbox.html = response.error + ": " +response.message;
+            msgbox.show(500);
+            setTimeout(hideMsgBox,5000);
         }
     });
+}
+function hideMsgBox() {
+    $("#msgWindow").hide(500);
 }
 /**
  * 

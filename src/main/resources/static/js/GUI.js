@@ -2,8 +2,9 @@ const DEAD = "#000000";
 const ALIVE = "#FFFFFF";
 const KL = "#0000FF";
 const GL = "#FF0000";
-const KL2 = "#00FF00";
+const KL2 = "#AA00FF";
 const GL2 = "#FFFF00";
+const GL3 = "#00FF00";
 
 
 
@@ -16,8 +17,8 @@ $(document).ready(function () {
     $(window).resize(function(){ustaw_wymiary_komorek(size,size)})
     $("#kwadraty").css("height", $("#kwadraty").css("width"));
     podziel_na_komorki(size);
-    randomujkolory();
-    
+    // randomujkolory();
+    clear(size);
 });
 function podziel_na_komorki(x) {
     y = x;
@@ -98,6 +99,10 @@ function kolorujEl2(element,type) {
             break;
         
         case 4:
+            element.css("background-color", GL3)
+            break;
+        
+        case 5:
             element.css("background-color", KL2)
             break;
         
@@ -144,6 +149,14 @@ function kolorujzDanych(dane,N, iteracja) {
         for (let j = 0; j < N; j++) {
             kolorujEl2($("#" + getCell(i, j)), dane[iteracja][i][j]);
             $("#" + getCell(i, j)).prop("algo", dane[iteracja][i][j]);
+        }
+    }
+}
+function clear(N) {
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            kolorujEl2($("#" + getCell(i, j)), 0);
+            $("#" + getCell(i, j)).prop("algo", 0);
         }
     }
 }

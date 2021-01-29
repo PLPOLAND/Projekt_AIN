@@ -24,7 +24,7 @@ body{
 	background-position: center;
 	background-color: #000000;
 	background-attachment: fixed;
-	filter: blur(10px);
+	/* filter: blur(10px); */
 	transform: scale(1.1);
 }
 #contener{
@@ -80,7 +80,7 @@ body{
     background-color: red;
     border-width: 1px;
     border-style: solid;
-    border-color: #000000;
+    border-color: #0f0f0f;
     float: left;
 }
 
@@ -122,4 +122,18 @@ body{
     padding: 0;
     margin: 0;
     border: 0px;
+}
+
+#msgWindow{
+    display: none;
+    position: absolute;
+    z-index: 10;
+    left: 25%;
+    top: calc(50% - 25px);
+    padding: 5px;
+    height: 40px;
+    width: 50%;
+    background-color: #80ff74;
+    text-align: center;
+    color: #000000;
 }
