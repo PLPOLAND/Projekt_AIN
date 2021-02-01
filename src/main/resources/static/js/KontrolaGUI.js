@@ -314,20 +314,21 @@ function glParam() {
         },
         success: function (response) {
             msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
             msgbox.html("Odebrano dane do wizualizacji");
             msgbox.show(500);
             setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData,5,0);
-        },
-        fail: function(){
-            alert();
-            msgbox = $("#msgWindow");
-            msgbox.html = response.error + ": " +response.message;
-            msgbox.show(500);
-            setTimeout(hideMsgBox,5000);
         }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
     });
 
 }
@@ -343,21 +344,23 @@ function gl(){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
-            msgbox = $("#msgWindow")
-            msgbox.html("Odebrano dane do wizualizacji");
-            msgbox.show(500);
-            setTimeout(hideMsgBox,3000);
+            msgbox = $("#msgWindow");//uchwyt
+            msgbox.css("background-color", "#00FF00");
+            msgbox.html("Odebrano dane do wizualizacji");//msg
+            msgbox.show(500);//show
+            setTimeout(hideMsgBox,3000);//hide
+
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData, 5, 0);
         },
-        fail: function(){
-            alert();
-            msgbox = $("#msgWindow");
-            msgbox.html = response.error + ": " +response.message;
-            msgbox.show(500);
-            setTimeout(hideMsgBox,5000);
-        }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
     });
 }
 function klParam() {
@@ -372,20 +375,21 @@ function klParam() {
         },
         success: function (response) {
             msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
             msgbox.html("Odebrano dane do wizualizacji");
             msgbox.show(500);
             setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData,5,0);
-        },
-        fail: function(){
-            alert();
-            msgbox = $("#msgWindow");
-            msgbox.html = response.error + ": " +response.message;
-            msgbox.show(500);
-            setTimeout(hideMsgBox,5000);
         }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
     });
 
 }
@@ -402,20 +406,21 @@ function kl(){
 
         success: function (response) {
             msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
             msgbox.html("Odebrano dane do wizualizacji");
             msgbox.show(500);
             setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData, 5, 0);
-        },
-        done: function(){
-            alert();
-            msgbox = $("#msgWindow");
-            msgbox.html = response.error + ": " +response.message;
-            msgbox.show(500);
-            setTimeout(hideMsgBox,5000);
         }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
     });
 }
 function hideMsgBox() {
