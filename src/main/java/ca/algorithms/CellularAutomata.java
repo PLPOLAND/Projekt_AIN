@@ -33,22 +33,26 @@ public class CellularAutomata {
      * @param tab - tablica zawierająca dane pokolenie CA
      * @param i - wiersz w tab wskazujący komórkę dla której liczymy sąsiedztwo
      * @param j- kolumna w tab wskazujący komórkę dla której liczymy sąsiedztwo
+     * @param d - promień sąsiedztwa dookoła komórki
      * @return metoda zwraca tablicę, w której na miejscu 0 jest liczba białych komórek w sąsiedztwie,
      * na 1 czerwonych na 2 niebieskich na 3 żółtych, a na 4 zielonych
      */
-    private int[] mooreN(int[][] tab, int i, int j){
+    private int[] mooreN(int[][] tab, int i, int j, int d){
         int n = tab[0].length;
         int[] ans = new int[5];
-        for(int k=i-2; k <=i+2; k++){
-            for(int l=j-2; l <=j+2; l++){
-                if((k==i)&& (l==i)) continue;
+        for(int k=i-d; k <=i+d; k++){
+            for(int l=j-d; l <=j+d; l++){
+                if((k==i)&& (l==j)) continue;
 
-                if((k<0) && (l<0)) ans[tab[n+k][n+l]]++;
-                else if (k<0) ans[tab[n+k][l]]++;
-                else if (l<0) ans[tab[n][n+l]]++;
-                else if ((k>=n) && (l>=n)) ans[tab[k-n][l-n]]++;
-                else if (k>=n) ans[tab[k-n][l]]++;
-                else if (l>=n) ans[tab[k][l-n]]++;
+                int x, y;
+                if(k<0) x = n+k;
+                else if(k>=n) x = k-n;
+                else x = k;
+
+                if(l<0) y = n+l;
+                else if(l>=n) y = l-n;
+                else y = l;
+                ans[tab[x][y]]++;
             }
         }
         return ans;
@@ -87,7 +91,8 @@ public class CellularAutomata {
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
-                    int[] tmp = vonNeumanN(tab2[gen-1], k, l);
+                    //int[] tmp = vonNeumanN(tab2[gen-1], k, l);
+                    int[] tmp = mooreN(tab2[gen-1], k, l, 1);
                     //jeśli aktualnie sprawdzana komórka jest czerwona
                     if(tab2[gen-1][k][l] == 1){
                         if((tmp[1] == 2) || (tmp[1] == 3))
@@ -119,7 +124,8 @@ public class CellularAutomata {
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
-                    int[] tmp = vonNeumanN(tab2[gen-1], k, l);
+                    //int[] tmp = vonNeumanN(tab2[gen-1], k, l);
+                    int[] tmp = mooreN(tab2[gen-1], k, l, 1);
                     //jeśli aktualnie sprawdzana komórka jest czerwona
                     if(tab2[gen-1][k][l] == 1){
                         if((tmp[1] == 2) || (tmp[1] == 3))
@@ -156,7 +162,7 @@ public class CellularAutomata {
         for (int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
-                    int[] tmp = mooreN(tab2[gen-1], k, l);
+                    int[] tmp = mooreN(tab2[gen-1], k, l, 2);
 
                     if(tmp[2] == 4) tab2[gen][k][l] = 2;
                     else tab2[gen][k][l] = 0;
@@ -181,7 +187,7 @@ public class CellularAutomata {
         for (int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
-                    int[] tmp = mooreN(tab2[gen-1], k, l);
+                    int[] tmp = mooreN(tab2[gen-1], k, l, 2);
 
                     if(tmp[2] == 4) tab2[gen][k][l] = 2;
                     else tab2[gen][k][l] = 0;
