@@ -38,17 +38,28 @@ public class CellularAutomata {
      */
     private int[] mooreN(int[][] tab, int i, int j){
         int n = tab[0].length;
+       // int end = n-1;
         int[] ans = new int[5];
         for(int k=i-2; k <=i+2; k++){
             for(int l=j-2; l <=j+2; l++){
-                if((k==i)&& (l==i)) continue;
+                if((k==i)&& (l==j)) continue;
 
-                if((k<0) && (l<0)) ans[tab[n+k][n+l]]++;
+                int x, y;
+                if(k<0) x = n+k;
+                else if(k>=n) x = k-n;
+                else x = k;
+
+                if(l<0) y = n+l;
+                else if(l>=n) y = l-n;
+                else y = l;
+                ans[tab[x][y]]++;
+
+                /*if((k<0) && (l<0)) ans[tab[n+k][n+l]]++;
                 else if (k<0) ans[tab[n+k][l]]++;
-                else if (l<0) ans[tab[n][n+l]]++;
+                else if (l<0) ans[tab[k][n+l]]++;
                 else if ((k>=n) && (l>=n)) ans[tab[k-n][l-n]]++;
                 else if (k>=n) ans[tab[k-n][l]]++;
-                else if (l>=n) ans[tab[k][l-n]]++;
+                else if (l>=n) ans[tab[k][l-n]]++;*/
             }
         }
         return ans;
