@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import ca.CASymulation;
 import ca.algorithms.CellularAutomata;
+import ca.controller.data.fromVizData;
 import pngReader.Png;
 import pngReader.PngImage;
 
@@ -43,22 +44,9 @@ public class MainRESTController {
     }
 
     @RequestMapping(value = "gl", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public int[][][] gl(@RequestParam("iter") int iter, @RequestParam("tab") String tab) {
-
-        ObjectMapper mapper = new ObjectMapper();
-        int[][] tmp;
-        try {
-            tmp = mapper.readValue(tab, int[][].class);
-            return ca.gl(tmp,iter);
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    
+    public int[][][] gl(@RequestBody fromVizData data) {
+        return ca.gl(data.getTab(),data.getIter());
     }
     @RequestMapping("/klparam")
     public int[][][] klParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
@@ -67,23 +55,12 @@ public class MainRESTController {
     }
 
     @RequestMapping(value = "kl", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public int[][][] kl(@RequestParam("iter") int iter, @RequestParam("tab") String tab) {
+    
+    public int[][][] kl(@RequestBody fromVizData data) {
 
-        ObjectMapper mapper = new ObjectMapper();
-        int[][] tmp;
-        try {
-            tmp = mapper.readValue(tab, int[][].class);
-            return ca.kl(tmp,iter);
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return ca.kl(data.getTab(), data.getIter());
     }
+    
     @PostMapping(value = "png", consumes = MediaType.APPLICATION_JSON_VALUE)
     public boolean png(@RequestBody String tab){
         ObjectMapper mapper = new ObjectMapper();

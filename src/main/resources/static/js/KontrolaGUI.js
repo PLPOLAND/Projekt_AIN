@@ -156,6 +156,9 @@ $(document).ready(function () {
         }
 
         kolorujzDanych(dane,size,0);
+        $(".komorka").click(function () {
+            changeAlgoTypeOfCell_Viz($(this));
+        });
     })
     $("#left").click(function(){
         $("#viz_number").val(parseInt($("#viz_number").val(),10)-1)
@@ -324,7 +327,8 @@ function glParam() {
             setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
-            kolorujzDanych(vizData,5,0);
+            kolorujzDanych(vizData, $("#wymiar").val(),0);
+            $("#viz_number").val(0);
         }
     }).fail(function (jqXHR, exception) {
         console.log(jqXHR.responseJSON.error);
@@ -340,11 +344,11 @@ function gl(){
     console.log(readCells());
     $.ajax({
         url: "/api/gl",
-        type: 'get',
-        data: {
-            iter: $("#iteracji").val(),
-            tab: JSON.stringify(readCells())
-        },
+        type: 'post',
+        data: JSON.stringify({
+            iter: parseInt($("#iteracji").val()),
+            tab: readCells()
+        }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
@@ -356,7 +360,8 @@ function gl(){
 
             console.log(response);
             vizData = response;
-            kolorujzDanych(vizData, 5, 0);
+            kolorujzDanych(vizData, $("#wymiar").val(), 0);
+            $("#viz_number").val(0);
         },
     }).fail(function (jqXHR, exception) {
         console.log(jqXHR.responseJSON.error);
@@ -385,7 +390,8 @@ function klParam() {
             setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
-            kolorujzDanych(vizData,5,0);
+            kolorujzDanych(vizData, $("#wymiar").val(),0);
+            $("#viz_number").val(0);
         }
     }).fail(function (jqXHR, exception) {
         console.log(jqXHR.responseJSON.error);
@@ -400,11 +406,11 @@ function klParam() {
 function kl(){
     $.ajax({
         url: "/api/kl",
-        type: 'get',
-        data: {
-            iter: $("#iteracji").val(),
-            tab: JSON.stringify(readCells())
-        },
+        type: 'post',
+        data: JSON.stringify({
+            iter: parseInt($("#iteracji").val()),
+            tab: readCells()
+        }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
 
@@ -416,7 +422,8 @@ function kl(){
             setTimeout(hideMsgBox,3000);
             console.log(response);
             vizData = response;
-            kolorujzDanych(vizData, 5, 0);
+            kolorujzDanych(vizData, $("#wymiar").val(), 0);
+            $("#viz_number").val(0);
         }
     }).fail(function (jqXHR, exception) {
         console.log(jqXHR.responseJSON.error);
