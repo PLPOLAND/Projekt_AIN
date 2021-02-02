@@ -224,6 +224,10 @@ $(document).ready(function () {
         }
     });
 
+    $("#savePngButt").click(function () {
+        png();
+    })
+
     $("#sym_type").change();
 });
 function play(){
@@ -413,6 +417,31 @@ function kl(){
             console.log(response);
             vizData = response;
             kolorujzDanych(vizData, 5, 0);
+        }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
+    });
+}
+function png(){
+    $.ajax({
+        url: "/api/png",
+        type: 'post',
+        data: JSON.stringify(readCells()),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
+            msgbox.html("PNG zapisane");
+            msgbox.show(500);
+            setTimeout(hideMsgBox,3000);
+            console.log(response);
         }
     }).fail(function (jqXHR, exception) {
         console.log(jqXHR.responseJSON.error);
