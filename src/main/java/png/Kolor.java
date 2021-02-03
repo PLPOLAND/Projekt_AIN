@@ -1,4 +1,4 @@
-package pngReader;
+package png;
 
 import java.awt.Color;
 public class Kolor {

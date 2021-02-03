@@ -1,6 +1,6 @@
-package pngReader;
+package png;
 
-import pngReader.PngImage.Type;
+import png.PngImage.Type;
 
 public class PngModifayer {
     

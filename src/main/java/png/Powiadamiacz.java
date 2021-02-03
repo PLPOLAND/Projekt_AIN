@@ -1,4 +1,4 @@
-package pngReader;
+package png;
 
 public class Powiadamiacz implements Runnable {
     long time;// time in millis
