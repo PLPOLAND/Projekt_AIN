@@ -507,7 +507,7 @@ public class PngImage {
                 for (int j = 0; j < n; j++) {
                     switch (tab[i][j]) {
                         case 0:
-                            img.image[i][j] = new Kolor(0, 0, 0);
+                            img.image[i][j] = new Kolor(255, 255, 255);
                             break;
                         case 1:
                             img.image[i][j] = new Kolor(255, 0, 0);
@@ -522,7 +522,7 @@ public class PngImage {
                             img.image[i][j] = new Kolor(0, 255, 0);
                             break;
                         case 5:
-                            img.image[i][j] = new Kolor(150, 0f, 255);
+                            img.image[i][j] = new Kolor(150, 0, 255);
                             break;
 
                         default:

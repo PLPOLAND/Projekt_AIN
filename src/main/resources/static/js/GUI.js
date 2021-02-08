@@ -1,4 +1,4 @@
-const DEAD = "#000000";
+const DEAD = "#FFFFFF";
 const ALIVE = "#FFFFFF";
 const KL = "#0000FF";
 const GL = "#FF0000";
@@ -46,8 +46,10 @@ function podziel_na_komorki(x) {
 }
 
 function ustaw_wymiary_komorek(x,y){
-    $(".komorka").css("height",( $("#kwadraty").height() /y )- 2);
-    $(".komorka").css("width", ($("#kwadraty").width() /x)- 2);
+    $(".komorka").css("height", $("#kwadraty").height() /y);
+    $(".komorka").css("width", $("#kwadraty").width() /x);
+    // $(".komorka").css("height",( $("#kwadraty").height() /y )- 2);//z borderem
+    // $(".komorka").css("width", ($("#kwadraty").width() /x)- 2);
 }
 
 /**
