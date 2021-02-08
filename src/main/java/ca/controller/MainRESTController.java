@@ -35,6 +35,8 @@ public class MainRESTController {
     public int[][][] glParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
             @RequestParam("prob") double prob) {
         int [][][] tmp = ca.gl(prob, n, iter, seed);
+        stats.setFileName("glparamStats.txt");
+        stats.genereteHaderOfStats(seed, n, iter, prob);
         stats.generateStats(tmp);
         return tmp;
     }
@@ -47,7 +49,12 @@ public class MainRESTController {
     @RequestMapping("/klparam")
     public int[][][] klParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
             @RequestParam("prob") double prob) {
-        return ca.kl(prob, n, iter, seed);
+        
+        int [][][] tmp = ca.kl(prob, n, iter, seed);
+        stats.setFileName("klparamStats.txt");
+        stats.genereteHaderOfStats(seed, n, iter, prob);
+        stats.generateStats(tmp);
+        return tmp;
     }
 
     @RequestMapping(value = "kl", consumes = MediaType.APPLICATION_JSON_VALUE)
