@@ -20,7 +20,8 @@ public class Stats {
 
     public Stats(String s) throws FileNotFoundException {
         fileName = s;
-        f = new File(fileName);
+        f = new File("statystyki/" + fileName);
+        f.getParentFile().mkdirs();
         writer = new PrintWriter(f);
     }
 
@@ -36,10 +37,40 @@ public class Stats {
                     stats[i][dane[i][x][y]]++;
                 }
             }
-            writer.println(i+":"+/*" " +stats[i][0]+*/" "+stats[i][1]+" "+stats[i][2]+" "+stats[i][3]+" "+stats[i][4]+" "+stats[i][5]+" ");
+            
             System.out.println(i+":"+/*" " +stats[i][0]+*/" "+stats[i][1]+" "+stats[i][2]+" "+stats[i][3]+" "+stats[i][4]+" "+stats[i][5]+" ");
         }
 
+        
+
+        for (int i = 0; i < stats.length; i++) {
+            float alive = 0;
+            float p_alive = 0;
+            float p_1 = 0;
+            float p_11 = 0;
+            float p_31 = 0;
+            float p_2 = 0;
+            float p_32 = 0;
+
+            alive = stats[i][1]+stats[i][2]+stats[i][3]+stats[i][4]+stats[i][5];
+            // System.out.println(i +":"+"alive = " + alive);
+            p_alive = alive/(dane[0][0].length * dane[0][0].length);//TODO sprawdzić czy odpowiednie komórki w tablicy sprawdzamy
+            if (alive != 0) {
+                p_1=stats[i][1]/alive;
+                p_11=stats[i][2]/alive;
+                p_31=stats[i][3]/alive;
+                p_2=stats[i][4]/alive;
+                p_32=stats[i][5]/alive;
+            } else {
+                p_1 = 0;
+                p_11 = 0;
+                p_31 = 0;
+                p_2 = 0;
+                p_32 = 0;
+            }
+            System.out.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
+            writer.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
+        }
         writer.close();
     }
 
@@ -50,7 +81,7 @@ public class Stats {
         writer.println("#" + " Iteracji: " + iter);
         writer.println("#" + " Probability to be alive: " + iter);
         writer.println();
-        writer.println("#" + " iteration 1 1.1 2 3.1 3.2 ");
+        writer.println("#" + " iteration %alive %1 %1.1 %2 %3.1 %3.2 ");
         
     }
 
@@ -63,8 +94,9 @@ public class Stats {
         if (writer != null) {
             writer.close();
         }
-        
-        f = new File(fileName);
+
+        f = new File("statystyki/" + fileName);
+        f.getParentFile().mkdirs();
         try {
             writer = new PrintWriter(f);
         } catch (FileNotFoundException e) {
