@@ -14,7 +14,7 @@ public class CellularAutomata {
      * @return metoda zwraca tablicę, w której na miejscu 0 jest liczba białych komórek w sąsiedztwie,
      * na 1 czerwonych na 2 niebieskich na 3 żółtych, a na 4 zielonych
      */
-    private int[] vonNeumanN(int[][] tab, int i, int j){
+   /* private int[] vonNeumanN(int[][] tab, int i, int j){
         int n = tab[0].length;
         int[] ans = new int[5];
         if(i-1<0) ans[tab[n-1][j]]++;
@@ -26,7 +26,7 @@ public class CellularAutomata {
         if(j-1<0) ans[tab[i][n-1]]++;
         else ans[tab[i][j-1]]++;
         return ans;
-    }
+    }*/
 
     /**
      * 
@@ -196,4 +196,41 @@ public class CellularAutomata {
         }
         return tab2;
     }
+
+    /*public int[][][] klAndGl (int[][] tab, int i){
+        int n = tab[0].length;
+        int[][][] tab2 = new int[i][n][n];
+
+        //Przepisanie danych do nowej tablicy
+        tab2[i - 1] = tab;
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                tab2[0][x][y] = tab[x][y];
+            }
+        }
+        //DEBUG1
+        for (int gen=1; gen<i; gen++){
+            for(int k=0; k<n; k++){
+                for(int l=0; l<n; l++){
+                    int[] tmp = mooreN(tab2[gen-1], k, l, 2);
+                    //DEBUG2
+
+                    if(tab2[gen-1][k][l] == 0){
+                        Random rand = new Random();
+                        if(rand.nextDouble() <= 0.5)
+                            glR2();
+                        else
+                            klR();
+                    }
+                    
+                }
+            }
+        }
+        
+        return new int[1][1][1];
+    }
+
+    public int[][][] klAndGl (double aliveProb, int n, int i, long seed){
+        return new int[1][1][1];
+    }*/
 }
