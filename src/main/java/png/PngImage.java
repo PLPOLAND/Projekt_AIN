@@ -346,10 +346,10 @@ public class PngImage {
             File outputfile;
             if (name.lastIndexOf("/")!=-1) {
                 String path = name.substring(0, name.lastIndexOf("/"));
-                outputfile = new File("WYNIKI/"+path);
+                outputfile = new File("png/"+path);
                 outputfile.mkdirs();
             }
-            outputfile = new File("WYNIKI/"+name+".png");
+            outputfile = new File("png/"+name+".png");
             outputfile.getParentFile().mkdirs();
             // ImageIO.write(result, "PNG", outputfile);
             saveWithPPI(outputfile, result, this.physX, this.physY);

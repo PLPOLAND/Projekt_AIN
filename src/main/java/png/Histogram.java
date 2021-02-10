@@ -139,13 +139,13 @@ public class Histogram {
             }
 
             try {
-                File outputfile = new File("WYNIKI/"+name+"R.png");
+                File outputfile = new File("png/"+name+"R.png");
                 outputfile.mkdirs();
                 ImageIO.write(imageR, "png", outputfile);
-                File outputfile1 = new File("WYNIKI/"+name+"G.png");
+                File outputfile1 = new File("png/"+name+"G.png");
                 outputfile.mkdirs();
                 ImageIO.write(imageG, "png", outputfile1);
-                File outputfile2 = new File("WYNIKI/"+name+"B.png");
+                File outputfile2 = new File("png/"+name+"B.png");
                 outputfile.mkdirs();
                 ImageIO.write(imageB, "png", outputfile2);
             } catch (IOException e) {
@@ -184,7 +184,7 @@ public class Histogram {
                 }
             }
             try {
-                File outputfile = new File("WYNIKI/" + name + "BW.png");
+                File outputfile = new File("png/" + name + "BW.png");
                 outputfile.mkdirs();
                 ImageIO.write(imageBW, "png", outputfile);
             } catch (IOException e) {
