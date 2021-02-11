@@ -35,11 +35,11 @@ public class CellularAutomata {
      * @param j- kolumna w tab wskazujący komórkę dla której liczymy sąsiedztwo
      * @param d - promień sąsiedztwa dookoła komórki
      * @return metoda zwraca tablicę, w której na miejscu 0 jest liczba białych komórek w sąsiedztwie,
-     * na 1 czerwonych na 2 niebieskich na 3 żółtych, a na 4 zielonych
+     * na 1 czerwonych na 2 niebieskich na 3 żółtych, na 4 zielonych, a na 5 fioletowych
      */
     private int[] mooreN(int[][] tab, int i, int j, int d){
         int n = tab[0].length;
-        int[] ans = new int[5];
+        int[] ans = new int[6];
         for(int k=i-d; k <=i+d; k++){
             for(int l=j-d; l <=j+d; l++){
                 if((k==i)&& (l==j)) continue;
@@ -200,6 +200,7 @@ public class CellularAutomata {
     /*public int[][][] klAndGl (int[][] tab, int i){
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
+        Random rand = new Random();
 
         //Przepisanie danych do nowej tablicy
         tab2[i - 1] = tab;
@@ -213,16 +214,41 @@ public class CellularAutomata {
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
                     int[] tmp = mooreN(tab2[gen-1], k, l, 2);
+                    int numAlive = 0;
+                    for(int m=0; m<tmp.length; m++){numAlive += tmp[m];}
                     //DEBUG2
 
                     if(tab2[gen-1][k][l] == 0){
-                        Random rand = new Random();
                         if(rand.nextDouble() <= 0.5)
+                        //DEBUG3
                             glR2();
                         else
                             klR();
                     }
-                    
+                    else if((tab2[gen-1][k][l] == 1) || (tab2[gen-1][k][l] == 3)){    //jeśli komórka jest czerwona lub żółta
+                        if((numAlive < 2) || (numAlive > 3)){
+                            //DEBUG4
+                            tab2[gen][k][l] = 0;
+                        }
+                        else{
+                            //DEBUG5
+                            if(numAlive == 2){glR1_2neigh();}
+                            else{glR1_3neigh();}
+                        }
+                    }
+                    else if(tab2[gen-1][k][l] == 4){
+                        double x = rand.nextDouble();
+                        //DEBUG6
+                        if(x <=0.5){}   //TODO
+                        else{
+                            //DEBUG7
+                            klR();
+                        }
+                    }
+                    else if((tab2[gen-1][k][l] == 2) || (tab2[gen-1][k][l] == 5)){
+                        //DEBUG8
+                        klR();
+                    }
                 }
             }
         }
@@ -232,5 +258,5 @@ public class CellularAutomata {
 
     public int[][][] klAndGl (double aliveProb, int n, int i, long seed){
         return new int[1][1][1];
-    }*/
-}
+    }
+}*/
