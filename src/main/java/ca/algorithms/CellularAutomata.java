@@ -70,6 +70,63 @@ public class CellularAutomata {
         return tab;
     }
 
+    private int glR2(int[] neigh){
+        if(neigh[1] + neigh[3]  == 3) {return 1;} //DEBUG 2.1
+        else if(
+            (neigh[2] == 2) || 
+                ((neigh[2] == 1)&&
+                    ((neigh[4] == 1) || (neigh[5] == 1))
+            )
+        ) {return 2;}   //DEBUG 2.2
+        else if(
+            (neigh[4] >=2) || (
+            (neigh[4] == 1) && (
+                (neigh[2] == 1) && ((neigh[1] ==1) || (neigh[3] == 1))
+                )
+            )
+        ) {return 4;} //DEBUG 2.3
+        else if(neigh[5] >=2){return 5;} //DEBUG 2.4
+        else if(
+            (neigh[5] == 1) && (
+                (neigh[2] == 1) && (
+                    (neigh[1] == 1) || (neigh[3] == 1)
+                )
+            )
+        ) {
+            Random rand = new Random();
+            if(rand.nextDouble() <= 0.5){return 4;}
+            else {return 5;}
+            //DEBUG 2.5
+        }
+        else{return 5;} //DEBUG 2.6
+    }
+
+    private int glR1_2neigh(int[] neigh) {
+        if(
+            (neigh[1] == 2) || (
+                (neigh[3] == 2) || (
+                    (neigh[1] == 1) && (neigh[11] == 1)
+                )
+            )
+        ){return 1;}
+        else {return 3;}
+        // DEBUG 1.1
+    }
+
+    private int glR1_3neigh(int[] neigh){
+        if(
+            (neigh[1] == 3) || (
+                (neigh[3] == 3) || (
+                    ((neigh[1] == 2) && (neigh[3] == 1)) || (
+                        ((neigh[1] == 1) && (neigh[3] == 2))
+                    )
+                )
+            )
+        ) {return 1;}
+        else {return 3;}
+        //DEBUG 1.2
+    }
+
     /**
      * 
      * @param tab - tablica wejściowa, jeśli użytkownik utawi jąręcznie
@@ -197,7 +254,7 @@ public class CellularAutomata {
         return tab2;
     }
 
-    /*public int[][][] klAndGl (int[][] tab, int i){
+   /*public int[][][] klAndGl (int[][] tab, int i){
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
         Random rand = new Random();
@@ -219,11 +276,13 @@ public class CellularAutomata {
                     //DEBUG2
 
                     if(tab2[gen-1][k][l] == 0){
-                        if(rand.nextDouble() <= 0.5)
+                        if(rand.nextDouble() <= 0.5){
                         //DEBUG3
-                            glR2();
-                        else
-                            klR();
+                        tab2[gen][k][l] = glR2(tmp);
+                        }
+                        else{
+                        tab2[gen][k][l] = klR();
+                        }
                     }
                     else if((tab2[gen-1][k][l] == 1) || (tab2[gen-1][k][l] == 3)){    //jeśli komórka jest czerwona lub żółta
                         if((numAlive < 2) || (numAlive > 3)){
@@ -232,22 +291,30 @@ public class CellularAutomata {
                         }
                         else{
                             //DEBUG5
-                            if(numAlive == 2){glR1_2neigh();}
-                            else{glR1_3neigh();}
+                            if(numAlive == 2){tab2[gen][k][l] = glR1_2neigh(tmp);}
+                            else{tab2[gen][k][l] = glR1_3neigh(tmp);}
                         }
                     }
                     else if(tab2[gen-1][k][l] == 4){
                         double x = rand.nextDouble();
                         //DEBUG6
-                        if(x <=0.5){}   //TODO
+                        if(x <=0.5){
+                            if((numAlive < 2) || (numAlive > 3)){
+                                tab2[gen][k][l] = 0;
+                            }
+                            else{
+                                if(numAlive == 2){tab2[gen][k][l] = glR1_2neigh(tmp);}
+                                else{tab2[gen][k][l] = glR1_3neigh(tmp);}
+                            }
+                        }
                         else{
                             //DEBUG7
-                            klR();
+                            tab2[gen][k][l] = klR();
                         }
                     }
                     else if((tab2[gen-1][k][l] == 2) || (tab2[gen-1][k][l] == 5)){
                         //DEBUG8
-                        klR();
+                        tab2[gen][k][l] = klR();
                     }
                 }
             }
@@ -258,5 +325,5 @@ public class CellularAutomata {
 
     public int[][][] klAndGl (double aliveProb, int n, int i, long seed){
         return new int[1][1][1];
-    }
-}*/
+    }*/
+}
