@@ -48,9 +48,11 @@ public class Stats {
             float p_alive = 0;
             float p_1 = 0;
             float p_11 = 0;
+            float p_1_11 = 0;
             float p_31 = 0;
             float p_2 = 0;
             float p_32 = 0;
+            float p_3 = 0;
 
             alive = stats[i][1]+stats[i][2]+stats[i][3]+stats[i][4]+stats[i][5];
             // System.out.println(i +":"+"alive = " + alive);
@@ -58,9 +60,11 @@ public class Stats {
             if (alive != 0) {
                 p_1=stats[i][1]/alive;
                 p_11=stats[i][2]/alive;
+                p_1_11=(stats[i][1]+stats[i][2])/alive;
                 p_31=stats[i][3]/alive;
                 p_2=stats[i][4]/alive;
                 p_32=stats[i][5]/alive;
+                p_3 = (stats[i][3] + stats[i][5]) / alive;
             } else {
                 p_1 = 0;
                 p_11 = 0;
@@ -68,8 +72,8 @@ public class Stats {
                 p_2 = 0;
                 p_32 = 0;
             }
-            System.out.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
-            writer.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
+            // System.out.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
+            writer.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " " + p_1_11 + " " + p_3 + " ");
         }
         writer.close();
     }
@@ -81,7 +85,7 @@ public class Stats {
         writer.println("#" + " Iteracji: " + iter);
         writer.println("#" + " Probability to be alive: " + iter);
         writer.println();
-        writer.println("#" + " iteration %alive %1 %1.1 %2 %3.1 %3.2 ");
+        writer.println("#" + " iteration %alive %1 %1.1 %2 %3.1 %3.2 %1_1.1 %3");
         
     }
 
