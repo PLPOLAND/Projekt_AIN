@@ -7,6 +7,8 @@ import java.io.Writer;
 
 import org.springframework.stereotype.Service;
 
+import ca.controller.data.FromVizData;
+
 @Service
 public class Stats {
 
@@ -38,13 +40,13 @@ public class Stats {
                 }
             }
             
-            System.out.println(i+":"+/*" " +stats[i][0]+*/" "+stats[i][1]+" "+stats[i][2]+" "+stats[i][3]+" "+stats[i][4]+" "+stats[i][5]+" ");
+            System.out.println(i+":"+" "+stats[i][1]+" "+stats[i][2]+" "+stats[i][3]+" "+stats[i][4]+" "+stats[i][5]+" ");
         }
 
         
 
         for (int i = 0; i < stats.length; i++) {
-            float alive = 0;
+            long alive = 0;
             float p_alive = 0;
             float p_1 = 0;
             float p_11 = 0;
@@ -61,11 +63,14 @@ public class Stats {
                 p_1_11 = (stats[i][1]+stats[i][3])/alive;
                 p_2 = stats[i][2]/alive;
                 p_3 = (stats[i][4] + stats[i][5]) / alive;
-
-                p_1 = stats[i][1] / (stats[i][1] + stats[i][3]);
-                p_11 = stats[i][3] / (stats[i][1] + stats[i][3]);
-                p_31=stats[i][4]/ (stats[i][4] + stats[i][5]);
-                p_32=stats[i][5]/ (stats[i][4] + stats[i][5]);
+                if ((stats[i][1] + stats[i][3])!= 0) {
+                    p_1 = stats[i][1] / (stats[i][1] + stats[i][3]);
+                    p_11 = stats[i][3] / (stats[i][1] + stats[i][3]);
+                }
+                if (stats[i][4] + stats[i][5] != 0) {
+                    p_31=stats[i][4]/ (stats[i][4] + stats[i][5]);
+                    p_32=stats[i][5]/ (stats[i][4] + stats[i][5]);
+                }
             }
             // System.out.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
             writer.println(i+" "+alive+" "+p_alive+" "+p_1_11+" "+p_2+" "+p_3+" " + p_1 + " " + p_11 + " " + p_31 + " " + p_32);
@@ -82,6 +87,9 @@ public class Stats {
         writer.println();
         writer.println("#" + " iteration num_of_alive frac_of_alive %frac_1_11 %frac_2 %frac_3 % frac_1 %frac_11 %frac_31 %frac_32");
         
+    }
+    public void genereteHaderOfStats(FromVizData data) {
+        genereteHaderOfStats(data.getSeed(), data.getN(), data.getIter(), data.getProb_a());
     }
 
     public String getFileName() {
