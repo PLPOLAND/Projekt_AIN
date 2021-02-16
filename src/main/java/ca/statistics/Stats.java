@@ -30,7 +30,7 @@ public class Stats {
      * @param dane
      */
     public void generateStats(int [][][] dane) {
-        int [][] stats = new int[dane.length][6];
+        int [][] stats = new int[dane.length][6];//na 0 martwe na 1 czerwonych na 2 niebieskich na 3 żółtych, na 4 zielonych, a na 5 fioletowych
         for (int i = 0; i < dane.length; i++) {
             for (int x = 0; x < dane[0].length; x++) {
                 for (int y = 0; y < dane[0][0].length; y++) {
@@ -55,25 +55,20 @@ public class Stats {
             float p_3 = 0;
 
             alive = stats[i][1]+stats[i][2]+stats[i][3]+stats[i][4]+stats[i][5];
-            // System.out.println(i +":"+"alive = " + alive);
-            p_alive = alive/(dane[0][0].length * dane[0][0].length);//TODO sprawdzić czy odpowiednie komórki w tablicy sprawdzamy
+
+            p_alive = alive/(dane[0][0].length * dane[0][0].length);
             if (alive != 0) {
-                p_1=stats[i][1]/alive;
-                p_11=stats[i][2]/alive;
-                p_1_11=(stats[i][1]+stats[i][2])/alive;
-                p_31=stats[i][3]/alive;
-                p_2=stats[i][4]/alive;
-                p_32=stats[i][5]/alive;
-                p_3 = (stats[i][3] + stats[i][5]) / alive;
-            } else {
-                p_1 = 0;
-                p_11 = 0;
-                p_31 = 0;
-                p_2 = 0;
-                p_32 = 0;
+                p_1_11 = (stats[i][1]+stats[i][3])/alive;
+                p_2 = stats[i][2]/alive;
+                p_3 = (stats[i][4] + stats[i][5]) / alive;
+
+                p_1 = stats[i][1] / (stats[i][1] + stats[i][3]);
+                p_11 = stats[i][3] / (stats[i][1] + stats[i][3]);
+                p_31=stats[i][4]/ (stats[i][4] + stats[i][5]);
+                p_32=stats[i][5]/ (stats[i][4] + stats[i][5]);
             }
             // System.out.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " ");
-            writer.println(i+" "+p_alive+" "+p_1+" "+p_11+" "+p_2+" " + p_31 + " " + p_32 + " " + p_1_11 + " " + p_3 + " ");
+            writer.println(i+" "+alive+" "+p_alive+" "+p_1_11+" "+p_2+" "+p_3+" " + p_1 + " " + p_11 + " " + p_31 + " " + p_32);
         }
         writer.close();
     }
@@ -85,7 +80,7 @@ public class Stats {
         writer.println("#" + " Iteracji: " + iter);
         writer.println("#" + " Probability to be alive: " + iter);
         writer.println();
-        writer.println("#" + " iteration %alive %1 %1.1 %2 %3.1 %3.2 %1_1.1 %3");
+        writer.println("#" + " iteration num_of_alive frac_of_alive %frac_1_11 %frac_2 %frac_3 % frac_1 %frac_11 %frac_31 %frac_32");
         
     }
 
