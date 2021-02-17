@@ -112,10 +112,7 @@ $(document).ready(function () {
     });
     
     $("#multirun_num").change(function (e) {
-        if(parseInt($(this).val(),10) > $(this).prop('max')){
-            $(this).val($(this).prop('max'))
-        }
-        else if(parseInt($(this).val(), 10) < $(this).prop('min')){
+        if(parseInt($(this).val(), 10) < $(this).prop('min')){
             $(this).val($(this).prop('min'))
         }
     });
@@ -206,25 +203,26 @@ $(document).ready(function () {
     });
     
     $("#start").click(function() {
-        if ($("#sym_type option:selected").val() == 0){
-            if ($("#manual").prop("checked")) {
-                gl();
-            }
-            else {
-                glParam(); 
-            }
-        }
-        else if ($("#sym_type option:selected").val() == 1){
-            if ($("#manual").prop("checked")) {
-                kl();
-            }
-            else {
-                klParam();
-            }
-        }
-        else if ($("#sym_type option:selected").val() == 2){
+        // if ($("#sym_type option:selected").val() == 0){
+        //     if ($("#manual").prop("checked")) {
+        //         gl();
+        //     }
+        //     else {
+        //         glParam(); 
+        //     }
+        // }
+        // else if ($("#sym_type option:selected").val() == 1){
+        //     if ($("#manual").prop("checked")) {
+        //         kl();
+        //     }
+        //     else {
+        //         klParam();
+        //     }
+        // }
+        // else if ($("#sym_type option:selected").val() == 2){
 
-        }
+        // }
+        process();
     });
 
     $("#savePngButt").click(function () {
@@ -434,6 +432,88 @@ function kl(){
         setTimeout(hideMsgBox, 5000);
     });
 }
+
+function process() {
+    
+    urlPath = "";
+
+    if ($("#sym_type option:selected").val() == 0) {
+        if ($("#multirun").prop("checked")) {
+            urlPath = "/api/multirunGl";
+        } else {
+            if ($("#manual").prop("checked")) {
+                urlPath = "/api/gl";
+            }
+            else {
+                urlPath = "/api/glparam";
+            }
+        }
+    }
+    else if ($("#sym_type option:selected").val() == 1) {
+        if ($("#multirun").prop("checked")) {
+            urlPath = "/api/multirunKl";
+        } else {
+            if ($("#manual").prop("checked")) {
+                urlPath = "/api/kl"
+            }
+            else {
+                urlPath = "/api/klparam"
+            }
+        }
+    }
+    else if ($("#sym_type option:selected").val() == 2) {
+        if ($("#multirun").prop("checked")) {
+            urlPath = "/api/multirunklgl";
+        } else {
+            if ($("#manual").prop("checked")) {
+                urlPath = "/api/klgl"
+            }
+            else {
+                urlPath = "/api/klglparam"
+            }
+        }
+    }
+
+
+    $.ajax({
+        url: urlPath,
+        type: 'post',
+        data: JSON.stringify({
+            iter: parseInt($("#iteracji").val()),
+            tab: readCells(),
+            seed: $("#seed").val(),
+            n: $("#wymiar").val(),
+            prob_a: aliveProbability.val(),
+            prob_a_gl: GLProbability.val(),
+            prob_a_kl: 1- GLProbability.val(),
+            multirun_runs: $("#multirun_num").val()
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
+            msgbox.html("Odebrano dane do wizualizacji");
+            msgbox.show(500);
+            setTimeout(hideMsgBox, 3000);
+            if (!$("#multirun").prop("checked")) {
+                // console.log(response);
+                vizData = response;
+                kolorujzDanych(vizData, $("#wymiar").val(), 0);
+            }
+            $("#viz_number").val(0);
+        }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
+    });
+}
+
 function png(){
     $.ajax({
         url: "/api/png",

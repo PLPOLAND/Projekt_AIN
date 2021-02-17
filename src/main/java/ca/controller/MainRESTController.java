@@ -1,6 +1,7 @@
 package ca.controller;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ca.algorithms.CellularAutomata;
-import ca.controller.data.fromVizData;
+import ca.controller.data.FromVizData;
 import ca.statistics.Stats;
 import png.PngImage;
 
@@ -27,43 +28,118 @@ import png.PngImage;
 @RequestMapping("/api")
 public class MainRESTController {
     CellularAutomata ca = new CellularAutomata();
+    Random random = new Random();
 
     @Autowired
     Stats stats;//do obsługi statystyk
 
-    @RequestMapping("/glparam")
-    public int[][][] glParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
-            @RequestParam("prob") double prob) {
-        int [][][] tmp = ca.gl(prob, n, iter, seed);
+
+    @RequestMapping(value = "glparam", consumes = MediaType.APPLICATION_JSON_VALUE)
+
+    public int[][][] glParam(@RequestBody FromVizData data) {
+        int [][][] tmp = ca.gl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());
         stats.setFileName("glparamStats.txt");
-        stats.genereteHaderOfStats(seed, n, iter, prob);
-        stats.generateStats(tmp);
+        stats.generateStats(tmp,true,data);
         return tmp;
     }
 
     @RequestMapping(value = "gl", consumes = MediaType.APPLICATION_JSON_VALUE)
     
-    public int[][][] gl(@RequestBody fromVizData data) {
-        return ca.gl(data.getTab(),data.getIter());
+    public int[][][] gl(@RequestBody FromVizData data) {
+        int[][][] tmp = ca.gl(data.getTab(), data.getIter());
+        stats.setFileName("glStats.txt");
+        stats.generateStats(tmp,true, data);
+        return tmp;
     }
-    @RequestMapping("/klparam")
-    public int[][][] klParam(@RequestParam("seed") long seed, @RequestParam("N") int n, @RequestParam("iter") int iter,
-            @RequestParam("prob") double prob) {
+    
+    @RequestMapping(value = "klparam", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public int[][][] klParam(@RequestBody FromVizData data) {
         
-        int [][][] tmp = ca.kl(prob, n, iter, seed);
+        int [][][] tmp = ca.kl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());
         stats.setFileName("klparamStats.txt");
-        stats.genereteHaderOfStats(seed, n, iter, prob);
-        stats.generateStats(tmp);
+        stats.generateStats(tmp, true, data);
         return tmp;
     }
 
     @RequestMapping(value = "kl", consumes = MediaType.APPLICATION_JSON_VALUE)
     
-    public int[][][] kl(@RequestBody fromVizData data) {
+    public int[][][] kl(@RequestBody FromVizData data) {
+        int [][][] tmp = ca.kl(data.getTab(), data.getIter());
+        stats.setFileName("klStats.txt");
+        stats.generateStats(tmp, true, data);
+        return tmp;
+    }
+    @RequestMapping(value = "multirunKl", consumes = MediaType.APPLICATION_JSON_VALUE)
+    
+    public boolean multirun_kl(@RequestBody FromVizData dane) {
+        int[][][][] tmp = new int[dane.getMultirun_runs()][dane.getIter()][dane.getN()][dane.getN()];
+        long[] seeds= new long[dane.getMultirun_runs()];
+        tmp[0] = ca.kl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed());
+        seeds[0] = dane.getSeed();
+        for (int i = 1; i < dane.getMultirun_runs(); i++) {
+            seeds[i] = random.nextLong();
+            tmp[i] = ca.kl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
+        }
 
-        return ca.kl(data.getTab(), data.getIter());
+        stats.setFileName("klMultirun.txt");
+        stats.generateStats(tmp,true, seeds, dane);
+        return true;
     }
     
+    @RequestMapping(value = "multirunGl", consumes = MediaType.APPLICATION_JSON_VALUE)
+    
+    public boolean multirun_gl(@RequestBody FromVizData dane) {
+        int[][][][] tmp = new int[dane.getMultirun_runs()][dane.getIter()][dane.getN()][dane.getN()];
+        long[] seeds = new long[dane.getMultirun_runs()];
+        tmp[0] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed());
+        seeds[0] = dane.getSeed();
+        for (int i = 1; i < dane.getMultirun_runs(); i++) {
+            seeds[i] = random.nextLong();
+            tmp[i] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
+        }
+
+        stats.setFileName("GLMultirun.txt");
+        stats.generateStats(tmp, true, seeds, dane);
+        return true;
+    }
+    
+
+    @RequestMapping(value = "klglparam", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public int[][][] klglParam(@RequestBody FromVizData data) {
+
+        int[][][] tmp = ca.kl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());//TODO zmienić wywołanie funkcji sumulującej 
+        stats.setFileName("klglparamStats.txt");
+        stats.generateStats(tmp, false, data);
+        return tmp;
+    }
+
+    @RequestMapping(value = "klgl", consumes = MediaType.APPLICATION_JSON_VALUE)
+
+    public int[][][] klgl(@RequestBody FromVizData data) {
+        int[][][] tmp = ca.kl(data.getTab(), data.getIter());// TODO zmienić wywołanie funkcji sumulującej
+        stats.setFileName("klglStats.txt");
+        stats.generateStats(tmp, false, data);
+        return tmp;
+    }
+
+    @RequestMapping(value = "multirunklgl", consumes = MediaType.APPLICATION_JSON_VALUE)
+
+    public boolean multirun_klgl(@RequestBody FromVizData dane) {
+        int[][][][] tmp = new int[dane.getMultirun_runs()][dane.getIter()][dane.getN()][dane.getN()];
+        long[] seeds = new long[dane.getMultirun_runs()];
+        tmp[0] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed());//TODO zmienić wywołanie funkcji sumulującej 
+        seeds[0] = dane.getSeed();
+        for (int i = 1; i < dane.getMultirun_runs(); i++) {
+            seeds[i] = random.nextLong();
+            tmp[i] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);//TODO zmienić wywołanie funkcji sumulującej 
+        }
+
+        stats.setFileName("KLGLMultirun.txt");
+        stats.generateStats(tmp, false, seeds, dane);
+        return true;
+    }
+
+
     @PostMapping(value = "png", consumes = MediaType.APPLICATION_JSON_VALUE)
     public boolean png(@RequestBody String tab){
         ObjectMapper mapper = new ObjectMapper();
