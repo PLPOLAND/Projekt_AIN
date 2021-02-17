@@ -462,7 +462,16 @@ function process() {
         }
     }
     else if ($("#sym_type option:selected").val() == 2) {
-
+        if ($("#multirun").prop("checked")) {
+            urlPath = "/api/multirunklgl";
+        } else {
+            if ($("#manual").prop("checked")) {
+                urlPath = "/api/klgl"
+            }
+            else {
+                urlPath = "/api/klglparam"
+            }
+        }
     }
 
 
