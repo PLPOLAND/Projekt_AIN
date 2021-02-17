@@ -4,30 +4,6 @@ import java.util.Random;
  * @author Bartłomiej Kozłowski
  */
 public class CellularAutomata {
-
-    /**
-     * vonNeumanN - von Neuman Neighbourhood
-     * kolor biały reprezentuje 0, czerwony 1, niebieski 2, żółty 3, a zielony 4
-     * @param tab - tablica zawierająca dane pokolenie CA
-     * @param i - wiersz w tab wskazujący komórkę dla której liczymy sąsiedztwo
-     * @param j - kolumna w tab wskazujący komórkę dla której liczymy sąsiedztwo
-     * @return metoda zwraca tablicę, w której na miejscu 0 jest liczba białych komórek w sąsiedztwie,
-     * na 1 czerwonych na 2 niebieskich na 3 żółtych, a na 4 zielonych
-     */
-   /* private int[] vonNeumanN(int[][] tab, int i, int j){
-        int n = tab[0].length;
-        int[] ans = new int[5];
-        if(i-1<0) ans[tab[n-1][j]]++;
-        else ans[tab[i-1][j]]++;
-        if(i+1 >=n) ans[tab[0][j]]++;
-        else ans[tab[i+1][j]]++;
-        if(j+1>=n) ans[tab[i][0]]++;
-        else ans[tab[i][j+1]]++;
-        if(j-1<0) ans[tab[i][n-1]]++;
-        else ans[tab[i][j-1]]++;
-        return ans;
-    }*/
-
     /**
      * 
      * @param tab - tablica zawierająca dane pokolenie CA
@@ -127,6 +103,93 @@ public class CellularAutomata {
         //DEBUG 1.2
     }
 
+    private int klR(int[] neigh){
+        if(neigh[1] + neigh[3] == 4){return 1;}
+        //////////////////KL-R-2/////////////////////
+        // 4 niebieskie
+        else if(neigh[2] == 4){return 2;}
+        
+        //kiedy są 3 niebieskie
+        else if(neigh[2] + neigh[3] + neigh[1] + neigh[4] + neigh[5] == 4 && neigh[2] == 3){
+            return 2;
+        }
+
+        //kiedy są 2 niebieskie
+        else if(neigh[2] == 2 && (neigh[1] == 1 && neigh[3] == 1)){
+            return 2;
+        }
+        else if(neigh[2] == 2 && (neigh[1] == 1 && neigh[4] == 1)){
+            return 2;
+        }
+        else if(neigh[2] == 2 && (neigh[1] == 1 && neigh[5] == 1)){
+            return 2;
+        }
+        else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[5] == 1)){
+            return 2;
+        }
+        else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[4] == 1)){
+            return 2;
+        }
+        else if(neigh[2] == 2 && (neigh[4] == 1 && neigh[5] == 1)){
+            return 2;
+        }
+
+        else if(neigh[2] == 2 && neigh[4] == 2){return 2;}
+        else if(neigh[2] == 2 && neigh[5] == 2){return 2;}
+
+        // 1 niebieski
+        if(neigh[2] == 1 && neigh[4] == 3){return 2;}
+        if(neigh[2] == 1 && (neigh[4] == 2 && neigh[5] == 1)){return 2;}
+        if(neigh[2] == 1 && (neigh[4] == 1 && neigh[5] == 2)){return 2;}
+        if(neigh[2] == 1 && neigh[5] == 3){return 2;}
+
+        Random rand = new Random();
+        if(neigh[2] == 2 && ((neigh[1] == 1 || neigh[3] == 1) || (neigh[3] == 2))){
+            if(rand.nextDouble() <= 0.5){return 3;}
+            else {return 2;}
+        }
+        
+        //////////////////KL-R-4(KL-R-31)/////////////////////
+        else if(neigh[4] == 3 && neigh[5] == 1){return 4;}
+        else if(neigh[4] == 2 && (neigh[1] == 1 && neigh[2] == 1)){return 4;}
+        else if(neigh[4] == 2 && (neigh[3] == 1 && neigh[2] == 1)){return 4;}
+        else if(neigh[4] == 4){return 4;}
+
+        else if(neigh[4] == 2 && neigh[5] == 2){
+            if(rand.nextDouble() <= 0.5){
+                return 4;
+            }
+            else {return 5;}
+        }
+
+        //////////////////KL-R-5(KL-R-32)/////////////////////
+        else if(neigh[1] == 2 && neigh[2] == 2){return 5;}
+        else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[1] == 1)){return 5;}
+        else if(neigh[2] == 2 && neigh[3] == 2){return 5;}
+
+        else if((neigh[1] == 1 && neigh[2] == 1) && 
+                (neigh[4] == 1 && neigh[5] == 1)){
+            return 5;
+        }
+        else if ((neigh[1] == 1 && neigh[2] == 1) && neigh[5] == 2){
+            return 5;
+        }
+
+        else if((neigh[3] == 1 && neigh[2] == 1) && 
+                (neigh[4] == 1 && neigh[5] == 1)){
+            return 5;
+        }
+        else if ((neigh[3] == 1 && neigh[2] == 1) && neigh[5] == 2){
+            return 5;
+        }
+        
+        else if(neigh[4] == 1 && neigh[5] == 3){return 5;}
+        else if(neigh[5] == 4){return 5;}
+        ////////////////////////////////////////////////////
+        else {return 0;}
+        //DEBUG 20
+    }
+
     /**
      * 
      * @param tab - tablica wejściowa, jeśli użytkownik utawi jąręcznie
@@ -136,7 +199,7 @@ public class CellularAutomata {
     public int[][][] gl(int[][] tab, int i){
         int n = tab[0].length;
         
-        // Przepisanie danych do nowej tablicy ( potrzebne żeby działało ;) )
+        // Przepisanie danych do nowej tablicy
         int[][][] tab2 =new int[i][n][n];
         tab2[i-1] = tab;
         for (int x = 0; x < n; x++) {
@@ -148,7 +211,6 @@ public class CellularAutomata {
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
-                    //int[] tmp = vonNeumanN(tab2[gen-1], k, l);
                     int[] tmp = mooreN(tab2[gen-1], k, l, 1);
                     //jeśli aktualnie sprawdzana komórka jest czerwona
                     if(tab2[gen-1][k][l] == 1){
@@ -181,7 +243,6 @@ public class CellularAutomata {
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
-                    //int[] tmp = vonNeumanN(tab2[gen-1], k, l);
                     int[] tmp = mooreN(tab2[gen-1], k, l, 1);
                     //jeśli aktualnie sprawdzana komórka jest czerwona
                     if(tab2[gen-1][k][l] == 1){
@@ -254,7 +315,7 @@ public class CellularAutomata {
         return tab2;
     }
 
-   /*public int[][][] klAndGl (int[][] tab, int i){
+   public int[][][] klAndGl (int[][] tab, int i){
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
         Random rand = new Random();
@@ -281,7 +342,7 @@ public class CellularAutomata {
                         tab2[gen][k][l] = glR2(tmp);
                         }
                         else{
-                        tab2[gen][k][l] = klR();
+                       tab2[gen][k][l] = klR(tmp);
                         }
                     }
                     else if((tab2[gen-1][k][l] == 1) || (tab2[gen-1][k][l] == 3)){    //jeśli komórka jest czerwona lub żółta
@@ -309,12 +370,12 @@ public class CellularAutomata {
                         }
                         else{
                             //DEBUG7
-                            tab2[gen][k][l] = klR();
+                            tab2[gen][k][l] = klR(tmp);
                         }
                     }
                     else if((tab2[gen-1][k][l] == 2) || (tab2[gen-1][k][l] == 5)){
                         //DEBUG8
-                        tab2[gen][k][l] = klR();
+                        tab2[gen][k][l] = klR(tmp);
                     }
                 }
             }
@@ -325,5 +386,5 @@ public class CellularAutomata {
 
     public int[][][] klAndGl (double aliveProb, int n, int i, long seed){
         return new int[1][1][1];
-    }*/
+    }
 }
