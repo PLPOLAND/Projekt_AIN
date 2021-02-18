@@ -34,13 +34,17 @@ public class CellularAutomata {
         return ans;
     }
 
-    private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, int species){
+    private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, int[] species){
         int n = tab[0].length;
+        int seciesNum = species.length;
         Random rand = new Random(seed);
         for(int k=0; k<n; k++){
             for(int l=0; l<n; l++){
                 if(rand.nextDouble()>aliveProb) tab[k][l] = 0;
-                else tab[k][l] = species;
+                else {
+
+                    tab[k][l] = species[rand.nextInt(seciesNum)];
+                }
             }
         }
         return tab;
@@ -238,7 +242,8 @@ public class CellularAutomata {
      */
     public int[][][] gl(double aliveProb, int n, int i, long seed){
         int[][][] tab2 =new int[i][n][n];
-        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, 1);
+        int[] species = {1};
+        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, species);
 
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
@@ -300,7 +305,8 @@ public class CellularAutomata {
      */
     public int[][][] kl(double aliveProb, int n, int i, long seed){
         int[][][] tab2 = new int[i][n][n];
-        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, 2);
+        int[] species = {2};
+        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, species);
 
         for (int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
@@ -315,7 +321,7 @@ public class CellularAutomata {
         return tab2;
     }
 
-   public int[][][] klAndGl (int[][] tab, int i){
+    private int[][][] klGl(int[][] tab, int i){
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
         Random rand = new Random();
@@ -380,11 +386,16 @@ public class CellularAutomata {
                 }
             }
         }
-        
-        return new int[1][1][1];
+        return tab2;
+    }
+
+   public int[][][] klAndGl (int[][] tab, int i){
+         return klGl(tab, i);
     }
 
     public int[][][] klAndGl (double aliveProb, int n, int i, long seed){
-        return new int[1][1][1];
+        int[][] tab = new int[n][n];
+        int[] species = {1,2,3,4,5};
+        return klGl(generateRandomPopulation(seed, tab, aliveProb, species), i);
     }
 }
