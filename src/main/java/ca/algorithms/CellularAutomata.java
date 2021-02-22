@@ -42,8 +42,27 @@ public class CellularAutomata {
             for(int l=0; l<n; l++){
                 if(rand.nextDouble()>aliveProb) tab[k][l] = 0;
                 else {
-
+                    
                     tab[k][l] = species[rand.nextInt(seciesNum)];
+                }
+            }
+        }
+        return tab;
+    }
+
+    private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, double klAliveProb){
+        int n = tab[0].length;
+        Random rand = new Random(seed);
+        for(int k=0; k<n; k++){
+            for(int l=0; l<n; l++){
+                if(rand.nextDouble()>aliveProb) tab[k][l] = 0;
+                else {
+                    if(rand.nextDouble() <= klAliveProb){
+                    tab[k][l] = 2;
+                    }
+                    else {
+                        tab[k][l] = 1;
+                    }
                 }
             }
         }
@@ -53,16 +72,16 @@ public class CellularAutomata {
     private int glR2(int[] neigh){
         if(neigh[1] + neigh[3]  == 3) {return 1;} //DEBUG 2.1
         else if(
-            (neigh[2] == 2) || 
-                ((neigh[2] == 1)&&
-                    ((neigh[4] == 1) || (neigh[5] == 1))
+            (neigh[2] == 2) || (
+                (neigh[2] == 1) && (
+                    (neigh[4] == 1) || (neigh[5] == 1))
             )
         ) {return 2;}   //DEBUG 2.2
         else if(
             (neigh[4] >=2) || (
-            (neigh[4] == 1) && (
-                (neigh[2] == 1) && ((neigh[1] ==1) || (neigh[3] == 1))
-                )
+                (neigh[4] == 1) && (
+                    (neigh[2] == 1) && ((neigh[1] ==1) || (neigh[3] == 1))
+                    )
             )
         ) {return 4;} //DEBUG 2.3
         else if(neigh[5] >=2){return 5;} //DEBUG 2.4
@@ -393,9 +412,8 @@ public class CellularAutomata {
          return klGl(tab, i);
     }
 
-    public int[][][] klAndGl (double aliveProb, int n, int i, long seed){
+    public int[][][] klAndGl (double aliveProb, int n, int i, long seed, double klAliveProb){
         int[][] tab = new int[n][n];
-        int[] species = {1,2,3,4,5};
-        return klGl(generateRandomPopulation(seed, tab, aliveProb, species), i);
+        return klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i);
     }
 }
