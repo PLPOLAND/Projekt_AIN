@@ -38,7 +38,7 @@ public class MainRESTController {
 
     public int[][][] glParam(@RequestBody FromVizData data) {
         int [][][] tmp = ca.gl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());
-        stats.setFileName("glparamStats.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp,true,data);
         return tmp;
     }
@@ -47,7 +47,7 @@ public class MainRESTController {
     
     public int[][][] gl(@RequestBody FromVizData data) {
         int[][][] tmp = ca.gl(data.getTab(), data.getIter());
-        stats.setFileName("glStats.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp,true, data);
         return tmp;
     }
@@ -56,7 +56,7 @@ public class MainRESTController {
     public int[][][] klParam(@RequestBody FromVizData data) {
         
         int [][][] tmp = ca.kl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());
-        stats.setFileName("klparamStats.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp, true, data);
         return tmp;
     }
@@ -65,7 +65,7 @@ public class MainRESTController {
     
     public int[][][] kl(@RequestBody FromVizData data) {
         int [][][] tmp = ca.kl(data.getTab(), data.getIter());
-        stats.setFileName("klStats.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp, true, data);
         return tmp;
     }
@@ -81,7 +81,7 @@ public class MainRESTController {
             tmp[i] = ca.kl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
         }
 
-        stats.setFileName("klMultirun.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp,true, seeds, dane);
         return true;
     }
@@ -98,7 +98,7 @@ public class MainRESTController {
             tmp[i] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
         }
 
-        stats.setFileName("GLMultirun.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp, true, seeds, dane);
         return true;
     }
@@ -107,8 +107,8 @@ public class MainRESTController {
     @RequestMapping(value = "klglparam", consumes = MediaType.APPLICATION_JSON_VALUE)
     public int[][][] klglParam(@RequestBody FromVizData data) {
 
-        int[][][] tmp = ca.kl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());//TODO zmienić wywołanie funkcji sumulującej 
-        stats.setFileName("klglparamStats.txt");
+        int[][][] tmp = ca.klAndGl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());//TODO zmienić wywołanie funkcji sumulującej 
+        stats.setFileName("results.txt");
         stats.generateStats(tmp, false, data);
         return tmp;
     }
@@ -116,8 +116,8 @@ public class MainRESTController {
     @RequestMapping(value = "klgl", consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public int[][][] klgl(@RequestBody FromVizData data) {
-        int[][][] tmp = ca.kl(data.getTab(), data.getIter());// TODO zmienić wywołanie funkcji sumulującej
-        stats.setFileName("klglStats.txt");
+        int[][][] tmp = ca.klAndGl(data.getTab(), data.getIter());// TODO zmienić wywołanie funkcji sumulującej
+        stats.setFileName("results.txt");
         stats.generateStats(tmp, false, data);
         return tmp;
     }
@@ -127,14 +127,14 @@ public class MainRESTController {
     public boolean multirun_klgl(@RequestBody FromVizData dane) {
         int[][][][] tmp = new int[dane.getMultirun_runs()][dane.getIter()][dane.getN()][dane.getN()];
         long[] seeds = new long[dane.getMultirun_runs()];
-        tmp[0] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed());//TODO zmienić wywołanie funkcji sumulującej 
+        tmp[0] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed());//TODO zmienić wywołanie funkcji sumulującej 
         seeds[0] = dane.getSeed();
         for (int i = 1; i < dane.getMultirun_runs(); i++) {
             seeds[i] = random.nextLong();
-            tmp[i] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);//TODO zmienić wywołanie funkcji sumulującej 
+            tmp[i] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);//TODO zmienić wywołanie funkcji sumulującej 
         }
 
-        stats.setFileName("KLGLMultirun.txt");
+        stats.setFileName("results.txt");
         stats.generateStats(tmp, false, seeds, dane);
         return true;
     }
