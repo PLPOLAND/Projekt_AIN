@@ -1,9 +1,26 @@
 package ca.algorithms;
+import java.util.Arrays;
 import java.util.Random;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
 /**
  * @author Bartłomiej Kozłowski
  */
 public class CellularAutomata {
+    File debugFile;
+    PrintWriter zapis;
+    // public CellularAutomata() throws FileNotFoundException{
+    //     try{
+    //         debugFile = new File("DEBUD.txt");
+    //         zapis = new PrintWriter(debugFile);
+    //     }
+    //     catch(FileNotFoundException e){
+    //         System.out.println("Nie znaleziono pliku.");
+    //     }
+    // }
+
     /**
      * 
      * @param tab - tablica zawierająca dane pokolenie CA
@@ -18,7 +35,7 @@ public class CellularAutomata {
         int[] ans = new int[6];
         for(int k=i-d; k <=i+d; k++){
             for(int l=j-d; l <=j+d; l++){
-                if((k==i)&& (l==j)) continue;
+                if((k==i) && (l==j)) continue;
 
                 int x, y;
                 if(k<0) x = n+k;
@@ -69,22 +86,37 @@ public class CellularAutomata {
         return tab;
     }
 
-    private int glR2(int[] neigh){
-        if(neigh[1] + neigh[3]  == 3) {return 1;} //DEBUG 2.1
+    private int glR2(int[] neigh, PrintWriter zapis) {
+        if(neigh[1] + neigh[3]  == 3) {
+            zapis.println("DEBUG 2.1: GL-r1-1");
+            zapis.println("new state = 1");//DEBUG 2.1
+            return 1;} 
         else if(
             (neigh[2] == 2) || (
                 (neigh[2] == 1) && (
                     (neigh[4] == 1) || (neigh[5] == 1))
             )
-        ) {return 2;}   //DEBUG 2.2
+        ) {
+            zapis.println("DEBUG 2.2: GL-r2-2"); //DEBUG 2.2
+            zapis.println("new state = 2");
+            return 2;
+        }
         else if(
             (neigh[4] >=2) || (
                 (neigh[4] == 1) && (
                     (neigh[2] == 1) && ((neigh[1] ==1) || (neigh[3] == 1))
                     )
             )
-        ) {return 4;} //DEBUG 2.3
-        else if(neigh[5] >=2){return 5;} //DEBUG 2.4
+        ) {
+            zapis.println("DEBUG 2.3: GL-r2-3.1"); //DEBUG 2.3
+            zapis.println("new state = 3.1");    //u nas 3.1 numerujemy jako 4
+            return 4;
+        }
+        else if(neigh[5] >=2){
+            zapis.println("DEBUG 2.4: GL-r2-3.2"); //DEBUG 2.4
+            zapis.println("new state = 3.2");   //u nas 3.2 numerujemy jako 5
+            return 5;
+        }
         else if(
             (neigh[5] == 1) && (
                 (neigh[2] == 1) && (
@@ -93,26 +125,46 @@ public class CellularAutomata {
             )
         ) {
             Random rand = new Random();
-            if(rand.nextDouble() <= 0.5){return 4;}
-            else {return 5;}
+            double x = rand.nextDouble();
             //DEBUG 2.5
+            zapis.println("DEBUG2.5: GL-r2-rand");
+            zapis.println("x = "+x);
+            if(x <= 0.5){
+                zapis.println("new state = 3.1");
+                return 4;
+            }
+            else {
+                zapis.println("new state = 3.2");
+                return 5;
+            }
         }
-        else{return 5;} //DEBUG 2.6
+        else{
+            //DEBUG 2.6
+            zapis.println("DEBUG 2.6: GL-r2-11");    
+            zapis.println("new state = 11");
+            return 3;
+        }
     }
 
-    private int glR1_2neigh(int[] neigh) {
+    private int glR1_2neigh(int[] neigh, PrintWriter zapis) {
         if(
             (neigh[1] == 2) || (
                 (neigh[3] == 2) || (
-                    (neigh[1] == 1) && (neigh[11] == 1)
+                    (neigh[1] == 1) && (neigh[3] == 1)
                 )
             )
-        ){return 1;}
-        else {return 3;}
         // DEBUG 1.1
+        ){
+            zapis.println("DEBUG 1.1: new state = 1");
+            return 1;
+        }
+        else {
+            zapis.println("DEBUG 1.1: new state = 11");
+            return 3;
+        }
     }
 
-    private int glR1_3neigh(int[] neigh){
+    private int glR1_3neigh(int[] neigh, PrintWriter zapis) {
         if(
             (neigh[1] == 3) || (
                 (neigh[3] == 3) || (
@@ -121,96 +173,111 @@ public class CellularAutomata {
                     )
                 )
             )
-        ) {return 1;}
-        else {return 3;}
         //DEBUG 1.2
+        ) {
+            zapis.println("DEBUG 1.2: new state = 1");
+            return 1;
+        }
+        else {
+            zapis.println("DEBUG 1.2: new state = 11");
+            return 3;
+        }
     }
 
-    private int klR(int[] neigh){
-        if(neigh[1] + neigh[3] == 4){return 1;}
+    private int klR(int[] neigh, PrintWriter zapis) {
+        zapis.println("DEBUG 20: ");
+        int ans;
+        if(neigh[1] + neigh[3] == 4){ans = 1;}
         //////////////////KL-R-2/////////////////////
         // 4 niebieskie
-        else if(neigh[2] == 4){return 2;}
+        else if(neigh[2] == 4){ans = 2;}
         
         //kiedy są 3 niebieskie
         else if(neigh[2] + neigh[3] + neigh[1] + neigh[4] + neigh[5] == 4 && neigh[2] == 3){
-            return 2;
+            ans = 2;
         }
 
         //kiedy są 2 niebieskie
         else if(neigh[2] == 2 && (neigh[1] == 1 && neigh[3] == 1)){
-            return 2;
+            ans = 2;
         }
         else if(neigh[2] == 2 && (neigh[1] == 1 && neigh[4] == 1)){
-            return 2;
+            ans = 2;
         }
         else if(neigh[2] == 2 && (neigh[1] == 1 && neigh[5] == 1)){
-            return 2;
+            ans = 2;
         }
         else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[5] == 1)){
-            return 2;
+            ans = 2;
         }
         else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[4] == 1)){
-            return 2;
+            ans = 2;
         }
         else if(neigh[2] == 2 && (neigh[4] == 1 && neigh[5] == 1)){
-            return 2;
+            ans = 2;
         }
 
-        else if(neigh[2] == 2 && neigh[4] == 2){return 2;}
-        else if(neigh[2] == 2 && neigh[5] == 2){return 2;}
+        else if(neigh[2] == 2 && neigh[4] == 2){ans = 2;}
+        else if(neigh[2] == 2 && neigh[5] == 2){ans = 2;}
 
         // 1 niebieski
-        if(neigh[2] == 1 && neigh[4] == 3){return 2;}
-        if(neigh[2] == 1 && (neigh[4] == 2 && neigh[5] == 1)){return 2;}
-        if(neigh[2] == 1 && (neigh[4] == 1 && neigh[5] == 2)){return 2;}
-        if(neigh[2] == 1 && neigh[5] == 3){return 2;}
+        if(neigh[2] == 1 && neigh[4] == 3){ans = 2;}
+        if(neigh[2] == 1 && (neigh[4] == 2 && neigh[5] == 1)){ans = 2;}
+        if(neigh[2] == 1 && (neigh[4] == 1 && neigh[5] == 2)){ans = 2;}
+        if(neigh[2] == 1 && neigh[5] == 3){ans = 2;}
 
         Random rand = new Random();
         if(neigh[2] == 2 && ((neigh[1] == 1 || neigh[3] == 1) || (neigh[3] == 2))){
-            if(rand.nextDouble() <= 0.5){return 3;}
-            else {return 2;}
+            if(rand.nextDouble() <= 0.5){ans = 3;}
+            else {ans = 2;}
         }
         
         //////////////////KL-R-4(KL-R-31)/////////////////////
-        else if(neigh[4] == 3 && neigh[5] == 1){return 4;}
-        else if(neigh[4] == 2 && (neigh[1] == 1 && neigh[2] == 1)){return 4;}
-        else if(neigh[4] == 2 && (neigh[3] == 1 && neigh[2] == 1)){return 4;}
-        else if(neigh[4] == 4){return 4;}
+        else if(neigh[4] == 3 && neigh[5] == 1){ans = 4;}
+        else if(neigh[4] == 2 && (neigh[1] == 1 && neigh[2] == 1)){ans = 4;}
+        else if(neigh[4] == 2 && (neigh[3] == 1 && neigh[2] == 1)){ans = 4;}
+        else if(neigh[4] == 4){ans = 4;}
 
         else if(neigh[4] == 2 && neigh[5] == 2){
             if(rand.nextDouble() <= 0.5){
-                return 4;
+                ans = 4;
             }
-            else {return 5;}
+            else {ans = 5;}
         }
 
         //////////////////KL-R-5(KL-R-32)/////////////////////
-        else if(neigh[1] == 2 && neigh[2] == 2){return 5;}
-        else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[1] == 1)){return 5;}
-        else if(neigh[2] == 2 && neigh[3] == 2){return 5;}
+        else if(neigh[1] == 2 && neigh[2] == 2){ans = 5;}
+        else if(neigh[2] == 2 && (neigh[3] == 1 && neigh[1] == 1)){ans = 5;}
+        else if(neigh[2] == 2 && neigh[3] == 2){ans = 5;}
 
         else if((neigh[1] == 1 && neigh[2] == 1) && 
                 (neigh[4] == 1 && neigh[5] == 1)){
-            return 5;
+            ans = 5;
         }
         else if ((neigh[1] == 1 && neigh[2] == 1) && neigh[5] == 2){
-            return 5;
+            ans = 5;
         }
 
         else if((neigh[3] == 1 && neigh[2] == 1) && 
                 (neigh[4] == 1 && neigh[5] == 1)){
-            return 5;
+            ans = 5;
         }
         else if ((neigh[3] == 1 && neigh[2] == 1) && neigh[5] == 2){
-            return 5;
+            ans = 5;
         }
         
-        else if(neigh[4] == 1 && neigh[5] == 3){return 5;}
-        else if(neigh[5] == 4){return 5;}
+        else if(neigh[4] == 1 && neigh[5] == 3){ans = 5;}
+        else if(neigh[5] == 4){ans = 5;}
         ////////////////////////////////////////////////////
-        else {return 0;}
+        else {ans = 0;}
         //DEBUG 20
+        String newState;
+        if(ans == 3){newState = "11";}
+        else if(ans == 4){newState = "3.1";}
+        else if(ans == 5){newState = "3.2";}
+        else{newState = String.valueOf(ans);}
+        zapis.println("new state = "+newState);
+        return ans;
     }
 
     /**
@@ -340,7 +407,26 @@ public class CellularAutomata {
         return tab2;
     }
 
-    private int[][][] klGl(int[][] tab, int i){
+    private String printTable(int[][] tab){
+        int n = tab.length;
+        StringBuilder bld = new StringBuilder();
+        for(int i = 0; i <n; i++){
+            for(int j = 0; j <n; j++){
+                bld.append(tab[i][j] + " ");
+            }
+            bld.append("\n");
+        }
+        return bld.toString();
+    }
+
+    private int[][][] klGl(int[][] tab, int i) {
+        debugFile = new File("DEBUG.txt");
+        try{
+            zapis = new PrintWriter(debugFile);
+        }
+        catch(FileNotFoundException e){
+            System.out.println("Błąd w tworzeniu PrintWriter.");
+        }
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
         Random rand = new Random();
@@ -352,59 +438,79 @@ public class CellularAutomata {
                 tab2[0][x][y] = tab[x][y];
             }
         }
-        //DEBUG1
         for (int gen=1; gen<i; gen++){
+
+            //DEBUG1
+            zapis.println("DEBUG1: t= " + (gen-1));
+            zapis.println(printTable(tab2[gen-1]));
+            zapis.println("-----------------------------------");
+            
             for(int k=0; k<n; k++){
                 for(int l=0; l<n; l++){
                     int[] tmp = mooreN(tab2[gen-1], k, l, 2);
                     int numAlive = 0;
-                    for(int m=0; m<tmp.length; m++){numAlive += tmp[m];}
+                    for(int m=1; m<tmp.length; m++){numAlive += tmp[m];}
+
                     //DEBUG2
+                    zapis.println("DEBUG2:");
+                    zapis.println("i: "+k+" j: "+l);
+                    zapis.println("state(i, j): "+tab2[gen][k][l]);
+                    zapis.println("Moore Neighbourhood: ");
+                    zapis.println("Num_alive: "+numAlive+" Num_1: "+tmp[1]+" Num_2: "+tmp[2]+" Num_11: "+tmp[3]+" Num_31: "+tmp[4]+" Num_32: "+tmp[5]);
 
                     if(tab2[gen-1][k][l] == 0){
-                        if(rand.nextDouble() <= 0.5){
+                        double x = rand.nextDouble();
                         //DEBUG3
-                        tab2[gen][k][l] = glR2(tmp);
+                        zapis.println("DEBUG3: x= "+x);
+
+                        if(x <= 0.5){
+                        tab2[gen][k][l] = glR2(tmp, zapis);
                         }
                         else{
-                       tab2[gen][k][l] = klR(tmp);
+                       tab2[gen][k][l] = klR(tmp, zapis);
                         }
                     }
                     else if((tab2[gen-1][k][l] == 1) || (tab2[gen-1][k][l] == 3)){    //jeśli komórka jest czerwona lub żółta
                         if((numAlive < 2) || (numAlive > 3)){
                             //DEBUG4
                             tab2[gen][k][l] = 0;
+                            zapis.println("DEBUG4: new state = 0");
                         }
                         else{
                             //DEBUG5
-                            if(numAlive == 2){tab2[gen][k][l] = glR1_2neigh(tmp);}
-                            else{tab2[gen][k][l] = glR1_3neigh(tmp);}
+                            zapis.println("DEBUG5: new state = r1/r2");
+                            if(numAlive == 2){tab2[gen][k][l] = glR1_2neigh(tmp,zapis);}
+                            else{tab2[gen][k][l] = glR1_3neigh(tmp,zapis);}
                         }
                     }
                     else if(tab2[gen-1][k][l] == 4){
                         double x = rand.nextDouble();
                         //DEBUG6
+                        zapis.println("DEBUG6: x = "+x);
                         if(x <=0.5){
                             if((numAlive < 2) || (numAlive > 3)){
                                 tab2[gen][k][l] = 0;
                             }
                             else{
-                                if(numAlive == 2){tab2[gen][k][l] = glR1_2neigh(tmp);}
-                                else{tab2[gen][k][l] = glR1_3neigh(tmp);}
+                                if(numAlive == 2){tab2[gen][k][l] = glR1_2neigh(tmp,zapis);}
+                                else{tab2[gen][k][l] = glR1_3neigh(tmp,zapis);}
                             }
                         }
                         else{
                             //DEBUG7
-                            tab2[gen][k][l] = klR(tmp);
+                            zapis.println("DEBUG7: new state = KL");
+                            tab2[gen][k][l] = klR(tmp,zapis);
                         }
                     }
                     else if((tab2[gen-1][k][l] == 2) || (tab2[gen-1][k][l] == 5)){
                         //DEBUG8
-                        tab2[gen][k][l] = klR(tmp);
+                        zapis.println("DEBUG8: new state = KL");
+                        tab2[gen][k][l] = klR(tmp,zapis);
                     }
                 }
             }
         }
+        zapis.close();
         return tab2;
     }
 
