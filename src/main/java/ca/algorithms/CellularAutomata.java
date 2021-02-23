@@ -11,15 +11,6 @@ import java.lang.reflect.Array;
 public class CellularAutomata {
     File debugFile;
     PrintWriter zapis;
-    // public CellularAutomata() throws FileNotFoundException{
-    //     try{
-    //         debugFile = new File("DEBUD.txt");
-    //         zapis = new PrintWriter(debugFile);
-    //     }
-    //     catch(FileNotFoundException e){
-    //         System.out.println("Nie znaleziono pliku.");
-    //     }
-    // }
 
     /**
      * 
@@ -138,12 +129,13 @@ public class CellularAutomata {
                 return 5;
             }
         }
-        else{
+        else if(neigh[1]+neigh[2]+neigh[3]+neigh[4]+neigh[5] == 3){
             //DEBUG 2.6
             zapis.println("DEBUG 2.6: GL-r2-11");    
             zapis.println("new state = 11");
             return 3;
         }
+        else {return 0;}
     }
 
     private int glR1_2neigh(int[] neigh, PrintWriter zapis) {
