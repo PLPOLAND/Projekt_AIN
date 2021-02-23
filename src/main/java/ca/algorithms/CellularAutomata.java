@@ -86,11 +86,11 @@ public class CellularAutomata {
             zapis.println("DEBUG 2.1: GL-r1-1");
             zapis.println("new state = 1");//DEBUG 2.1
             return 1;} 
-        else if(
+        else if((
             (neigh[2] == 2) || (
                 (neigh[2] == 1) && (
                     (neigh[4] == 1) || (neigh[5] == 1))
-            )
+            ) && numAlive == 2)
         ) {
             zapis.println("DEBUG 2.2: GL-r2-2"); //DEBUG 2.2
             zapis.println("new state = 2");
@@ -182,6 +182,7 @@ public class CellularAutomata {
 
     private int klR(int[] neigh, PrintWriter zapis) {
         if(neigh[1]+neigh[2]+neigh[3]+neigh[4]+neigh[5] != 4){return 0;}
+        Random rand = new Random();
 
         zapis.println("DEBUG 20: ");
         int ans;
@@ -219,13 +220,12 @@ public class CellularAutomata {
         else if(neigh[2] == 2 && neigh[5] == 2){ans = 2;}
 
         // 1 niebieski
-        if(neigh[2] == 1 && neigh[4] == 3){ans = 2;}
-        if(neigh[2] == 1 && (neigh[4] == 2 && neigh[5] == 1)){ans = 2;}
-        if(neigh[2] == 1 && (neigh[4] == 1 && neigh[5] == 2)){ans = 2;}
-        if(neigh[2] == 1 && neigh[5] == 3){ans = 2;}
+        else if(neigh[2] == 1 && neigh[4] == 3){ans = 2;}
+        else if(neigh[2] == 1 && (neigh[4] == 2 && neigh[5] == 1)){ans = 2;}
+        else if(neigh[2] == 1 && (neigh[4] == 1 && neigh[5] == 2)){ans = 2;}
+        else if(neigh[2] == 1 && neigh[5] == 3){ans = 2;}
 
-        Random rand = new Random();
-        if(neigh[2] == 2 && ((neigh[1] == 1 || neigh[3] == 1) || (neigh[3] == 2))){
+        else if(neigh[2] == 2 && ((neigh[1] == 1 || neigh[3] == 1) || (neigh[3] == 2))){
             if(rand.nextDouble() <= 0.5){ans = 3;}
             else {ans = 2;}
         }
