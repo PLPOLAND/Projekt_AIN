@@ -107,7 +107,7 @@ public class MainRESTController {
     @RequestMapping(value = "klglparam", consumes = MediaType.APPLICATION_JSON_VALUE)
     public int[][][] klglParam(@RequestBody FromVizData data) {
 
-        int[][][] tmp = ca.klAndGl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed(), 0.5);//TODO Dodać prawdopodobieństwo, że żyjąca komórka będzie kl w pierwszej generacji 
+        int[][][] tmp = ca.klAndGl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed(), data.getProb_a_kl());//TODO Dodać prawdopodobieństwo, że żyjąca komórka będzie kl w pierwszej generacji 
         stats.setFileName("results.txt");
         stats.generateStats(tmp, false, data);
         return tmp;
@@ -127,11 +127,11 @@ public class MainRESTController {
     public boolean multirun_klgl(@RequestBody FromVizData dane) {
         int[][][][] tmp = new int[dane.getMultirun_runs()][dane.getIter()][dane.getN()][dane.getN()];
         long[] seeds = new long[dane.getMultirun_runs()];
-        tmp[0] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), 0.5);//TODO Dodać prawdopodobieństwo, że żyjąca komórka będzie kl w pierwszej generacji
+        tmp[0] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), dane.getProb_a_kl());//TODO Dodać prawdopodobieństwo, że żyjąca komórka będzie kl w pierwszej generacji
         seeds[0] = dane.getSeed();
         for (int i = 1; i < dane.getMultirun_runs(); i++) {
             seeds[i] = random.nextLong();
-            tmp[i] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i], 0.5);//TODO Dodać prawdopodobieństwo, że żyjąca komórka będzie kl w pierwszej generacji
+            tmp[i] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i], dane.getProb_a_kl());//TODO Dodać prawdopodobieństwo, że żyjąca komórka będzie kl w pierwszej generacji
         }
 
         stats.setFileName("results.txt");
