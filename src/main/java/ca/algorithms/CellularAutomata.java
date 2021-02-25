@@ -78,26 +78,26 @@ public class CellularAutomata {
     }
 
     private int glR2(int[] neigh, PrintWriter zapis) {
-        //CZY TRZEBA UWZGLĘDNIAĆ TO, ŻE INNE KOMÓRKI POZA SPRAWDZANAMI W WARUNKU TEŻ MOGA BYĆ ŻYWE?
         int numAlive = neigh[1]+neigh[2]+neigh[3]+neigh[4]+neigh[5];
-        if(numAlive != 2 && numAlive != 3){return 0;}
+        int tmp = 3 - neigh[2] + neigh[4] + neigh[5];
+        if(numAlive != 3){return 0;}
 
         if(neigh[1] + neigh[3]  == 3) {
             zapis.println("DEBUG 2.1: GL-r1-1");
             zapis.println("new state = 1");//DEBUG 2.1
             return 1;} 
-        else if((
+        else if(neigh[2] == 3 || (neigh[2] > 2 && tmp == 3)) /*((
             (neigh[2] == 2) || (
                 (neigh[2] == 1) && (
                     (neigh[4] == 1) || (neigh[5] == 1))
             ) && numAlive == 2)
-        ) {
+        )*/ {
             zapis.println("DEBUG 2.2: GL-r2-2"); //DEBUG 2.2
             zapis.println("new state = 2");
             return 2;
         }
         else if(
-            (neigh[4] >=2) || (
+            (neigh[4] == 3) || (
                 (neigh[4] == 1) && (
                     (neigh[2] == 1) && ((neigh[1] ==1) || (neigh[3] == 1))
                     )
@@ -107,7 +107,7 @@ public class CellularAutomata {
             zapis.println("new state = 3.1");    //u nas 3.1 numerujemy jako 4
             return 4;
         }
-        else if(neigh[5] >=2){
+        else if(neigh[5] == 3){
             zapis.println("DEBUG 2.4: GL-r2-3.2"); //DEBUG 2.4
             zapis.println("new state = 3.2");   //u nas 3.2 numerujemy jako 5
             return 5;
