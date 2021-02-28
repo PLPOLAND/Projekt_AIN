@@ -42,21 +42,21 @@ public class CellularAutomata {
         return ans;
     }
 
-    private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, int[] species){
-        int n = tab[0].length;
-        int seciesNum = species.length;
-        Random rand = new Random(seed);
-        for(int k=0; k<n; k++){
-            for(int l=0; l<n; l++){
-                if(rand.nextDouble()>aliveProb) tab[k][l] = 0;
-                else {
+    // private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, int[] species){
+    //     int n = tab[0].length;
+    //     int seciesNum = species.length;
+    //     Random rand = new Random(seed);
+    //     for(int k=0; k<n; k++){
+    //         for(int l=0; l<n; l++){
+    //             if(rand.nextDouble()>aliveProb) tab[k][l] = 0;
+    //             else {
                     
-                    tab[k][l] = species[rand.nextInt(seciesNum)];
-                }
-            }
-        }
-        return tab;
-    }
+    //                 tab[k][l] = species[rand.nextInt(seciesNum)];
+    //             }
+    //         }
+    //     }
+    //     return tab;
+    // }
 
     private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, double klAliveProb){
         int n = tab[0].length;
@@ -65,7 +65,7 @@ public class CellularAutomata {
             for(int l=0; l<n; l++){
                 if(rand.nextDouble()>aliveProb) tab[k][l] = 0;
                 else {
-                    if(rand.nextDouble() <= klAliveProb){
+                    if(rand.nextDouble() < klAliveProb){
                     tab[k][l] = 2;
                     }
                     else {
@@ -326,8 +326,8 @@ public class CellularAutomata {
      */
     public int[][][] gl(double aliveProb, int n, int i, long seed){
         int[][][] tab2 =new int[i][n][n];
-        int[] species = {1};
-        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, species);
+        //int[] species = {1};
+        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, 0);
 
         for(int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
@@ -389,8 +389,8 @@ public class CellularAutomata {
      */
     public int[][][] kl(double aliveProb, int n, int i, long seed){
         int[][][] tab2 = new int[i][n][n];
-        int[] species = {2};
-        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, species);
+        //int[] species = {2};
+        tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, 1);
 
         for (int gen=1; gen<i; gen++){
             for(int k=0; k<n; k++){
@@ -455,7 +455,7 @@ public class CellularAutomata {
                     //DEBUG2
                     zapis.println("DEBUG2:");
                     zapis.println("i: "+k+" j: "+l);
-                    zapis.println("state(i, j): "+tab2[gen][k][l]);
+                    zapis.println("state(i, j): "+tab2[gen-1][k][l]);
                     zapis.println("Moore Neighbourhood: ");
                     zapis.println("Num_aliveR2: "+numAliveR2+" Num_1: "+neigh2[1]+" Num_2: "+neigh2[2]+" Num_11: "+neigh2[3]+" Num_31: "+neigh2[4]+" Num_32: "+neigh2[5]);
                     zapis.println("Num_aliveR1: "+numAliveR1+" Num_1: "+neigh1[1]+" Num_2: "+neigh1[2]+" Num_11: "+neigh1[3]+" Num_31: "+neigh1[4]+" Num_32: "+neigh1[5]);
