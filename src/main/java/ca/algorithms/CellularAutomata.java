@@ -460,12 +460,12 @@ public class CellularAutomata {
                     for(int m=1; m<neigh1.length; m++){numAliveR1 += neigh1[m];}
 
                     //DEBUG2
-                    zapis.println("DEBUG2:");
-                    zapis.println("i: "+k+" j: "+l);
-                    zapis.println("state(i, j): "+tab2[gen-1][k][l]);
-                    zapis.println("Moore Neighbourhood: ");
-                    zapis.println("Num_aliveR2: "+numAliveR2+" Num_1: "+neigh2[1]+" Num_2: "+neigh2[2]+" Num_11: "+neigh2[3]+" Num_31: "+neigh2[4]+" Num_32: "+neigh2[5]);
-                    zapis.println("Num_aliveR1: "+numAliveR1+" Num_1: "+neigh1[1]+" Num_2: "+neigh1[2]+" Num_11: "+neigh1[3]+" Num_31: "+neigh1[4]+" Num_32: "+neigh1[5]);
+                    debug("DEBUG2:");
+                    debug("i: "+k+" j: "+l);
+                    debug("state(i, j): "+tab2[gen-1][k][l]);
+                    debug("Moore Neighbourhood: ");
+                    debug("Num_aliveR2: "+numAliveR2+" Num_1: "+neigh2[1]+" Num_2: "+neigh2[2]+" Num_11: "+neigh2[3]+" Num_31: "+neigh2[4]+" Num_32: "+neigh2[5]);
+                    debug("Num_aliveR1: "+numAliveR1+" Num_1: "+neigh1[1]+" Num_2: "+neigh1[2]+" Num_11: "+neigh1[3]+" Num_31: "+neigh1[4]+" Num_32: "+neigh1[5]);
 
                     if(tab2[gen-1][k][l] == 0){
                         double x = rand.nextDouble();
