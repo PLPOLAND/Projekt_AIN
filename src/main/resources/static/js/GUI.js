@@ -8,9 +8,9 @@ const GL3 = "#00FF00";
 
 
 
-var size = 5;
+var size = 100;
 
-
+var iter = 0;
 
 $(document).ready(function () {
     $(window).resize(function(){$("#kwadraty").css("height", $("#kwadraty").css("width"))});
@@ -26,17 +26,7 @@ function podziel_na_komorki(x) {
     for (let i = 0; i < x; i++) {
         row =$('<div class="row"></div>')
         for (let j = 0; j < y; j++) {
-            id = "";
-            if (i<10) {
-                id = id + "0" + i;
-            }
-            else
-            id = id + i;
-            if (j<10) {
-                id = id + "0" + j;
-            }
-            else
-            id = id + j;
+            id = getCell(i,j);
             tmp = $('<div id="'+id+'" class="komorka"></div>')
             $($(row)).append($(tmp));
         }
@@ -59,17 +49,7 @@ function ustaw_wymiary_komorek(x,y){
  * @param {*} kolor - kolor hex
  */
 function koloruj(x,y,kolor) {
-    id = "";
-    if (x < 10) {
-        id = id + "0" + x;
-    }
-    else
-        id = id + x;
-    if (y < 10) {
-        id = id + "0" + y;
-    }
-    else
-        id = id + y;
+    id = getCell(x,y);
     // console.log(kolor);
     $("#"+id).css("background-color",kolor)
 
@@ -114,13 +94,21 @@ function kolorujEl2(element,type) {
 }
 function getCell(x,y){
     id = "";
-    if (x < 10) {
+    //X
+    if(x < 100 && x >= 10){
         id = id + "0" + x;
+    }
+    else if (x < 10) {
+        id = id + "00" + x;
     }
     else
         id = id + x;
-    if (y < 10) {
+    //Y
+    if (y < 100 && y >= 10) {
         id = id + "0" + y;
+    }
+    else if (y < 10) {
+        id = id + "00" + y;
     }
     else
         id = id + y;
@@ -147,12 +135,21 @@ function randomujkolory() {
 }
 
 function kolorujzDanych(dane,N, iteracja) {
+    
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
-            kolorujEl2($("#" + getCell(i, j)), dane[iteracja][i][j]);
-            $("#" + getCell(i, j)).prop("algo", dane[iteracja][i][j]);
+            if (iteracja == 0 ) {
+                kolorujEl2($("#" + getCell(i, j)), dane[iteracja][i][j]);
+                $("#" + getCell(i, j)).prop("algo", dane[iteracja][i][j]);
+            }
+            else if (dane[iter][i][j] != dane[iteracja][i][j]) {
+
+                kolorujEl2($("#" + getCell(i, j)), dane[iteracja][i][j]);
+                $("#" + getCell(i, j)).prop("algo", dane[iteracja][i][j]);
+            }
         }
     }
+    iter = iteracja 
 }
 function clear(N) {
     for (let i = 0; i < N; i++) {

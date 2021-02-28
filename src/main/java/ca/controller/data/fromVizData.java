@@ -11,11 +11,12 @@ public class FromVizData {
     double prob_a_gl;
     double prob_a_kl;
     int multirun_runs;
+    boolean debug;
 
     public FromVizData() {
     }
 
-    public FromVizData(int iter, int[][] tab, long seed, int n, double prob_a, double prob_a_gl, double prob_a_kl, int multirun_runs) {
+    public FromVizData(int iter, int[][] tab, long seed, int n, double prob_a, double prob_a_gl, double prob_a_kl, int multirun_runs, boolean debug) {
         this.iter = iter;
         this.tab = tab;
         this.seed = seed;
@@ -24,6 +25,7 @@ public class FromVizData {
         this.prob_a_gl = prob_a_gl;
         this.prob_a_kl = prob_a_kl;
         this.multirun_runs = multirun_runs;
+        this.debug = debug;
     }
 
     public int getIter() {
@@ -90,6 +92,18 @@ public class FromVizData {
         this.multirun_runs = multirun_runs;
     }
 
+    public boolean isDebug() {
+        return this.debug;
+    }
+
+    public boolean getDebug() {
+        return this.debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
     public FromVizData iter(int iter) {
         setIter(iter);
         return this;
@@ -130,6 +144,11 @@ public class FromVizData {
         return this;
     }
 
+    public FromVizData debug(boolean debug) {
+        setDebug(debug);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -138,12 +157,12 @@ public class FromVizData {
             return false;
         }
         FromVizData fromVizData = (FromVizData) o;
-        return iter == fromVizData.iter && Objects.equals(tab, fromVizData.tab) && seed == fromVizData.seed && n == fromVizData.n && prob_a == fromVizData.prob_a && prob_a_gl == fromVizData.prob_a_gl && prob_a_kl == fromVizData.prob_a_kl && multirun_runs == fromVizData.multirun_runs;
+        return iter == fromVizData.iter && Objects.equals(tab, fromVizData.tab) && seed == fromVizData.seed && n == fromVizData.n && prob_a == fromVizData.prob_a && prob_a_gl == fromVizData.prob_a_gl && prob_a_kl == fromVizData.prob_a_kl && multirun_runs == fromVizData.multirun_runs && debug == fromVizData.debug;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(iter, tab, seed, n, prob_a, prob_a_gl, prob_a_kl, multirun_runs);
+        return Objects.hash(iter, tab, seed, n, prob_a, prob_a_gl, prob_a_kl, multirun_runs, debug);
     }
 
     @Override
@@ -157,6 +176,7 @@ public class FromVizData {
             ", prob_a_gl='" + getProb_a_gl() + "'" +
             ", prob_a_kl='" + getProb_a_kl() + "'" +
             ", multirun_runs='" + getMultirun_runs() + "'" +
+            ", debug='" + isDebug() + "'" +
             "}";
     }
 

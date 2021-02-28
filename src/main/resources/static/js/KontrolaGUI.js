@@ -307,132 +307,6 @@ function changeAlgoTypeOfCell_Viz(element) {
     kolorujEl2(element,tmp);
 }
 
-function glParam() {
-    $.ajax({
-        url: "/api/glparam",
-        type: 'get',
-        data: {
-            seed : $("#seed").val(),
-            N: $("#wymiar").val(),
-            iter : $("#iteracji").val(),
-            prob: aliveProbability.val()
-        },
-        success: function (response) {
-            msgbox = $("#msgWindow")
-            msgbox.css("background-color", "#00FF00");
-            msgbox.html("Odebrano dane do wizualizacji");
-            msgbox.show(500);
-            setTimeout(hideMsgBox,3000);
-            console.log(response);
-            vizData = response;
-            kolorujzDanych(vizData, $("#wymiar").val(),0);
-            $("#viz_number").val(0);
-        }
-    }).fail(function (jqXHR, exception) {
-        console.log(jqXHR.responseJSON.error);
-        msgbox = $("#msgWindow");
-        msgbox.css("background-color", "#FF0000");
-        msgbox.text(jqXHR.responseJSON.error);
-        msgbox.show(500);
-        setTimeout(hideMsgBox, 5000);
-    });
-
-}
-function gl(){
-    console.log(readCells());
-    $.ajax({
-        url: "/api/gl",
-        type: 'post',
-        data: JSON.stringify({
-            iter: parseInt($("#iteracji").val()),
-            tab: readCells()
-        }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            msgbox = $("#msgWindow");//uchwyt
-            msgbox.css("background-color", "#00FF00");
-            msgbox.html("Odebrano dane do wizualizacji");//msg
-            msgbox.show(500);//show
-            setTimeout(hideMsgBox,3000);//hide
-
-            console.log(response);
-            vizData = response;
-            kolorujzDanych(vizData, $("#wymiar").val(), 0);
-            $("#viz_number").val(0);
-        },
-    }).fail(function (jqXHR, exception) {
-        console.log(jqXHR.responseJSON.error);
-        msgbox = $("#msgWindow");
-        msgbox.css("background-color", "#FF0000");
-        msgbox.text(jqXHR.responseJSON.error);
-        msgbox.show(500);
-        setTimeout(hideMsgBox, 5000);
-    });
-}
-function klParam() {
-    $.ajax({
-        url: "/api/klparam",
-        type: 'get',
-        data: {
-            seed : $("#seed").val(),
-            N: $("#wymiar").val(),
-            iter : $("#iteracji").val(),
-            prob: aliveProbability.val()
-        },
-        success: function (response) {
-            msgbox = $("#msgWindow")
-            msgbox.css("background-color", "#00FF00");
-            msgbox.html("Odebrano dane do wizualizacji");
-            msgbox.show(500);
-            setTimeout(hideMsgBox,3000);
-            console.log(response);
-            vizData = response;
-            kolorujzDanych(vizData, $("#wymiar").val(),0);
-            $("#viz_number").val(0);
-        }
-    }).fail(function (jqXHR, exception) {
-        console.log(jqXHR.responseJSON.error);
-        msgbox = $("#msgWindow");
-        msgbox.css("background-color", "#FF0000");
-        msgbox.text(jqXHR.responseJSON.error);
-        msgbox.show(500);
-        setTimeout(hideMsgBox, 5000);
-    });
-
-}
-function kl(){
-    $.ajax({
-        url: "/api/kl",
-        type: 'post',
-        data: JSON.stringify({
-            iter: parseInt($("#iteracji").val()),
-            tab: readCells()
-        }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-
-        success: function (response) {
-            msgbox = $("#msgWindow")
-            msgbox.css("background-color", "#00FF00");
-            msgbox.html("Odebrano dane do wizualizacji");
-            msgbox.show(500);
-            setTimeout(hideMsgBox,3000);
-            console.log(response);
-            vizData = response;
-            kolorujzDanych(vizData, $("#wymiar").val(), 0);
-            $("#viz_number").val(0);
-        }
-    }).fail(function (jqXHR, exception) {
-        console.log(jqXHR.responseJSON.error);
-        msgbox = $("#msgWindow");
-        msgbox.css("background-color", "#FF0000");
-        msgbox.text(jqXHR.responseJSON.error);
-        msgbox.show(500);
-        setTimeout(hideMsgBox, 5000);
-    });
-}
-
 function process() {
     
     urlPath = "";
@@ -473,7 +347,8 @@ function process() {
             }
         }
     }
-
+    
+    debugflag = $("#debug").prop("checked");
 
     $.ajax({
         url: urlPath,
@@ -486,7 +361,8 @@ function process() {
             prob_a: aliveProbability.val(),
             prob_a_gl: GLProbability.val(),
             prob_a_kl: 1- GLProbability.val(),
-            multirun_runs: $("#multirun_num").val()
+            multirun_runs: $("#multirun_num").val(),
+            debug: debugflag
         }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
