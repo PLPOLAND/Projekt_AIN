@@ -116,7 +116,7 @@ public class MainRESTController {
     @RequestMapping(value = "klgl", consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public int[][][] klgl(@RequestBody FromVizData data) {
-        int[][][] tmp = ca.klAndGl(data.getTab(), data.getIter(), data.getDebug());
+        int[][][] tmp = ca.klAndGl(data.getTab(), data.getIter(), data.getDebug(), data.getProb_a_kl());
         stats.setFileName("results.txt");
         stats.generateStats(tmp, false, data);
         return tmp;
