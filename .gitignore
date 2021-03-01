@@ -5,6 +5,7 @@
 
 /png/*
 /statystyki/*
+/DEBUG.txt
 
 # User-specific files
 *.rsuser
