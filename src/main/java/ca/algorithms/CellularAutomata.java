@@ -424,6 +424,12 @@ public class CellularAutomata {
     }
 
     private int[][][] klGl(int[][] tab, int i,boolean debugFlag, double klAliveProb) {
+
+
+        if (klAliveProb<1 && klAliveProb>0) {
+            klAliveProb = 0.5d;
+        }
+
         _debug = debugFlag;//przepisanie flagi debug
         debugFile = new File("DEBUG.txt");
         try{
