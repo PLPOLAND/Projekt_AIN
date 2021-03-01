@@ -181,7 +181,7 @@ public class CellularAutomata {
         }
     }
 
-    private int klR(int[] neigh, PrintWriter zapis) {
+    private int klR(int[] neigh) {
         if(neigh[1]+neigh[2]+neigh[3]+neigh[4]+neigh[5] != 4){return 0;}
         Random rand = new Random();
 
@@ -423,7 +423,7 @@ public class CellularAutomata {
         }
     }
 
-    private int[][][] klGl(int[][] tab, int i,boolean debugFlag) {
+    private int[][][] klGl(int[][] tab, int i,boolean debugFlag, double klAliveProb) {
         _debug = debugFlag;//przepisanie flagi debug
         debugFile = new File("DEBUG.txt");
         try{
@@ -472,11 +472,11 @@ public class CellularAutomata {
                         //DEBUG3
                         debug("DEBUG3: x= "+x);
 
-                        if(x <= 0.5){
+                        if(x > klAliveProb){
                         tab2[gen][k][l] = glR2(neigh1, zapis);
                         }
                         else{
-                       tab2[gen][k][l] = klR(neigh2, zapis);
+                       tab2[gen][k][l] = klR(neigh2);
                         }
                     }
                     else if((tab2[gen-1][k][l] == 1) || (tab2[gen-1][k][l] == 3)){    //jeśli komórka jest czerwona lub żółta
@@ -508,13 +508,13 @@ public class CellularAutomata {
                         else{
                             //DEBUG7
                             debug("DEBUG7: new state = KL");
-                            tab2[gen][k][l] = klR(neigh2,zapis);
+                            tab2[gen][k][l] = klR(neigh2);
                         }
                     }
                     else if((tab2[gen-1][k][l] == 2) || (tab2[gen-1][k][l] == 5)){
                         //DEBUG8
                         debug("DEBUG8: new state = KL");
-                        tab2[gen][k][l] = klR(neigh2,zapis);
+                        tab2[gen][k][l] = klR(neigh2);
                     }
                 }
             }
@@ -524,12 +524,12 @@ public class CellularAutomata {
         return tab2;
     }
 
-   public int[][][] klAndGl (int[][] tab, int i, boolean debugFlag){
-         return klGl(tab, i,debugFlag);
+   public int[][][] klAndGl (int[][] tab, int i, boolean debugFlag, double klAliveProb){
+         return klGl(tab, i,debugFlag, klAliveProb);
     }
 
     public int[][][] klAndGl (double aliveProb, int n, int i, long seed, double klAliveProb, boolean debugFlag){
         int[][] tab = new int[n][n];
-        return klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i,debugFlag);
+        return klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i,debugFlag, klAliveProb);
     }
 }
