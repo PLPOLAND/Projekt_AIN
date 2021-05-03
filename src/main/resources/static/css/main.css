@@ -83,6 +83,13 @@ body{
     border-color: #0f0f0f; */
     float: left;
 }
+.komorkaManual{
+    background-color: white;
+    /* border-width: 1px;
+    border-style: solid;
+    border-color: #0f0f0f; */
+    float: left;
+}
 
 .active{
     background-color: #80ff74;
@@ -136,4 +143,55 @@ body{
     background-color: #80ff74;
     text-align: center;
     color: #000000;
+}
+
+#manualCells{
+    display: none;
+    z-index: 2;
+    position: absolute;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    background-color: #223a5afa;
+    padding: 10px;
+    /* margin-top: 5%;
+    margin-left: 5%; */
+}
+#cancel{
+    height: 30px;
+    width: 100px;
+    margin: 5px;
+    background-color: #4c3ec7;
+    color: #f1f1f1;
+    border-color: #040029;
+}
+#save{
+    height: 30px;
+    width: 100px;
+    margin: 5px;
+    background-color: #4c3ec7;
+    color: #f1f1f1;
+    border-color: #0b006d;
+}
+#clearManualButton{
+    height: 30px;
+    width: 100px;
+    margin: 5px;
+    background-color: #4c3ec7;
+    color: #f1f1f1;
+    border-color: #0b006d;
+}
+.pushToBottom{
+    position: absolute;
+    bottom: 0;
+    width: auto;
+}
+#kwadratyManual{
+    background-color: #ffffff;
+    
+    width: 90%;
+    height: 90%;
+
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
 }

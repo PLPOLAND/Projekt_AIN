@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <title>AIN</title>
     <script src="./js/jquery.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
     <script src="./js/GUI.js"></script>
     <script src="./js/KontrolaGUI.js"></script>
+    <link rel="stylesheet" href="./css/jquery-ui.min.css">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/fontello.css">
 </head>
 <body>
     <div class="background-container"></div>
+    <div id="manualCells">
+        <div id="kwadratyManual"></div>        
+        <div class="wiersz pushToBottom"><button id="cancel">Hide</button><button id="save">Save</button><button id="clearManualButton" class="multirunNhide"> Clear cells</button></div>
+    </div>
     <div id="msgWindow">ERROR</div>
     <div id="contener">
         <div id="visualization">
@@ -32,11 +38,14 @@
             </div>
         </div>
         <div id="init_data">
-            <div class="wiersz">N: <input id="wymiar" name="wymiar" type="number" min="2" max="500"><button id="setSize">Ustaw</button></div>
+            <div class="wiersz">N: <input id="wymiar" name="wymiar" type="number" min="2" max="500"><button id="setSize">Set</button></div>
             <div class="wiersz">Max iteration number: <input id="iteracji" name="iteracji" type="number" min="1" value="1000"></div>
             <div class="wiersz">Seed: <input id="seed" name="seed" type="number" min = "0" value="1"> <button id="seed_rand">random</button></div>
             <!-- <div class="wiersz">Seed: <input id="seed" name="seed" type="number" min = "0" value="1"> <label><input id="seed_rand" type ="checkbox" title="random"> random</label></div> -->
-            <div class="wiersz"><label >Set cells manual<input id="manual" type ="checkbox" title="Set cells manual" class="multirunNhide"></label></div>
+            <div class="wiersz"><label >Set cells manual<input id="manual" type ="checkbox" title="Set cells manual" class="multirunNhide"></label> 
+                <button id="manualCellsButton" class="multirunNhide"> Set cells</button>
+                <button id="ClearButton" class="multirunNhide"> Clear cells</button>
+            </div>
             <div class="wiersz">Algorithm: 
                 <select name="sym_type" id="sym_type">
                     <option value="0">Game of Life</option>

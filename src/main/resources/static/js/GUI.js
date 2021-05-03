@@ -16,7 +16,35 @@ $(document).ready(function () {
     $(window).resize(function(){$("#kwadraty").css("height", $("#kwadraty").css("width"))});
     $(window).resize(function(){ustaw_wymiary_komorek(size,size)})
     $("#kwadraty").css("height", $("#kwadraty").css("width"));
+
+    
+    $(window).resize(function () { 
+        height_man = parseInt($("#manualCells").css("height"),10);
+        width_man = parseInt($("#manualCells").css("width"), 10);
+        if (height_man < width_man) {
+            $("#kwadratyManual").css("width",0.9*height_man);
+            $("#kwadratyManual").css("height",0.9*height_man);
+        }
+        else {
+            $("#kwadratyManual").css("width", 0.9 * width_man);
+            $("#kwadratyManual").css("height", 0.9 * width_man);
+        }
+
+        ustaw_wymiary_komorek_manual(20, 20)
+    });
+    height_man = parseInt($("#manualCells").css("height"), 10);
+    width_man = parseInt($("#manualCells").css("width"), 10);
+    if (height_man < width_man) {
+        $("#kwadratyManual").css("width", 0.9 * height_man);
+        $("#kwadratyManual").css("height", 0.9 * height_man);
+    }
+    else {
+        $("#kwadratyManual").css("width", 0.9 * width_man);
+        $("#kwadratyManual").css("height", 0.9 * width_man);
+    }
+
     podziel_na_komorki(size);
+    podziel_na_komorki_manual(20);
     // randomujkolory();
     clear(size);
 });
@@ -41,6 +69,28 @@ function ustaw_wymiary_komorek(x,y){
     // $(".komorka").css("height",( $("#kwadraty").height() /y )- 2);//z borderem
     // $(".komorka").css("width", ($("#kwadraty").width() /x)- 2);
 }
+function podziel_na_komorki_manual(x) {
+    y = x;
+    $("#kwadratyManual").children().remove();
+    for (let i = 0; i < x; i++) {
+        row =$('<div class="row"></div>')
+        for (let j = 0; j < y; j++) {
+            id = getCell_manual(i,j);
+            tmp = $('<div id="'+id+'" class="komorkaManual"></div>');
+            tmp.prop("algo", 0)
+            $($(row)).append($(tmp));
+        }
+        $("#kwadratyManual").append(row);
+    }
+    ustaw_wymiary_komorek_manual(x, y);
+}
+
+function ustaw_wymiary_komorek_manual(x,y){
+    $(".komorkaManual").css("height", $("#kwadratyManual").height() /y);
+    $(".komorkaManual").css("width", $("#kwadratyManual").width() /x);
+    // $(".komorka").css("height",( $("#kwadraty").height() /y )- 2);//z borderem
+    // $(".komorka").css("width", ($("#kwadraty").width() /x)- 2);
+}
 
 /**
  * 
@@ -50,6 +100,18 @@ function ustaw_wymiary_komorek(x,y){
  */
 function koloruj(x,y,kolor) {
     id = getCell(x,y);
+    // console.log(kolor);
+    $("#"+id).css("background-color",kolor)
+
+}
+/**
+ * 
+ * @param {Number} x - wspolrzedna komorki x
+ * @param {Number} y - wspolrzedna komorki y
+ * @param {*} kolor - kolor hex
+ */
+function koloruj_manual(x,y,kolor) {
+    id = getCell_manual(x,y);
     // console.log(kolor);
     $("#"+id).css("background-color",kolor)
 
@@ -114,6 +176,28 @@ function getCell(x,y){
         id = id + y;
     return id;
 }
+function getCell_manual(x,y){
+    id = "manual";
+    //X
+    if(x < 100 && x >= 10){
+        id = id + "0" + x;
+    }
+    else if (x < 10) {
+        id = id + "00" + x;
+    }
+    else
+        id = id + x;
+    //Y
+    if (y < 100 && y >= 10) {
+        id = id + "0" + y;
+    }
+    else if (y < 10) {
+        id = id + "00" + y;
+    }
+    else
+        id = id + y;
+    return id;
+}
 
 function randomujkolory() {
     for (let i = 0; i < size; i++) {
@@ -134,7 +218,7 @@ function randomujkolory() {
     }
 }
 
-function kolorujzDanych(dane,N, iteracja) {
+function kolorujzDanychIter(dane,N, iteracja) {
     
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
@@ -150,6 +234,15 @@ function kolorujzDanych(dane,N, iteracja) {
         }
     }
     iter = iteracja 
+}
+function kolorujzDanych(dane,N) {
+    
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            kolorujEl2($("#" + getCell(i, j)), dane[i][j]);
+            $("#" + getCell(i, j)).prop("algo", dane[i][j]);
+        }
+    } 
 }
 function clear(N) {
     for (let i = 0; i < N; i++) {

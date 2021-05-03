@@ -97,7 +97,7 @@ $(document).ready(function () {
             $(this).val($(this).prop('max'))
         }
         else if(parseInt($(this).val(), 10) < $(this).prop('min')){
-            $(this.val($(this).prop('min')))
+            $(this).val($(this).prop('min'))
         }
     });
     $("#iteracji").change(function (e) {
@@ -132,7 +132,7 @@ $(document).ready(function () {
             $(this).val($(this).prop('min'))
         }
 
-        kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
+        kolorujzDanychIter(vizData, $("#wymiar").val(), $("#viz_number").val());
     });
     $("#seed_rand").click(function(){
         $("#seed").val(Math.floor(Math.random()*1000000000));
@@ -152,7 +152,7 @@ $(document).ready(function () {
             }
         }
 
-        kolorujzDanych(dane,size,0);
+        kolorujzDanychIter(dane,size,0);
         $(".komorka").click(function () {
             changeAlgoTypeOfCell_Viz($(this));
         });
@@ -167,7 +167,7 @@ $(document).ready(function () {
             $("#viz_number").val($("#viz_number").prop('min'))
             return;
         }
-        kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
+        kolorujzDanychIter(vizData, $("#wymiar").val(), $("#viz_number").val());
     })
     $("#right").click(function(){
         $("#viz_number").val(parseInt($("#viz_number").val(),10)+1)
@@ -179,7 +179,7 @@ $(document).ready(function () {
             $("#viz_number").val($("#viz_number").prop('min'))
             return;
         }
-        kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
+        kolorujzDanychIter(vizData, $("#wymiar").val(), $("#viz_number").val());
     })
     $("#play").click(function () {
         playTimer = setTimeout(play, parseInt($("#speed").val()));
@@ -188,7 +188,6 @@ $(document).ready(function () {
         clearTimeout(playTimer);
     })
     $("#sym_type").change(function() {
-        // alert(); 
         if ($("#sym_type option:selected").val() == 2) {
             $(".sym_type_hide").show();
         }
@@ -198,30 +197,11 @@ $(document).ready(function () {
     })
     
     
-    $(".komorka").click(function(){
+    $(".komorkaManual").click(function(){
         changeAlgoTypeOfCell_Viz($(this));
     });
     
     $("#start").click(function() {
-        // if ($("#sym_type option:selected").val() == 0){
-        //     if ($("#manual").prop("checked")) {
-        //         gl();
-        //     }
-        //     else {
-        //         glParam(); 
-        //     }
-        // }
-        // else if ($("#sym_type option:selected").val() == 1){
-        //     if ($("#manual").prop("checked")) {
-        //         kl();
-        //     }
-        //     else {
-        //         klParam();
-        //     }
-        // }
-        // else if ($("#sym_type option:selected").val() == 2){
-
-        // }
         process();
     });
 
@@ -230,7 +210,56 @@ $(document).ready(function () {
     })
 
     $("#sym_type").change();
+    $("#manualCellsButton").click(function () {
+        show($("#manualCells"),500);
+        $("#manual").prop("checked",1);
+        $("#wymiar").prop("min", 20);
+    })
+    $("#cancel").click(function(){
+        hide($("#manualCells"),500);
+    })
+
+    $("#save").click(function () {
+        przepisz_z_manual();
+        hide($("#manualCells"), 500);
+    })
+    $("#ClearButton").click(function () {
+        n = parseInt($("#wymiar").val(), 10);
+        size = n;
+
+        dane = [];
+        dane[0] = [];
+        for (let i = 0; i < n; i++) {
+            dane[0][i] = [];
+            for (let j = 0; j < n; j++) {
+                dane[0][i][j] = 0;
+
+            }
+        }
+
+        kolorujzDanychIter(dane, size, 0);
+        $(".komorka").click(function () {
+            changeAlgoTypeOfCell_Viz($(this));
+        });
+    })
+    $("#clearManualButton").click(function () {
+        n = 20;
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n; j++) {
+                $("#" + getCell_manual(i, j)).prop("algo",0);
+                kolorujEl2($("#" + getCell_manual(i, j)),0);
+                $("#" + getCell_manual(i, j));
+            }
+        }
+        $(".komorka").click(function () {
+            changeAlgoTypeOfCell_Viz($(this));
+        });
+    })
 });
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function play(){
     $("#viz_number").val(parseInt($("#viz_number").val(), 10) + 1)
     if (parseInt($("#viz_number").val(), 10) >= $("#viz_number").prop('max')) {
@@ -239,7 +268,7 @@ function play(){
         return;
     }
 
-    kolorujzDanych(vizData, $("#wymiar").val(), $("#viz_number").val());
+    kolorujzDanychIter(vizData, $("#wymiar").val(), $("#viz_number").val());
     playTimer = setTimeout(play, parseInt($("#speed").val()));
 }
 function uaktualnij_KL_value(){//TODO
@@ -257,11 +286,11 @@ function changeActive(disable,butt) {
 
     // Enable #x
 }
-function show(what) {
-    what.show(100);
+function show(what, time =100) {
+    what.show("blind", { times: 20, distance: 10 }, time);
 }
-function hide(what) {
-    what.hide(100);
+function hide(what,time = 100) {
+    what.hide("blind", { times: 20, distance: 10 }, time);
 }
 
 function roundTo(value, places) {
@@ -376,7 +405,7 @@ function process() {
             if (!$("#multirun").prop("checked")) {
                 // console.log(response);
                 vizData = response;
-                kolorujzDanych(vizData, $("#wymiar").val(), 0);
+                kolorujzDanychIter(vizData, $("#wymiar").val(), 0);
             }
             $("#viz_number").val(0);
         }
@@ -432,4 +461,38 @@ function hideMsgBox() {
     }
     console.log(dane);
     return dane;
+}
+ function readManualCells() {
+    N = 20;
+    dane = [];
+    for (let i = 0; i < N; i++) {
+        dane[i] = [];
+        for (let j = 0; j < N; j++) {
+            dane[i][j] = parseInt($("#" + getCell_manual(i, j)).prop("algo"));
+        }
+    }
+    console.log(dane);
+    return dane;
+}
+
+
+function przepisz_z_manual(){
+    dane = readCells();
+    N = $("#wymiar").val();
+    if (N <= 20) {
+        kolorujzDanych(readManualCells(),20);
+    }
+    else{
+        roznica = N - 20;
+        marginLeftTop = Math.floor(roznica / 2);
+        // console.log(roznica);
+        // console.log(marginLeftTop);
+        tmpDane = readManualCells();
+        for (let i = 0; i < 20; i++) {
+            for (let j = 0; j < 20; j++) {
+                kolorujEl2($("#" + getCell(i + marginLeftTop, j + marginLeftTop)), tmpDane[i][j]);
+                $("#" + getCell(i + marginLeftTop, j + marginLeftTop)).prop("algo", tmpDane[i][j]);
+            }
+        }
+    }
 }
