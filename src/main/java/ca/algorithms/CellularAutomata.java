@@ -9,8 +9,8 @@ import java.lang.reflect.Array;
  * @author Bartłomiej Kozłowski
  */
 public class CellularAutomata {
-    File debugFile;
-    PrintWriter zapis;
+    File debugFile;  
+    PrintWriter zapis; 
     boolean _debug = false; // flaga informująca czy mamy zapisywać debug
 
     /**

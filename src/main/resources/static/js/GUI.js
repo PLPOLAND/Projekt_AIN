@@ -13,12 +13,12 @@ var size = 100;
 var iter = 0;
 
 $(document).ready(function () {
-    $(window).resize(function(){$("#kwadraty").css("height", $("#kwadraty").css("width"))});
-    $(window).resize(function(){ustaw_wymiary_komorek(size,size)})
-    $("#kwadraty").css("height", $("#kwadraty").css("width"));
-    podziel_na_komorki(size);
+    // $(window).resize(function(){$("#kwadraty").css("height", $("#kwadraty").css("width"))});
+    // $(window).resize(function(){ustaw_wymiary_komorek(size,size)})
+    // $("#kwadraty").css("height", $("#kwadraty").css("width"));
+    // podziel_na_komorki(size);
     // randomujkolory();
-    clear(size);
+    // clear(size);
 });
 function podziel_na_komorki(x) {
     y = x;
