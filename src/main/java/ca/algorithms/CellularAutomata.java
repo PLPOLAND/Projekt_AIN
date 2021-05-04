@@ -9,9 +9,12 @@ import java.lang.reflect.Array;
  * @author Bartłomiej Kozłowski
  */
 public class CellularAutomata {
-    File debugFile;
-    PrintWriter zapis;
+    File debugFile, saveStatFile;
+    PrintWriter debugWriter, saveStatWriter;
     boolean _debug = false; // flaga informująca czy mamy zapisywać debug
+    int [][][] table;
+    double aliveProbability;
+    long seed;
 
     /**
      * 
@@ -78,7 +81,7 @@ public class CellularAutomata {
         return tab;
     }
 
-    private int glR2(int[] neigh, PrintWriter zapis) {
+    private int glR2(int[] neigh) {
         int numAlive = neigh[1]+neigh[2]+neigh[3]+neigh[4]+neigh[5];
         int tmp = 3 - neigh[2] + neigh[4] + neigh[5];
         if(numAlive != 3){return 0;}
@@ -143,7 +146,7 @@ public class CellularAutomata {
         else {return 0;}
     }
 
-    private int glR1_2neigh(int[] neigh, PrintWriter zapis) {
+    private int glR1_2neigh(int[] neigh) {
         if(
             (neigh[1] == 2) || (
                 (neigh[3] == 2) || (
@@ -161,7 +164,7 @@ public class CellularAutomata {
         }
     }
 
-    private int glR1_3neigh(int[] neigh, PrintWriter zapis) {
+    private int glR1_3neigh(int[] neigh) {
         if(
             (neigh[1] == 3) || (
                 (neigh[3] == 3) || (
@@ -281,13 +284,14 @@ public class CellularAutomata {
 
     /**
      * 
-     * @param tab - tablica wejściowa, jeśli użytkownik utawi jąręcznie
+     * @param tab - tablica wejściowa, jeśli użytkownik ustawi ją ręcznie
      * @param i - liczba iteracji (pokoleń) które ma wykonać metoda
      * @return trójwymiarowa tablica zawierająca wszystkie pokolenia danego CA zaczynając od wejściowego
      */
     public int[][][] gl(int[][] tab, int i){
         int n = tab[0].length;
-        
+        this.aliveProbability = 0;
+        this.seed = 0;
         // Przepisanie danych do nowej tablicy
         int[][][] tab2 =new int[i][n][n];
         tab2[i-1] = tab;
@@ -314,6 +318,7 @@ public class CellularAutomata {
                 }
             }
         }
+        table = tab2;
         return tab2;
     }
 
@@ -327,6 +332,8 @@ public class CellularAutomata {
      */
     public int[][][] gl(double aliveProb, int n, int i, long seed){
         int[][][] tab2 =new int[i][n][n];
+        this.aliveProbability = aliveProb;
+        this.seed = seed;
         //int[] species = {1};
         tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, 0);
 
@@ -347,6 +354,7 @@ public class CellularAutomata {
                 }
             }
         }
+        table = tab2;
         return tab2;
     }
 
@@ -360,6 +368,8 @@ public class CellularAutomata {
     public int[][][] kl(int[][] tab, int i){
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
+        this.aliveProbability = 0;
+        this.seed = 0;
         //Przepisanie danych do nowej tablicy
         tab2[i - 1] = tab;
         for (int x = 0; x < n; x++) {
@@ -377,6 +387,7 @@ public class CellularAutomata {
                 }
             }
         }
+        table = tab2;
         return tab2;
     }
     
@@ -390,6 +401,8 @@ public class CellularAutomata {
      */
     public int[][][] kl(double aliveProb, int n, int i, long seed){
         int[][][] tab2 = new int[i][n][n];
+        this.aliveProbability = aliveProb;
+        this.seed = seed;
         //int[] species = {2};
         tab2[0] = generateRandomPopulation(seed, tab2[0], aliveProb, 1);
 
@@ -403,6 +416,7 @@ public class CellularAutomata {
                 }
             }
         }
+        table = tab2;
         return tab2;
     }
 
@@ -418,8 +432,8 @@ public class CellularAutomata {
         return bld.toString();
     }
     private void debug(String debug) {
-        if (zapis!=null && _debug) {
-            zapis.println(debug);
+        if (debugWriter!=null && _debug) {
+            debugWriter.println(debug);
         }
     }
 
@@ -433,7 +447,7 @@ public class CellularAutomata {
         _debug = debugFlag;//przepisanie flagi debug
         debugFile = new File("DEBUG.txt");
         try{
-            zapis = new PrintWriter(debugFile);
+            debugWriter = new PrintWriter(debugFile);
         }
         catch(FileNotFoundException e){
             System.out.println("Błąd w tworzeniu PrintWriter.");
@@ -479,7 +493,7 @@ public class CellularAutomata {
                         debug("DEBUG3: x= "+x);
 
                         if(x > klAliveProb){
-                        tab2[gen][k][l] = glR2(neigh1, zapis);
+                        tab2[gen][k][l] = glR2(neigh1, debugWriter);
                         }
                         else{
                        tab2[gen][k][l] = klR(neigh2);
@@ -494,8 +508,8 @@ public class CellularAutomata {
                         else{
                             //DEBUG5
                             debug("DEBUG5: new state = r1/r2");
-                            if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1,zapis);}
-                            else{tab2[gen][k][l] = glR1_3neigh(neigh1,zapis);}
+                            if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1,debugWriter);}
+                            else{tab2[gen][k][l] = glR1_3neigh(neigh1,debugWriter);}
                         }
                     }
                     else if(tab2[gen-1][k][l] == 4){
@@ -507,8 +521,8 @@ public class CellularAutomata {
                                 tab2[gen][k][l] = 0;
                             }
                             else{
-                                if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1,zapis);}
-                                else{tab2[gen][k][l] = glR1_3neigh(neigh1,zapis);}
+                                if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1,debugWriter);}
+                                else{tab2[gen][k][l] = glR1_3neigh(neigh1,debugWriter);}
                             }
                         }
                         else{
@@ -525,8 +539,9 @@ public class CellularAutomata {
                 }
             }
         }
-        zapis.close();
+        debugWriter.close();
         _debug = false;
+        table = tab2;
         return tab2;
     }
 
@@ -537,5 +552,31 @@ public class CellularAutomata {
     public int[][][] klAndGl (double aliveProb, int n, int i, long seed, double klAliveProb, boolean debugFlag){
         int[][] tab = new int[n][n];
         return klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i,debugFlag, klAliveProb);
+    }
+
+    /**
+     * Zapisanie pojedynczego pokolenia (generacji) do pliku txt
+     * @param generation nr pokolenia, które ma być zapisane
+     */
+    public void saveState(int generation) {
+        saveStatFile = new File("GL_state.txt");
+        try {
+            saveStatWriter = new PrintWriter(saveStatFile);    
+        } catch (FileNotFoundException fne) {
+            System.out.println(fne.getMessage());
+        }
+        int [][] tab = this.table[generation];
+        int n = tab.length;
+        StringBuilder bld = new StringBuilder();
+        bld.append("# alive probability \t seed \t generation number \n");
+        bld.append(this.aliveProbability +" "+ this.seed +" "+ generation +"\n");
+        for(int i = 0; i <n; i++){
+            for(int j = 0; j <n; j++){
+                bld.append(tab[i][j] + " ");
+            }
+            bld.append("\n");
+        }
+        saveStatWriter.print(bld.toString());
+        saveStatWriter.close();
     }
 }
