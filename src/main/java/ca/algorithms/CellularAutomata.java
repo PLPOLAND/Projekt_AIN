@@ -556,20 +556,21 @@ public class CellularAutomata {
 
     /**
      * Zapisanie pojedynczego pokolenia (generacji) do pliku txt
-     * @param generation nr pokolenia, które ma być zapisane
+     * @param tab tablica do zapisania
+     * @param seed 
+     * @param aliveProb
      */
-    public void saveState(int generation) {
+    public void saveState(int [][] tab, long seed, double aliveProb) {
         saveStatFile = new File("GL_state.txt");
         try {
             saveStatWriter = new PrintWriter(saveStatFile);    
         } catch (FileNotFoundException fne) {
             System.out.println(fne.getMessage());
         }
-        int [][] tab = this.table[generation];
         int n = tab.length;
         StringBuilder bld = new StringBuilder();
-        bld.append("# alive probability \t seed \t generation number \n");
-        bld.append(this.aliveProbability +" "+ this.seed +" "+ generation +"\n");
+        bld.append("# alive probability \t seed \n");
+        bld.append(aliveProb +" "+ seed +"\n");
         for(int i = 0; i <n; i++){
             for(int j = 0; j <n; j++){
                 bld.append(tab[i][j] + " ");
