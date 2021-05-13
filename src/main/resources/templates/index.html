@@ -34,10 +34,12 @@
                 <div id="ustawienia_wiz">
                     <div class="wiersz">Speed: <input id="speed" type="number" step="10" min="10" max = "1000000000" value="100">(ms)</div>
                     <div id="savePNG"><button id="savePngButt">Save to PNG</button></div>
+                    <div id="saveDataToViz"><button id="saveToFile">Save current state to file</button>   <input id="fileName" placeholder="file name" ></div>
                 </div>
             </div>
         </div>
         <div id="init_data">
+            <div class="wiersz"><button id="readFromFile">Read from file</button><input type="file" id="readFileName"></div>
             <div class="wiersz">N: <input id="wymiar" name="wymiar" type="number" min="2" max="500"><button id="setSize">Set</button></div>
             <div class="wiersz">Max iteration number: <input id="iteracji" name="iteracji" type="number" min="1" value="1000"></div>
             <div class="wiersz">Seed: <input id="seed" name="seed" type="number" min = "0" value="1"> <button id="seed_rand">random</button></div>

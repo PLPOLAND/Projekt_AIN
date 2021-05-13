@@ -255,6 +255,22 @@ $(document).ready(function () {
             changeAlgoTypeOfCell_Viz($(this));
         });
     })
+
+    $("#saveToFile").click(function() {
+        fileName = $("#fileName").val();
+        console.log(fileName);
+        save(fileName);
+    })
+
+    $("#readFromFile").click(function () {
+        fileName = $("#readFileName").val().replace(/C:\\fakepath\\/i, '');
+        read(fileName);
+    })
+
+
+    $("#msgWindow").click(function () {
+        $(this).hide(500);
+    })
 });
 
 
@@ -391,7 +407,8 @@ function process() {
             prob_a_gl: GLProbability.val(),
             prob_a_kl: 1- GLProbability.val(),
             multirun_runs: $("#multirun_num").val(),
-            debug: debugflag
+            debug: debugflag,
+            filename: ""
         }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -444,6 +461,91 @@ function png(){
         setTimeout(hideMsgBox, 5000);
     });
 }
+
+function save(fileName) {
+    $.ajax({
+        url: "/api/save",
+        type: 'post',
+        data: JSON.stringify({
+            iter: parseInt($("#iteracji").val()),
+            tab: readCells(),
+            seed: $("#seed").val(),
+            n: $("#wymiar").val(),
+            prob_a: aliveProbability.val(),
+            prob_a_gl: GLProbability.val(),
+            prob_a_kl: 1 - GLProbability.val(),
+            multirun_runs: $("#multirun_num").val(),
+            debug: false,
+            fileName: fileName
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
+            msgbox.html("Zapisano dane do: " + response.path);
+            msgbox.show(500);
+            setTimeout(hideMsgBox, 30000);
+        }
+    })
+    // .fail(function (jqXHR, exception) {
+    //     console.log(jqXHR.responseJSON.error);
+    //     msgbox = $("#msgWindow");
+    //     msgbox.css("background-color", "#FF0000");
+    //     msgbox.text(jqXHR.responseJSON.error);
+    //     msgbox.show(500);
+    //     setTimeout(hideMsgBox, 5000);
+    // });
+}
+
+function read(fileName) {
+    $.ajax({
+        url: "/api/read",
+        type: 'post',
+        data: fileName,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
+            msgbox.html("Wczytano");
+            msgbox.show(500);
+            setTimeout(hideMsgBox, 3000);
+            console.log(response);
+            // iter: parseInt($("#iteracji").val()),
+            // tab: readCells(),
+            // seed: $("#seed").val(),
+            // n: $("#wymiar").val(),
+            // prob_a: aliveProbability.val(),
+            // prob_a_gl: GLProbability.val(),
+            // prob_a_kl: 1 - GLProbability.val(),
+            // multirun_runs: $("#multirun_num").val(),
+            // debug: false,
+            // fileName: fileName
+
+            $("#iteracji").val(response.iter);
+            kolorujzDanych(response.tab,response.n);
+            $("#seed").val(response.seed);
+            $("#wymiar").val(response.n);
+            aliveProbability.val(response.prob_a);
+            GLProbability.val(response.prob_a_gl);
+            GLProbability.change();//TODO poprawić
+            $("#manual").prop("checked",true);
+            $("#multirun_num").val(response.multirun_runs);
+        }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
+    });
+}
+
+
 function hideMsgBox() {
     $("#msgWindow").hide(500);
 }

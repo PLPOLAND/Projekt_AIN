@@ -2,6 +2,14 @@ package ca.controller.data;
 
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
+/**
+ * Klasa do przechowywania danych przychodzących z przeglądarki
+ * @author Marek Pałdyna
+ */
+
+@Component
 public class FromVizData {
     int iter;
     int[][] tab;
@@ -12,11 +20,12 @@ public class FromVizData {
     double prob_a_kl;
     int multirun_runs;
     boolean debug;
+    String fileName;
 
     public FromVizData() {
     }
 
-    public FromVizData(int iter, int[][] tab, long seed, int n, double prob_a, double prob_a_gl, double prob_a_kl, int multirun_runs, boolean debug) {
+    public FromVizData(int iter, int[][] tab, long seed, int n, double prob_a, double prob_a_gl, double prob_a_kl, int multirun_runs, boolean debug, String fileName) {
         this.iter = iter;
         this.tab = tab;
         this.seed = seed;
@@ -26,6 +35,7 @@ public class FromVizData {
         this.prob_a_kl = prob_a_kl;
         this.multirun_runs = multirun_runs;
         this.debug = debug;
+        this.fileName = fileName;
     }
 
     public int getIter() {
@@ -149,21 +159,21 @@ public class FromVizData {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof FromVizData)) {
-            return false;
-        }
-        FromVizData fromVizData = (FromVizData) o;
-        return iter == fromVizData.iter && Objects.equals(tab, fromVizData.tab) && seed == fromVizData.seed && n == fromVizData.n && prob_a == fromVizData.prob_a && prob_a_gl == fromVizData.prob_a_gl && prob_a_kl == fromVizData.prob_a_kl && multirun_runs == fromVizData.multirun_runs && debug == fromVizData.debug;
+
+    public String getFileName() {
+        return this.fileName;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(iter, tab, seed, n, prob_a, prob_a_gl, prob_a_kl, multirun_runs, debug);
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
+
+
+    public FromVizData fileName(String fileName) {
+        setFileName(fileName);
+        return this;
+    }
+
 
     @Override
     public String toString() {
@@ -177,7 +187,25 @@ public class FromVizData {
             ", prob_a_kl='" + getProb_a_kl() + "'" +
             ", multirun_runs='" + getMultirun_runs() + "'" +
             ", debug='" + isDebug() + "'" +
+            ", fileName='" + getFileName() + "'" +
             "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof FromVizData)) {
+            return false;
+        }
+        FromVizData fromVizData = (FromVizData) o;
+        return iter == fromVizData.iter && Objects.equals(tab, fromVizData.tab) && seed == fromVizData.seed && n == fromVizData.n && prob_a == fromVizData.prob_a && prob_a_gl == fromVizData.prob_a_gl && prob_a_kl == fromVizData.prob_a_kl && multirun_runs == fromVizData.multirun_runs && debug == fromVizData.debug && Objects.equals(fileName, fromVizData.fileName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(iter, tab, seed, n, prob_a, prob_a_gl, prob_a_kl, multirun_runs, debug, fileName);
+    }
+    
 
 }
