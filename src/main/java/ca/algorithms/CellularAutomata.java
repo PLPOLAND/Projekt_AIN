@@ -493,7 +493,7 @@ public class CellularAutomata {
                         debug("DEBUG3: x= "+x);
 
                         if(x > klAliveProb){
-                        tab2[gen][k][l] = glR2(neigh1, debugWriter);
+                        tab2[gen][k][l] = glR2(neigh1);
                         }
                         else{
                        tab2[gen][k][l] = klR(neigh2);
@@ -508,8 +508,8 @@ public class CellularAutomata {
                         else{
                             //DEBUG5
                             debug("DEBUG5: new state = r1/r2");
-                            if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1,debugWriter);}
-                            else{tab2[gen][k][l] = glR1_3neigh(neigh1,debugWriter);}
+                            if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1);}
+                            else{tab2[gen][k][l] = glR1_3neigh(neigh1);}
                         }
                     }
                     else if(tab2[gen-1][k][l] == 4){
@@ -521,8 +521,8 @@ public class CellularAutomata {
                                 tab2[gen][k][l] = 0;
                             }
                             else{
-                                if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1,debugWriter);}
-                                else{tab2[gen][k][l] = glR1_3neigh(neigh1,debugWriter);}
+                                if(numAliveR1 == 2){tab2[gen][k][l] = glR1_2neigh(neigh1);}
+                                else{tab2[gen][k][l] = glR1_3neigh(neigh1);}
                             }
                         }
                         else{
