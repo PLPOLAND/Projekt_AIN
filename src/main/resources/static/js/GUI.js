@@ -132,6 +132,7 @@ function kolorujEl2(element,type) {
     
         case 1:
             element.css("background-color", GL)
+            console.log("GL");
             break;
     
         case 2:

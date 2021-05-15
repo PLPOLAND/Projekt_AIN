@@ -526,6 +526,9 @@ function read(fileName) {
             // fileName: fileName
 
             $("#iteracji").val(response.iter);
+            size = response.n;
+            podziel_na_komorki(size, size);
+            console.log(response.tab);
             kolorujzDanych(response.tab,response.n);
             $("#seed").val(response.seed);
             $("#wymiar").val(response.n);
