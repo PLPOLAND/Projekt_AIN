@@ -48,7 +48,7 @@ public class SaveController {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-                File saveFile = new File("src/main/resources/static/saves/" + name + ".json");
+                File saveFile = new File("saves/" + name + ".json");
                 saveFile.getParentFile().mkdirs();
                 saveFile.createNewFile();
                 objectMapper.writeValue(saveFile, data);
@@ -63,7 +63,7 @@ public class SaveController {
         
         ObjectMapper obj = new ObjectMapper();
         try{
-            FromVizData tmp = obj.readValue(new FileInputStream(new File("src/main/resources/static/saves/" + fileName)),FromVizData.class);
+            FromVizData tmp = obj.readValue(new FileInputStream(new File("saves/" + fileName)),FromVizData.class);
             return tmp;
         }
         catch (Exception e){
