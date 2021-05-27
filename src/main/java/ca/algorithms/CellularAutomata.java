@@ -555,6 +555,20 @@ public class CellularAutomata {
     }
 
     /**
+     * wersja z nowymi parametrami
+     */
+   public int[][][] klAndGlv2 (int[][] tab, int i, boolean debugFlag, double klAliveProb, double GLTolerance, double KLTolerance ){
+         return klGl(tab, i,debugFlag, klAliveProb);
+    }
+    /**
+     * wersja z nowymi parametrami
+     */
+    public int[][][] klAndGlv2 (double aliveProb, int n, int i, long seed, double klAliveProb, double GLTolerance, double KLTolerance , boolean debugFlag){
+        int[][] tab = new int[n][n];
+        return klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i,debugFlag, klAliveProb);
+    }
+
+    /**
      * Zapisanie pojedynczego pokolenia (generacji) do pliku txt
      * @param tab tablica do zapisania
      * @param seed 
