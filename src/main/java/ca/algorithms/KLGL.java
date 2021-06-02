@@ -25,6 +25,20 @@ public class KLGL {
         this.aliveProbability = aliveProbability;
         this.seed = seed;
     }
+    public KLGL(boolean _debug, double aliveProbability, long seed){
+        this.debugFile = new File("DEBUG.txt");
+        this.saveStatFile = new File("GL_state.txt");
+        try {
+            this.debugWriter = new PrintWriter(debugFile);
+            this.saveStatWriter = new PrintWriter(saveStatFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        this._debug = _debug;
+        this.aliveProbability = aliveProbability;
+        this.seed = seed;
+    }
 
     private void debug(String debug) {
         if (debugWriter!=null && _debug) {
@@ -103,11 +117,15 @@ public class KLGL {
     private int kl_r_32_t(){
         return 0;
     }
+    /**
+     * Potrzebna wersja dla opcji z uzupełnioną tablicą i dla opcji z losowaniem stanu początkowego. ;)
+     * 
+     */
+    public int[][][] klGl(int[][] tab, int i,double aliveProb, long seed,boolean debugFlag, double klAliveProb, double expansionProb, double toleracneGL, double toleranceKL) {
+        this.aliveProbability = aliveProb;
+        this.seed = seed;
 
-    private int[][][] klGl(int[][] tab, int i,boolean debugFlag, double klAliveProb, double expansionProb, double toleracneGL, double toleranceKL) {
-
-
-        if (klAliveProb>1 || klAliveProb<0) {
+        if (klAliveProb > 1 || klAliveProb<0) {
             klAliveProb = 0.5d;
         }
 

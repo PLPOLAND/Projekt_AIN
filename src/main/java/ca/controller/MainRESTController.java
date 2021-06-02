@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ca.algorithms.CellularAutomata;
+import ca.algorithms.KLGL;
 import ca.controller.data.FromVizData;
 import ca.statistics.Stats;
 import png.PngImage;
@@ -28,6 +29,7 @@ import png.PngImage;
 @RequestMapping("/api")
 public class MainRESTController {
     CellularAutomata ca = new CellularAutomata();
+    KLGL klgl = new KLGL(false,0,0);
     Random random = new Random();
 
     @Autowired
@@ -107,19 +109,21 @@ public class MainRESTController {
     @RequestMapping(value = "klglparam", consumes = MediaType.APPLICATION_JSON_VALUE)
     public int[][][] klglParam(@RequestBody FromVizData data) {
 
-        int[][][] tmp = ca.klAndGl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed(), data.getProb_a_kl(), data.getDebug());
-        stats.setFileName("results.txt");
-        stats.generateStats(tmp, false, data);
-        return tmp;
+        // int[][][] tmp = klgl.klGl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed(), data.getProb_a_kl(), data.getDebug()); //TODO: dodać odpowiednie wywołanie 
+        // stats.setFileName("results.txt");
+        // stats.generateStats(tmp, false, data);
+        // return tmp;
+        return null;
     }
 
     @RequestMapping(value = "klgl", consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public int[][][] klgl(@RequestBody FromVizData data) {
-        int[][][] tmp = ca.klAndGl(data.getTab(), data.getIter(), data.getDebug(), data.getProb_a_kl());
-        stats.setFileName("results.txt");
-        stats.generateStats(tmp, false, data);
-        return tmp;
+        // int[][][] tmp = klgl.klGl(data.getTab(), data.getIter(), data.getDebug(), data.getProb_a_kl());//TODO: dodać odpowiednie wywołanie
+        // stats.setFileName("results.txt");
+        // stats.generateStats(tmp, false, data);
+        // return tmp;
+        return null;
     }
 
     @RequestMapping(value = "multirunklgl", consumes = MediaType.APPLICATION_JSON_VALUE)

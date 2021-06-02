@@ -408,7 +408,10 @@ function process() {
             prob_a_kl: 1- GLProbability.val(),
             multirun_runs: $("#multirun_num").val(),
             debug: debugflag,
-            filename: ""
+            filename: "",
+            prob_exp: $("#expProb").val(),
+            prob_Gl_tol: $("#GoLTol").val(),
+            prob_KL_tol: $("#KLTol").val()
         }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -476,7 +479,10 @@ function save(fileName) {
             prob_a_kl: 1 - GLProbability.val(),
             multirun_runs: $("#multirun_num").val(),
             debug: false,
-            fileName: fileName
+            fileName: fileName,
+            prob_exp: 0,
+            prob_Gl_tol: 0,
+            prob_KL_tol: 0
         }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
