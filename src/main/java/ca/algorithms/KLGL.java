@@ -15,6 +15,7 @@ public class KLGL {
     int [][][] table;
     double aliveProbability;
     long seed;
+    Random rand = new Random();
 
     public KLGL(File debugFile, File saveStatFile, PrintWriter debugWriter, PrintWriter saveStatWriter, boolean _debug, double aliveProbability, long seed){
         this.debugFile = debugFile;
@@ -90,7 +91,32 @@ public class KLGL {
         return ans;
     }
 
-    private int gl_r1_t(){
+    private int gl_r1_t(int[] neigh, int numAlive){
+        if((numAlive == 2) || (numAlive == 3)){
+            if(numAlive == 2){
+                if(((neigh[1] == 2) ||
+                (neigh[1] == 1) && (neigh[3] == 1)) ||
+                (neigh[1] == 1) && (neigh[4] == 1)){
+                    return 1;
+                } else if (
+                    ((neigh[2] == 2) || 
+                        (neigh[2] == 1) && (neigh[3] == 1)
+                    ) || (
+                        (neigh[2] == 1) && (neigh[4] == 1)
+                    )
+                ){return 2;}
+                else if(
+                    (neigh[1] == neigh[2]) || (neigh[3] == 2)
+                ){return 1;}
+                else if(neigh[4] == 2){return 4;}
+                else if(neigh[3] == neigh[4]){
+                    if(rand.nextDouble() <= 0.5){return 3;}
+                    else {return 4;}
+                }
+            } else {    // numAlive == 3
+                
+            }
+        }
         return 0;
     }
 
@@ -139,7 +165,7 @@ public class KLGL {
         }
         int n = tab[0].length;
         int[][][] tab2 = new int[i][n][n];
-        Random rand = new Random();
+
 
         //Przepisanie danych do nowej tablicy
         tab2[i - 1] = tab;
@@ -207,7 +233,7 @@ public class KLGL {
 
                     else if(tab2[gen-1][k][l] == 1){    //stosuje reguły GL  state(i,j) = 1
                         if(rand.nextDouble() <=toleracneGL){   
-                            gl_r1_t();  // GL toleruje KL
+                            tab2[gen][k][l] = gl_r1_t(neigh1, numAliveR1);  // GL toleruje KL
                         } else{   //GL nie toleruje KL
                             if((2 <= neigh1[1]+neigh1[3])&&(neigh1[1]+neigh1[3] <= 3)){
                                 if(neigh1[1]+neigh1[3] == 2){    //=2
