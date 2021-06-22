@@ -114,7 +114,20 @@ public class KLGL {
                     else {return 4;}
                 }
             } else {    // numAlive == 3
-                
+                if(neigh[1] == neigh[2]){
+                    if(neigh[3] == 1){return 3;}
+                    else if(neigh[4] == 1){return 4;}
+                } else if(neigh[1] > neigh[2]){return 1;}
+                else if(neigh[2] > neigh[1]){return 2;}
+                else if(neigh[3] > neigh[4]){return 3;}
+                else if(neigh[4] > neigh[3]){return 4;}
+                else if(neigh[1] >= 2){return 1;}
+                else if(neigh[2] >= 2){return 2;}
+                else if(neigh[3] == 3){return 3;}
+                else if(neigh[4] == 3){return 4;}
+                else{
+                    System.out.println("BRAKUJĄCY WARIANT W GL-R1-T DLA 3 ŻYWYCH");
+                }
             }
         }
         return 0;
