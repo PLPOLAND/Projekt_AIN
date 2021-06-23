@@ -160,14 +160,20 @@ public class KLGL {
             return 0;
         } else {
             if(neigh[1] >=2){
-                if(neigh[2] == 2){return 4;}
+                if(neigh[2] == 2){
+                    if(rand.nextDouble() <= 0.5){return 3;}
+                    else{return 4;}
+                }
                 else {return 1;}
             } else if(neigh[2] >= 2){
-                if(neigh[1] == 2){return 4;}
+                if(neigh[1] == 2){
+                    if(rand.nextDouble() <= 0.5){return 3;}
+                    else{return 4;}
+                }
                 else {return 2;}
             } else if(neigh[3] >= 3){return 3;}
             else if(neigh[4] >= 3){return 4;}
-            else if(neigh[3] == neigh[4]){
+            else if((neigh[3] == 2) && (neigh[4] == 2)){
                 if(rand.nextDouble() <= 0.5){return 3;}
                 else {return 4;}
             } else if((neigh[3] == 2) && (neigh[4] != 2)){return 3;}
