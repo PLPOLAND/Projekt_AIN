@@ -123,7 +123,10 @@ public class KLGL {
         if(numAlive == 3){
             if(neigh[1] == neigh[2]){
                 if(neigh[3] == 1){return 3;}
-                else if(neigh[4] == 1){return 4;}
+                else if(neigh[4] == 1){
+                    if(rand.nextDouble() <= 0.5){return 3;}
+                    else {return 4;}
+                }
             } else if(neigh[1] > neigh[2]){return 1;}
             else if(neigh[2] > neigh[1]){return 2;}
             else if(neigh[3] > neigh[4]){return 3;}
