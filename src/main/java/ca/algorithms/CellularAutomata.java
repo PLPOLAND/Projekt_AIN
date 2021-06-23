@@ -557,15 +557,17 @@ public class CellularAutomata {
     /**
      * wersja z nowymi parametrami
      */
-   public int[][][] klAndGlv2 (int[][] tab, int i, boolean debugFlag, double klAliveProb, double GLTolerance, double KLTolerance ){
-         return klGl(tab, i,debugFlag, klAliveProb);
+   public int[][][] klAndGlv2 (int[][] tab, int i, boolean debugFlag, double klAliveProb, double GLTolerance, double KLTolerance, double expansionProb ){
+    KLGL x = new KLGL(this);
+    return x.klGl(tab, i, debugFlag, klAliveProb, expansionProb, GLTolerance, KLTolerance);
     }
     /**
      * wersja z nowymi parametrami
      */
-    public int[][][] klAndGlv2 (double aliveProb, int n, int i, long seed, double klAliveProb, double GLTolerance, double KLTolerance , boolean debugFlag){
+    public int[][][] klAndGlv2 (double aliveProb, int n, int i, long seed, double klAliveProb, double GLTolerance, double KLTolerance , boolean debugFlag, double expansionProb){
         int[][] tab = new int[n][n];
-        return klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i,debugFlag, klAliveProb);
+        KLGL x = new KLGL(this);
+        return x.klGl(generateRandomPopulation(seed, tab, aliveProb, klAliveProb), i,debugFlag, klAliveProb, expansionProb, GLTolerance, KLTolerance);
     }
 
     /**

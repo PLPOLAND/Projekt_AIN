@@ -26,7 +26,17 @@ public class CASymulation extends SpringBootServletInitializer {
 		
 		
 		SpringApplication.run(CASymulation.class, args);
-
+		// CellularAutomata ca = new CellularAutomata();
+		// int[][][] tab = ca.klAndGlv2(0.5, 10, 10, 22, 0.5, 1, 1, false, 0.4);
+		// for(int x = 0; x < tab.length; x++){
+		// 	for(int y = 0; y < tab[0].length; y++){
+		// 		for(int z = 0; z<tab[0][0].length; z++){
+		// 			System.out.print(tab[x][y][z]+" ");
+		// 		}
+		// 		System.out.println();
+		// 	}
+		// 	System.out.println("///////////////////////////////////////");
+		// }
 		
 	}
 }
