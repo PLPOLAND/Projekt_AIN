@@ -127,11 +127,11 @@ public class MainRESTController {
     public boolean multirun_klgl(@RequestBody FromVizData dane) {
         int[][][][] tmp = new int[dane.getMultirun_runs()][dane.getIter()][dane.getN()][dane.getN()];
         long[] seeds = new long[dane.getMultirun_runs()];
-        tmp[0] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), dane.getProb_a_kl(), dane.getDebug());
+        tmp[0] = ca.klAndGlv2(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), dane.getProb_a_kl(),dane.getProb_Gl_tol(),dane.getProb_KL_tol(),  dane.getDebug(), dane.getProb_exp());
         seeds[0] = dane.getSeed();
         for (int i = 1; i < dane.getMultirun_runs(); i++) {
             seeds[i] = random.nextLong();
-            tmp[i] = ca.klAndGl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i], dane.getProb_a_kl(), dane.getDebug());
+            tmp[i] = ca.klAndGlv2(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), dane.getProb_a_kl(),dane.getProb_Gl_tol(),dane.getProb_KL_tol(),  dane.getDebug(), dane.getProb_exp());
         }
 
         stats.setFileName("results.txt");
