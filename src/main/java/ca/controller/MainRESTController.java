@@ -3,8 +3,6 @@ package ca.controller;
 import java.io.IOException;
 import java.util.Random;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import ca.algorithms.CellularAutomata;
 import ca.algorithms.KLGL;
 import ca.controller.data.FromVizData;
@@ -109,21 +107,19 @@ public class MainRESTController {
     @RequestMapping(value = "klglparam", consumes = MediaType.APPLICATION_JSON_VALUE)
     public int[][][] klglParam(@RequestBody FromVizData data) {
 
-        // int[][][] tmp = klgl.klGl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed(), data.getProb_a_kl(), data.getDebug()); //TODO: dodać odpowiednie wywołanie 
-        // stats.setFileName("results.txt");
-        // stats.generateStats(tmp, false, data);
-        // return tmp;
-        return null;
+        int[][][] tmp = ca.klAndGlv2(data.getProb_a(), data.getN(), data.getIter(), data.getSeed(), data.getProb_a_kl(),data.getProb_Gl_tol(),data.getProb_KL_tol(),  data.getDebug(), data.getProb_exp());
+        stats.setFileName("results.txt");
+        stats.generateStats(tmp, false, data);
+        return tmp;
     }
 
     @RequestMapping(value = "klgl", consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public int[][][] klgl(@RequestBody FromVizData data) {
-        // int[][][] tmp = klgl.klGl(data.getTab(), data.getIter(), data.getDebug(), data.getProb_a_kl());//TODO: dodać odpowiednie wywołanie
-        // stats.setFileName("results.txt");
-        // stats.generateStats(tmp, false, data);
-        // return tmp;
-        return null;
+        int[][][] tmp = ca.klAndGlv2(data.getTab(), data.getIter(), data.getDebug(), data.getProb_a_kl(), data.getProb_Gl_tol(), data.getProb_KL_tol(),data.getProb_exp());
+        stats.setFileName("results.txt");
+        stats.generateStats(tmp, false, data);
+        return tmp;
     }
 
     @RequestMapping(value = "multirunklgl", consumes = MediaType.APPLICATION_JSON_VALUE)

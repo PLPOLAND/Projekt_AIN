@@ -73,9 +73,7 @@ public class KLGL {
         int[] ans = new int[6];
         for(int k=i-d; k <=i+d; k++){
             for(int l=j-d; l <=j+d; l++){
-                if(d==1){
-                    if((k==i) && (l==j)) continue;
-                }
+                if((k==i) && (l==j)) continue;
 
                 int x, y;
                 if(k<0) x = n+k;
@@ -95,23 +93,23 @@ public class KLGL {
         if((numAlive == 2) || (numAlive == 3)){
             if(numAlive == 2){
                 if(((neigh[1] == 2) ||
-                (neigh[1] == 1) && (neigh[3] == 1)) ||
-                (neigh[1] == 1) && (neigh[4] == 1)){
+                (neigh[1] == 1) && (neigh[4] == 1)) ||
+                (neigh[1] == 1) && (neigh[5] == 1)){
                     return 1;
                 } else if (
                     ((neigh[2] == 2) || 
-                        (neigh[2] == 1) && (neigh[3] == 1)
-                    ) || (
                         (neigh[2] == 1) && (neigh[4] == 1)
+                    ) || (
+                        (neigh[2] == 1) && (neigh[5] == 1)
                     )
                 ){return 2;}
                 else if(
-                    (neigh[1] == neigh[2]) || (neigh[3] == 2)
+                    (neigh[1] == neigh[2]) || (neigh[4] == 2)
                 ){return 1;}
-                else if(neigh[4] == 2){return 4;}
-                else if(neigh[3] == neigh[4]){
-                    if(rand.nextDouble() <= 0.5){return 3;}
-                    else {return 4;}
+                else if(neigh[5] == 2){return 5;}
+                else if(neigh[4] == neigh[5]){
+                    if(rand.nextDouble() <= 0.5){return 4;}
+                    else {return 5;}
                 }
             } else {    // numAlive == 3
                 return kombinacja3(neigh, numAlive);
@@ -122,19 +120,19 @@ public class KLGL {
     private int kombinacja3 (int[] neigh, int numAlive){
         if(numAlive == 3){
             if(neigh[1] == neigh[2]){
-                if(neigh[3] == 1){return 3;}
-                else if(neigh[4] == 1){
-                    if(rand.nextDouble() <= 0.5){return 3;}
-                    else {return 4;}
+                if(neigh[4] == 1){return 4;}
+                else if(neigh[5] == 1){
+                    if(rand.nextDouble() <= 0.5){return 4;}
+                    else {return 5;}
                 }
             } else if(neigh[1] > neigh[2]){return 1;}
             else if(neigh[2] > neigh[1]){return 2;}
-            else if(neigh[3] > neigh[4]){return 3;}
-            else if(neigh[4] > neigh[3]){return 4;}
+            else if(neigh[4] > neigh[5]){return 4;}
+            else if(neigh[5] > neigh[4]){return 5;}
             else if(neigh[1] >= 2){return 1;}
             else if(neigh[2] >= 2){return 2;}
-            else if(neigh[3] == 3){return 3;}
             else if(neigh[4] == 3){return 4;}
+            else if(neigh[5] == 3){return 5;}
             else{
                 System.out.println("BRAKUJĄCY WARIANT W GL-R1-T DLA 3 ŻYWYCH");
                 return 0;
@@ -161,26 +159,26 @@ public class KLGL {
         } else {
             if(neigh[1] >=2){
                 if(neigh[2] == 2){
-                    if(rand.nextDouble() <= 0.5){return 3;}
-                    else{return 4;}
+                    if(rand.nextDouble() <= 0.5){return 4;}
+                    else{return 5;}
                 }
                 else {return 1;}
             } else if(neigh[2] >= 2){
                 if(neigh[1] == 2){
-                    if(rand.nextDouble() <= 0.5){return 3;}
-                    else{return 4;}
+                    if(rand.nextDouble() <= 0.5){return 4;}
+                    else{return 5;}
                 }
                 else {return 2;}
-            } else if(neigh[3] >= 3){return 3;}
-            else if(neigh[4] >= 3){return 4;}
-            else if((neigh[3] == 2) && (neigh[4] == 2)){
-                if(rand.nextDouble() <= 0.5){return 3;}
-                else {return 4;}
-            } else if((neigh[3] == 2) && (neigh[4] != 2)){return 3;}
-            else if((neigh[4] == 2) && (neigh[3] != 2)){return 4;}
-            else if((((neigh[1] == 1) && (neigh[2] == 1)) && (neigh[3] == 1)) && (neigh[4] == 1)){  // jeśli wszystkich po tyle samo, to zwracamy randomowo 31 lub 32, zgodnie z rule1
-                if(rand.nextDouble() <= 0.5){return 3;}
-                else{return 4;}
+            } else if(neigh[4] >= 3){return 4;}
+            else if(neigh[5] >= 3){return 5;}
+            else if((neigh[4] == 2) && (neigh[5] == 2)){
+                if(rand.nextDouble() <= 0.5){return 4;}
+                else {return 5;}
+            } else if((neigh[4] == 2) && (neigh[5] != 2)){return 4;}
+            else if((neigh[5] == 2) && (neigh[4] != 2)){return 5;}
+            else if((((neigh[1] == 1) && (neigh[2] == 1)) && (neigh[4] == 1)) && (neigh[5] == 1)){  // jeśli wszystkich po tyle samo, to zwracamy randomowo 31 lub 32, zgodnie z rule1
+                if(rand.nextDouble() <= 0.5){return 4;}
+                else{return 5;}
             } else {
                 System.out.println("NIEPRZEWIDZIANY PRZYPADEK W KL-R-T");
                 return 0;
@@ -241,53 +239,63 @@ public class KLGL {
                     for(int m=1; m<neigh1.length; m++){numAliveR1 += neigh1[m];}
 
                     //DEBUG2
+                    debug("");
                     debug("DEBUG2:");
                     debug("i: "+k+" j: "+l);
                     debug("state(i, j): "+tab2[gen-1][k][l]);
                     debug("Moore Neighbourhood: ");
-                    debug("Num_aliveR2: "+numAliveR2+" Num_1: "+neigh2[1]+" Num_2: "+neigh2[2]+" Num_11: "+neigh2[3]+" Num_31: "+neigh2[4]+" Num_32: "+neigh2[5]);
-                    debug("Num_aliveR1: "+numAliveR1+" Num_1: "+neigh1[1]+" Num_2: "+neigh1[2]+" Num_11: "+neigh1[3]+" Num_31: "+neigh1[4]+" Num_32: "+neigh1[5]);
+                    debug("Num_aliveR2: "+numAliveR2+" Num_1: "+neigh2[1]+" Num_2: "+neigh2[2]+" Num_31: "+neigh2[4]+" Num_32: "+neigh2[5]);
+                    debug("Num_aliveR1: "+numAliveR1+" Num_1: "+neigh1[1]+" Num_2: "+neigh1[2]+" Num_31: "+neigh1[4]+" Num_32: "+neigh1[5]);
 
                     if(tab2[gen-1][k][l] == 0){                 //state(i,j) = 0
-                        if(rand.nextDouble() <= expansionProb){     //ekspansja GL
-                            if(rand.nextDouble() <= toleracneGL){
+                        double expRand = rand.nextDouble();
+                        debug("expProb = " + expRand);
+                        if(expRand <= expansionProb){     //ekspansja GL
+                            double gLtol = rand.nextDouble();
+                            debug("glTolerance = " + gLtol);
+                            if(gLtol <= toleracneGL){
                                 tab2[gen][k][l] = gl_r2_t(neigh1, numAliveR1);  // GL toleruje KL
                             } else {    // GL nie toleruje KL
-                                if(neigh1[1] + neigh1[3] == 3){
-                                    if(neigh1[1] > neigh1[3]){
+                                if(neigh1[1] + neigh1[4] == 3){
+                                    if(neigh1[1] > neigh1[4]){
                                         tab2[gen][k][l] = 1;
-                                    } else {tab2[gen][k][l] = 3;}
+                                    } else {tab2[gen][k][l] = 4;}
                                 }
                                 else {tab2[gen][k][l] = 0;}
                             }
+                            debug("x = " + tab2[gen][k][l]);
                         } else {    //ekspansja KL
-                            if(rand.nextDouble() <= toleranceKL){
+                            double klTol = rand.nextDouble();
+                            if(klTol <= toleranceKL){
                                 tab2[gen][k][l] = kl_r_t(neigh2, numAliveR2);   // KL toleruje GL
+                                
+                                debug("klTolerance = " + klTol);
                             } else {    // KL nie toleruje GL
-                                if(neigh2[2] + neigh2[4] == 4){
-                                    if(neigh2[2] == neigh2[4]){
+                                if(neigh2[2] + neigh2[5] == 4){
+                                    if(neigh2[2] == neigh2[5]){
                                         if(rand.nextDouble()<=0.5){tab2[gen][k][l] = 2;}
-                                        else{tab2[gen][k][l] = 4;}
-                                    } else if(neigh2[2] > neigh2[4]) {
+                                        else{tab2[gen][k][l] = 5;}
+                                    } else if(neigh2[2] > neigh2[5]) {
                                         tab2[gen][k][l] = 2;
                                     } else{
-                                        tab2[gen][k][l] = 4;
+                                        tab2[gen][k][l] = 5;
                                     }
                                 } else {
                                     tab2[gen][k][l] = 0;
                                 } 
                             }
+                            debug("x = " + tab2[gen][k][l]);
                         }
-
                     }
-
                     else if(tab2[gen-1][k][l] == 1){    //stosuje reguły GL  state(i,j) = 1
-                        if(rand.nextDouble() <=toleracneGL){   
+                        double glTolerance = rand.nextDouble();
+                        debug("glTolerance = " + glTolerance);
+                        if(glTolerance <=toleracneGL){   
                             tab2[gen][k][l] = gl_r1_t(neigh1, numAliveR1);  // GL toleruje KL
                         } else{   //GL nie toleruje KL
-                            if((2 <= neigh1[1]+neigh1[3])&&(neigh1[1]+neigh1[3] <= 3)){
-                                if(neigh1[1]+neigh1[3] == 2){    //=2
-                                    if(neigh1[1] == neigh1[3]){
+                            if((2 <= neigh1[1]+neigh1[4])&&(neigh1[1]+neigh1[4] <= 3)){
+                                if(neigh1[1]+neigh1[4] == 2){    //=2
+                                    if(neigh1[1] == neigh1[4]){
                                         if(rand.nextDouble() <=0.5){
                                             tab2[gen][k][l]=1;
                                         } else {
@@ -301,44 +309,50 @@ public class KLGL {
                                 } else {                    //=3
                                     if(neigh1[1] == 3){
                                         tab2[gen][k][l] = 1;
-                                    } else if(neigh1[3] == 3){
-                                        tab2[gen][k][l] = 3;
-                                    } else if(neigh1[1] > neigh1[3]){
+                                    } else if(neigh1[4] == 3){
+                                        tab2[gen][k][l] = 4;
+                                    } else if(neigh1[1] > neigh1[4]){
                                         tab2[gen][k][l] = 1;
                                     } else {
-                                        tab2[gen][k][l] = 3;
+                                        tab2[gen][k][l] = 4;
                                     }
                                 }
                             } else {
                                 tab2[gen][k][l] = 0;
                             }
                         }
+                        debug("x = " + tab2[gen][k][l]);
                     } else if(tab2[gen-1][k][l] == 2){      //state(i,j)=2
                         if(numAliveR2 != 4){
                             tab2[gen][k][l] = 0;
                         } else {
-                            if(rand.nextDouble() <= toleranceKL){
+                            double klTolerance = rand.nextDouble();
+                            debug("klTolerance = " + klTolerance);
+                            if(klTolerance <= toleranceKL){
                                 tab2[gen][k][l] = kl_r_t(neigh2, numAliveR2);       // KL toleruje GL
                             } else {    // KL nie toleruje GL
                                 if(neigh2[2] == 4){
                                     tab2[gen][k][l] = 2;
-                                } else if(neigh2[4] == 4){
-                                    tab2[gen][k][l] = 4;
-                                } else if(neigh2[2] > neigh2[4]){
+                                } else if(neigh2[5] == 4){
+                                    tab2[gen][k][l] = 5;
+                                } else if(neigh2[2] > neigh2[5]){
                                     tab2[gen][k][l] = 2;
-                                } else if(neigh2[2] < neigh2[4]){
-                                    tab2[gen][k][l] = 4;
-                                } else if(neigh2[2]==neigh2[4]){
+                                } else if(neigh2[2] < neigh2[5]){
+                                    tab2[gen][k][l] = 5;
+                                } else if(neigh2[2]==neigh2[5]){
                                     if(rand.nextDouble()<=0.5){
                                         tab2[gen][k][l] = 2;
                                     } else{
-                                        tab2[gen][k][l] = 4;
+                                        tab2[gen][k][l] = 5;
                                     }
                                 }
                             }
                         }
+                        debug("x = " + tab2[gen][k][l]);
                     } else if(tab2[gen-1][k][l] == 3){ // state(i,j) = 31 stosuje KL lub GL i toleruje obcych
-                        if(rand.nextDouble() <= 0.5){   //stosuje regułę GL
+                        double option = rand.nextDouble();
+                        debug("choose param GL/KL = " + option);
+                        if(option <= 0.5){   //stosuje regułę GL
                             if((numAliveR1 == 2) || (numAliveR1 == 3)){
                                 tab2[gen][k][l] = gl_r1_31_t(neigh1, numAliveR1);
                             } else {
@@ -351,8 +365,11 @@ public class KLGL {
                                 tab2[gen][k][l] = 0;
                             }
                         }
+                        debug("x = " + tab2[gen][k][l]);
                     } else if(tab2[gen-1][k][l] == 4) { //stosuje GL lub KL i toleruje obcych
-                        if(rand.nextDouble() <= 0.5){
+                        double option = rand.nextDouble();
+                        debug("choose param GL/KL = " + option);
+                        if(option <= 0.5){
                             if((numAliveR1 == 2) || (numAliveR1 == 3)){ //stosuje regułę GL
                                 tab2[gen][k][l] = gl_r1_32_t(neigh1, numAliveR1);
                             } else {
@@ -365,6 +382,7 @@ public class KLGL {
                                 tab2[gen][k][l] = 0;
                             }
                         }
+                        debug("x = " + tab2[gen][k][l]);
                     }
                 }
             }
