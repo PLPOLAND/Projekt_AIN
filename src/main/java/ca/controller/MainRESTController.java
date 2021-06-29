@@ -156,4 +156,12 @@ public class MainRESTController {
         }
         return false;
     }
+
+
+    @RequestMapping(value = "randPop", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public int[][] getRandomPopulation(@RequestBody FromVizData data) {
+
+        return CellularAutomata.generateRandomPopulation(data.getSeed(), new int[data.getN()][data.getN()], data.getProb_a(), data.getProb_a_kl());
+    }
+
 }

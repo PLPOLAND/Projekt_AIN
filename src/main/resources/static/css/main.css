@@ -156,30 +156,7 @@ body{
     /* margin-top: 5%;
     margin-left: 5%; */
 }
-#cancel{
-    height: 30px;
-    width: 100px;
-    margin: 5px;
-    background-color: #4c3ec7;
-    color: #f1f1f1;
-    border-color: #040029;
-}
-#save{
-    height: 30px;
-    width: 100px;
-    margin: 5px;
-    background-color: #4c3ec7;
-    color: #f1f1f1;
-    border-color: #0b006d;
-}
-#clearManualButton{
-    height: 30px;
-    width: 100px;
-    margin: 5px;
-    background-color: #4c3ec7;
-    color: #f1f1f1;
-    border-color: #0b006d;
-}
+
 .pushToBottom{
     position: absolute;
     bottom: 0;
@@ -188,10 +165,29 @@ body{
 #kwadratyManual{
     background-color: #ffffff;
     
-    width: 90%;
-    height: 90%;
+    width: calc(60% - 20px);
+    height: 50%;
+    margin-left: 20px;
+    float: left;
 
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
+}
+#kwadratyManualProps{
+    width: calc(30% - 10px);
+    height: 90%;
+    margin-right: 10px;
+    float: right;
+}
+.manualButton{
+    height: 30px;
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 5px;
+    background-color: #4c3ec7;
+    color: #f1f1f1;
+    border-color: #0b006d;
+}
+.manualButton:active{
+    
+    background-color: #211b55;
 }

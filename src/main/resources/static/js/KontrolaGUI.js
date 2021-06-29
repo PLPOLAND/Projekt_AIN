@@ -22,6 +22,8 @@ $(document).ready(function () {
     uaktualnij_KL_value();
     $("#viz_number").prop('max', parseInt($("#iteracji").val()));
     $("#wymiar").val(size);
+    $("#wymiarManual").val(sizeManual);
+    
     $("#multirun").click(function() {
         if ($("#multirun").prop('checked')) {
             show(sliderMultiRun);
@@ -62,6 +64,12 @@ $(document).ready(function () {
             return false;
         }
     });
+    $("#wymiarManual").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
     $("#iteracji").keypress(function (e) {
         //if the letter is not digit then display error and don't type anything
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -93,6 +101,14 @@ $(document).ready(function () {
         }
     });
     $("#wymiar").change(function (e) {
+        if (parseInt($(this).val(), 10) > $(this).prop('max')){
+            $(this).val($(this).prop('max'))
+        }
+        else if(parseInt($(this).val(), 10) < $(this).prop('min')){
+            $(this).val($(this).prop('min'))
+        }
+    });
+    $("#wymiarManual").change(function (e) {
         if (parseInt($(this).val(), 10) > $(this).prop('max')){
             $(this).val($(this).prop('max'))
         }
@@ -154,6 +170,23 @@ $(document).ready(function () {
 
         kolorujzDanychIter(dane,size,0);
         $(".komorka").click(function () {
+            changeAlgoTypeOfCell_Viz($(this));
+        });
+    })
+    $("#setSizeManual").click(function(){
+        n = parseInt($("#wymiarManual").val(),10);
+        sizeManual = n;
+        podziel_na_komorki_manual(n,n);
+
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n; j++) {
+                $("#" + getCell_manual(i, j)).prop("algo", 0);
+                kolorujEl2($("#" + getCell_manual(i, j)), 0);
+                $("#" + getCell_manual(i, j));
+            }
+        }
+
+        $(".komorkaManual").click(function () {
             changeAlgoTypeOfCell_Viz($(this));
         });
     })
@@ -223,6 +256,10 @@ $(document).ready(function () {
         przepisz_z_manual();
         hide($("#manualCells"), 500);
     })
+    $("#randoSave").click(function () {
+        przepisz_z_manual_with_random();
+        hide($("#manualCells"), 500);
+    })
     $("#ClearButton").click(function () {
         n = parseInt($("#wymiar").val(), 10);
         size = n;
@@ -243,7 +280,7 @@ $(document).ready(function () {
         });
     })
     $("#clearManualButton").click(function () {
-        n = 20;
+        n = sizeManual;
         for (let i = 0; i < n; i++) {
             for (let j = 0; j < n; j++) {
                 $("#" + getCell_manual(i, j)).prop("algo",0);
@@ -261,10 +298,19 @@ $(document).ready(function () {
         console.log(fileName);
         save(fileName);
     })
+    $("#saveToFileManual").click(function() {
+        fileName = $("#fileNameManual").val();
+        console.log(fileName);
+        saveManual(fileName);
+    })
 
     $("#readFromFile").click(function () {
         fileName = $("#readFileName").val().replace(/C:\\fakepath\\/i, '');
         read(fileName);
+    })
+    $("#readFromFileManual").click(function () {
+        fileName = $("#readFileNameManual").val().replace(/C:\\fakepath\\/i, '');
+        readManual(fileName);
     })
 
 
@@ -343,6 +389,9 @@ function changeAlgoTypeOfCell_Viz(element) {
         console.log("2");
         console.log(tmp);
         tmp += 1;
+        if (tmp == 3){//omijamy "żółte" ,nie używane już!
+            tmp = 4;
+        }
         if (tmp>5) {
             tmp = 0;
         }
@@ -504,6 +553,45 @@ function save(fileName) {
     //     setTimeout(hideMsgBox, 5000);
     // });
 }
+function saveManual(fileName) {
+    $.ajax({
+        url: "/api/save",
+        type: 'post',
+        data: JSON.stringify({
+            iter: parseInt($("#iteracji").val()),
+            tab: readManualCells(),
+            seed: $("#seed").val(),
+            n: $("#wymiarManual").val(),
+            prob_a: aliveProbability.val(),
+            prob_a_gl: GLProbability.val(),
+            prob_a_kl: 1 - GLProbability.val(),
+            multirun_runs: $("#multirun_num").val(),
+            debug: false,
+            fileName: fileName,
+            prob_exp: 0,
+            prob_Gl_tol: 0,
+            prob_KL_tol: 0
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            msgbox = $("#msgWindow")
+            msgbox.css("background-color", "#00FF00");
+            msgbox.html("Zapisano dane do: " + response.path);
+            msgbox.show(500);
+            setTimeout(hideMsgBox, 30000);
+        }
+    })
+    // .fail(function (jqXHR, exception) {
+    //     console.log(jqXHR.responseJSON.error);
+    //     msgbox = $("#msgWindow");
+    //     msgbox.css("background-color", "#FF0000");
+    //     msgbox.text(jqXHR.responseJSON.error);
+    //     msgbox.show(500);
+    //     setTimeout(hideMsgBox, 5000);
+    // });
+}
 
 function read(fileName) {
     $.ajax({
@@ -553,6 +641,62 @@ function read(fileName) {
         setTimeout(hideMsgBox, 5000);
     });
 }
+function readManual(fileName) {
+    $.ajax({
+        url: "/api/read",
+        type: 'post',
+        data: fileName,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            if (response.n > parseInt($("#wymiarManual").prop("max"),10)) {
+                msgbox = $("#msgWindow")
+                msgbox.css("background-color", "#FFFF00");
+                msgbox.html("Wczytano plik zapisu niepochodzący z zapisu manualnego ustawiania komórek!!! Wczytaj inny!");
+                msgbox.show(500);
+                setTimeout(hideMsgBox, 3000);
+            }
+            else {
+                msgbox = $("#msgWindow")
+                msgbox.css("background-color", "#00FF00");
+                msgbox.html("Wczytano");
+                msgbox.show(500);
+                setTimeout(hideMsgBox, 3000);
+                console.log(response);
+                // iter: parseInt($("#iteracji").val()),
+                // tab: readCells(),
+                // seed: $("#seed").val(),
+                // n: $("#wymiar").val(),
+                // prob_a: aliveProbability.val(),
+                // prob_a_gl: GLProbability.val(),
+                // prob_a_kl: 1 - GLProbability.val(),
+                // multirun_runs: $("#multirun_num").val(),
+                // debug: false,
+                // fileName: fileName
+
+                sizeManual = response.n;
+                podziel_na_komorki_manual(sizeManual, sizeManual);
+                // console.log(response.tab);
+                kolorujzDanychManual(response.tab,response.n);
+                $("#seed").val(response.seed);
+                $("#wymiarManual").val(response.n);
+                // aliveProbability.val(response.prob_a);
+                // GLProbability.val(response.prob_a_gl);
+                // GLProbability.change();//TODO poprawić
+                // $("#manual").prop("checked",true);
+                // $("#multirun_num").val(response.multirun_runs);
+            }
+        }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
+    });
+}
 
 
 function hideMsgBox() {
@@ -574,7 +718,7 @@ function hideMsgBox() {
     return dane;
 }
  function readManualCells() {
-    N = 20;
+    N = sizeManual;
     dane = [];
     for (let i = 0; i < N; i++) {
         dane[i] = [];
@@ -590,20 +734,92 @@ function hideMsgBox() {
 function przepisz_z_manual(){
     dane = readCells();
     N = $("#wymiar").val();
-    if (N <= 20) {
-        kolorujzDanych(readManualCells(),20);
+    if (N <= sizeManual) {
+        kolorujzDanych(readManualCells(), sizeManual);
     }
     else{
-        roznica = N - 20;
+        roznica = N - sizeManual;
         marginLeftTop = Math.floor(roznica / 2);
         // console.log(roznica);
         // console.log(marginLeftTop);
         tmpDane = readManualCells();
-        for (let i = 0; i < 20; i++) {
-            for (let j = 0; j < 20; j++) {
+        for (let i = 0; i < sizeManual; i++) {
+            for (let j = 0; j < sizeManual; j++) {
                 kolorujEl2($("#" + getCell(i + marginLeftTop, j + marginLeftTop)), tmpDane[i][j]);
                 $("#" + getCell(i + marginLeftTop, j + marginLeftTop)).prop("algo", tmpDane[i][j]);
             }
         }
     }
+}
+
+function przepisz_z_manual_with_random(){//TODO
+    valOfprob = 0;
+
+    if ($("#sym_type option:selected").val() == 0) {
+        valOfprob = 1;
+    }
+    else if ($("#sym_type option:selected").val() == 1){
+        valOfprob = 0;
+    }
+    else if ($("#sym_type option:selected").val() == 2){
+        valOfprob = GLProbability.val();
+    }
+
+    $.ajax({
+        url: "/api/randPop",
+        type: 'post',
+        data: JSON.stringify({
+            iter: parseInt($("#iteracji").val()),
+            tab: null,
+            seed: $("#seed").val(),
+            n: $("#wymiar").val(),
+            prob_a: aliveProbability.val(),
+            prob_a_gl: valOfprob,
+            prob_a_kl: 1 - valOfprob,
+            multirun_runs: $("#multirun_num").val(),
+            debug: $("#debug").prop("checked"),
+            filename: "",
+            prob_exp: $("#expProb").val(),
+            prob_Gl_tol: $("#GoLTol").val(),
+            prob_KL_tol: $("#KLTol").val()
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (response) {
+            N = $("#wymiar").val();
+            console.log("N:" +N);
+            if (N <= sizeManual) {
+                kolorujzDanych(readManualCells(), sizeManual);
+            }
+            else {
+                // console.log("N:" +N);
+                roznica = N - sizeManual;
+                // console.log("N:" +N);
+                marginLeftTop = Math.floor(roznica / 2);
+                // console.log("N:" +N);
+                // console.log(roznica);
+                // console.log(marginLeftTop);
+                // console.log("N:" +N);
+                kolorujzDanych(response,N);
+                // console.log("N:" +N);
+                tmpDane = readManualCells();
+                for (let i = 0; i < sizeManual; i++) {
+                    for (let j = 0; j < sizeManual; j++) {
+                        kolorujEl2($("#" + getCell(i + marginLeftTop, j + marginLeftTop)), tmpDane[i][j]);
+                        $("#" + getCell(i + marginLeftTop, j + marginLeftTop)).prop("algo", tmpDane[i][j]);
+                    }
+                }
+            }
+        }
+    }).fail(function (jqXHR, exception) {
+        console.log(jqXHR.responseJSON.error);
+        msgbox = $("#msgWindow");
+        msgbox.css("background-color", "#FF0000");
+        msgbox.text(jqXHR.responseJSON.error);
+        msgbox.show(500);
+        setTimeout(hideMsgBox, 5000);
+    });
+
+    
 }

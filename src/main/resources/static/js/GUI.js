@@ -9,6 +9,7 @@ const GL3 = "#00FF00";
 
 
 var size = 100;
+var sizeManual = 20;
 
 var iter = 0;
 
@@ -18,36 +19,46 @@ $(document).ready(function () {
     $("#kwadraty").css("height", $("#kwadraty").css("width"));
 
     
-    $(window).resize(function () { 
-        height_man = parseInt($("#manualCells").css("height"),10);
-        width_man = parseInt($("#manualCells").css("width"), 10);
+    $(window).resize(function () {
+        resizeKwadratyManual();
+    });
+    resizeKwadratyManual();
+
+    podziel_na_komorki(size);
+    podziel_na_komorki_manual(sizeManual);
+    // randomujkolory();
+    clear(size);
+});
+function resizeKwadratyManual() {
+    height_man = parseInt($("#manualCells").css("height"), 10);
+    width_man = parseInt($("#manualCells").css("width"), 10);
+    height_win = parseInt($(window).innerHeight(), 10);
+    width_win = parseInt($(window).innerWidth(), 10);
+
+    if (width_win < height_win * 1.3) {
+        console.log("Mniejsza");
         if (height_man < width_man) {
-            $("#kwadratyManual").css("width",0.9*height_man);
-            $("#kwadratyManual").css("height",0.9*height_man);
+            $("#kwadratyManual").css("width", 0.65 * height_man);
+            $("#kwadratyManual").css("height", 0.65 * height_man);
+        }
+        else {
+            $("#kwadratyManual").css("width", 0.65 * width_man);
+            $("#kwadratyManual").css("height", 0.65 * width_man);
+        }
+    }else{
+
+        if (height_man < width_man) {
+            $("#kwadratyManual").css("width", 0.9 * height_man);
+            $("#kwadratyManual").css("height", 0.9 * height_man);
         }
         else {
             $("#kwadratyManual").css("width", 0.9 * width_man);
             $("#kwadratyManual").css("height", 0.9 * width_man);
         }
-
-        ustaw_wymiary_komorek_manual(20, 20)
-    });
-    height_man = parseInt($("#manualCells").css("height"), 10);
-    width_man = parseInt($("#manualCells").css("width"), 10);
-    if (height_man < width_man) {
-        $("#kwadratyManual").css("width", 0.9 * height_man);
-        $("#kwadratyManual").css("height", 0.9 * height_man);
     }
-    else {
-        $("#kwadratyManual").css("width", 0.9 * width_man);
-        $("#kwadratyManual").css("height", 0.9 * width_man);
-    }
+    ustaw_wymiary_komorek_manual(sizeManual, sizeManual)
+}
 
-    podziel_na_komorki(size);
-    podziel_na_komorki_manual(20);
-    // randomujkolory();
-    clear(size);
-});
 function podziel_na_komorki(x) {
     y = x;
     $("#kwadraty").children().remove();
@@ -132,7 +143,7 @@ function kolorujEl2(element,type) {
     
         case 1:
             element.css("background-color", GL)
-            console.log("GL");
+            // console.log("GL");
             break;
     
         case 2:
@@ -237,11 +248,22 @@ function kolorujzDanychIter(dane,N, iteracja) {
     iter = iteracja 
 }
 function kolorujzDanych(dane,N) {
-    
+    console.log("N: "+N);
+    console.log("dane: " + dane);
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
             kolorujEl2($("#" + getCell(i, j)), dane[i][j]);
             $("#" + getCell(i, j)).prop("algo", dane[i][j]);
+        }
+    } 
+}
+function kolorujzDanychManual(dane,N) {
+    console.log("N: "+N);
+    console.log("dane: " + dane);
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            kolorujEl2($("#" + getCell_manual(i, j)), dane[i][j]);
+            $("#" + getCell_manual(i, j)).prop("algo", dane[i][j]);
         }
     } 
 }

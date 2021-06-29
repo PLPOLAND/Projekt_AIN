@@ -62,7 +62,7 @@ public class CellularAutomata {
     //     return tab;
     // }
 
-    private int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, double klAliveProb){
+    static public int[][] generateRandomPopulation(long seed, int[][] tab, double aliveProb, double klAliveProb){
         int n = tab[0].length;
         Random rand = new Random(seed);
         for(int k=0; k<n; k++){
