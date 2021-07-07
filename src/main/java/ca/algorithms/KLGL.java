@@ -311,12 +311,12 @@ public class KLGL {
                                         if(rand.nextDouble() <=0.5){
                                             tab2[gen][k][l]=1;
                                         } else {
-                                            tab2[gen][k][l]=3;
+                                            tab2[gen][k][l]=4;
                                         }
                                     } else if(neigh1[1] ==2){
                                         tab2[gen][k][l]=1;
                                     } else {
-                                        tab2[gen][k][l]=3;
+                                        tab2[gen][k][l]=4;
                                     }
                                 } else {                    //=3
                                     if(neigh1[1] == 3){
