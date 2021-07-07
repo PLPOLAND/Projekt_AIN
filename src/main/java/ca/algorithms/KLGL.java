@@ -186,6 +186,10 @@ public class KLGL {
             else if((((neigh[1] == 1) && (neigh[2] == 1)) && (neigh[3] == 1)) && (neigh[5] == 1)){
                 if(rand.nextDouble() <= 0.5){return 4;}
                 else{return 5;}
+            }
+            else if((((neigh[1] == 1) && (neigh[3] == 1)) && (neigh[4] == 1)) && (neigh[5] == 1)){
+                if(rand.nextDouble() <= 0.5){return 4;}
+                else{return 5;}
             } else {
                 System.out.println("NIEPRZEWIDZIANY PRZYPADEK W KL-R-T");
                 System.out.println("neigh: "+neigh[0]+" "+neigh[1]+" "+neigh[2]+" "+neigh[3]+" "+neigh[4]+" "+neigh[5]);
@@ -307,12 +311,12 @@ public class KLGL {
                                         if(rand.nextDouble() <=0.5){
                                             tab2[gen][k][l]=1;
                                         } else {
-                                            tab2[gen][k][l]=3;
+                                            tab2[gen][k][l]=4;
                                         }
                                     } else if(neigh1[1] ==2){
                                         tab2[gen][k][l]=1;
                                     } else {
-                                        tab2[gen][k][l]=3;
+                                        tab2[gen][k][l]=4;
                                     }
                                 } else {                    //=3
                                     if(neigh1[1] == 3){
