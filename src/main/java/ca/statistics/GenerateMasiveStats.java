@@ -7,8 +7,8 @@ import ca.controller.data.FromVizData;
 
 public class GenerateMasiveStats {
     final static int multiruns = 4;
-    final static int iterations = 1000;
-    final static int N = 100;
+    final static int iterations = 500;
+    final static int N = 50;
 
     public static void main(String[] args) {
         Stats stats = new Stats();
