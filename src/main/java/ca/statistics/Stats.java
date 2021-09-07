@@ -26,7 +26,7 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
 
     public Stats(String s) throws FileNotFoundException {
         fileName = s;
-        f = new File("statystyki/" + fileName);
+        f = new File("RESULTS" + fileName);
         f.getParentFile().mkdirs();
         writer = new PrintWriter(f);
     }
@@ -451,7 +451,7 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
             writer.close();
         }
 
-        f = new File("statystyki/" + fileName);
+        f = new File("RESULTS" + fileName);
         f.getParentFile().mkdirs();
         try {
             writer = new PrintWriter(f);
