@@ -37,6 +37,7 @@ public class MainRESTController {
     @RequestMapping(value = "glparam", consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public int[][][] glParam(@RequestBody FromVizData data) {
+        data.setProb_a_gl(1);// ustawienie informacji o uruchomieniu algorytmu w trybie GL
         int [][][] tmp = ca.gl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());
         stats.setFileName("results.txt");
         stats.generateStats(tmp,true,data);
@@ -46,6 +47,7 @@ public class MainRESTController {
     @RequestMapping(value = "gl", consumes = MediaType.APPLICATION_JSON_VALUE)
     
     public int[][][] gl(@RequestBody FromVizData data) {
+        data.setProb_a_gl(1);// ustawienie informacji o uruchomieniu algorytmu w trybie GL
         int[][][] tmp = ca.gl(data.getTab(), data.getIter());
         stats.setFileName("results.txt");
         stats.generateStats(tmp,true, data);
@@ -55,6 +57,7 @@ public class MainRESTController {
     @RequestMapping(value = "klparam", consumes = MediaType.APPLICATION_JSON_VALUE)
     public int[][][] klParam(@RequestBody FromVizData data) {
         
+        data.setProb_a_gl(0);// ustawienie informacji o uruchomieniu algorytmu w trybie KL
         int [][][] tmp = ca.kl(data.getProb_a(), data.getN(), data.getIter(), data.getSeed());
         stats.setFileName("results.txt");
         stats.generateStats(tmp, true, data);
@@ -64,6 +67,7 @@ public class MainRESTController {
     @RequestMapping(value = "kl", consumes = MediaType.APPLICATION_JSON_VALUE)
     
     public int[][][] kl(@RequestBody FromVizData data) {
+        data.setProb_a_gl(0);// ustawienie informacji o uruchomieniu algorytmu w trybie KL
         int [][][] tmp = ca.kl(data.getTab(), data.getIter());
         stats.setFileName("results.txt");
         stats.generateStats(tmp, true, data);
@@ -81,7 +85,7 @@ public class MainRESTController {
             tmp[i] = ca.kl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
         }
 
-        stats.setFileName("results.txt");
+        stats.setFileName("m_results.txt");
         stats.generateStats(tmp,true, seeds, dane);
         return true;
     }
@@ -98,7 +102,7 @@ public class MainRESTController {
             tmp[i] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
         }
 
-        stats.setFileName("results.txt");
+        stats.setFileName("m_results.txt");
         stats.generateStats(tmp, true, seeds, dane);
         return true;
     }
@@ -134,7 +138,7 @@ public class MainRESTController {
             tmp[i] = ca.klAndGlv2(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), dane.getProb_a_kl(),dane.getProb_Gl_tol(),dane.getProb_KL_tol(),  dane.getDebug(), dane.getProb_exp());
         }
 
-        stats.setFileName("results.txt");
+        stats.setFileName("m_results.txt");
         stats.generateStats(tmp, false, seeds, dane);
         return true;
     }

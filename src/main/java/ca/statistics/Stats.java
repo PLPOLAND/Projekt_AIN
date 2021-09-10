@@ -219,6 +219,16 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
      */
     public void genereteHaderOfStats(long seed, int n, int iter, double prob,double prob_gl, double prob_kl, boolean GL_KL_MODE, double expansion, double glTolerance, double klTolerance) {
         writer.println("#" + " Symulacja");
+        if (GL_KL_MODE) {
+            if ((int) prob_gl == 0) {
+                writer.println("#" + " Algorithm: Kaleidoscope of life");
+            } else {
+
+                writer.println("#" + " Algorithm: Game of life");
+            }
+        } else {
+            writer.println("#" + " Algorithm: Competition for living space");
+        }
         writer.println("#" + " seed: " + seed);
         writer.println("#" + " N: " + n);
         writer.println("#" + " Iterations: " + iter);
@@ -258,6 +268,17 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
         writer.println("#" + " N: " + data.getN());
         writer.println("#" + " Iterations: " + data.getIter());
         writer.println("#" + " Multiruns: " + data.getMultirun_runs());
+        if(GL_KL_MODE){
+            if ((int)data.getProb_a_gl() == 0) {
+                writer.println("#" + " Algorithm: Kaleidoscope of life");
+            } else {
+                
+                writer.println("#" + " Algorithm: Game of life");
+            }
+        }
+        else{
+            writer.println("#" + " Algorithm: Competition for living space");
+        }
         writer.println("#" + " Probability to be alive: " + data.getProb_a());
         if (!GL_KL_MODE) {
             writer.println("#" + " Probability to be alive as GL: " + data.getProb_a_gl());
