@@ -57,6 +57,7 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
         float [][][] frac_stats = new float[dane.length][dane_naglowka.getIter()][8];
         for (int i = 0; i < dane.length; i++) {
             int[][] stats = countStats(dane[i]);
+            dane_naglowka.setSeed(seeds[i]);
             //genereteHaderOfStats(seeds[i], dane_naglowka.getN(), dane_naglowka.getIter(), dane_naglowka.getProb_a(), dane_naglowka.getProb_a_gl(), dane_naglowka.getProb_a_kl(),GL_KL_MODE);
             genereteHaderOfStats(dane_naglowka,GL_KL_MODE);
             frac_stats[i] = calcFrac_saveToFile(dane[i], GL_KL_MODE, stats);
@@ -173,10 +174,10 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
     private void writeToFile(int i, long alive, float p_alive, float p_1, float p_11, float p_1_11, float p_31,
             float p_2, float p_32, float p_3, boolean GL_KL_MODE, float p_1_11_31_alive, float p_2_32_alive) {
         if (GL_KL_MODE) {
-            writer.println(i + " " + p_alive);
+            writer.println(i + "\t\t" + String.format("%.4f",p_alive));
         } else
-            writer.println(i + " " + p_alive + " " + p_1_11 + " " + p_2 + " " + p_3 + " " + p_1 + " " + p_11 + " "
-                    + p_31 + " " + p_32 + " " + p_1_11_31_alive + " " + p_2_32_alive);
+            writer.println(i + "\t\t" + String.format("%.4f", p_alive) + "\t\t" + String.format("%.4f", p_1_11) + "\t\t" + String.format("%.4f", p_2) + "\t" + String.format("%.4f", p_3) + "\t" + String.format("%.4f", p_1) + "\t" + String.format("%.4f", p_11) + "\t"
+                    + String.format("%.4f", p_31) + "\t" + String.format("%.4f", p_32) + "\t" + String.format("%.4f", p_1_11_31_alive) + "\t\t\t" + String.format("%.4f", p_2_32_alive));
     }
 
     /**
@@ -231,11 +232,13 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
         }
         writer.println("#");
         if (GL_KL_MODE) {
-            writer.println("#" + " iteration frac_of_alive");
+            writer.println("#1\t\t2");
+            writer.println("#" + "iteration\tfrac_of_alive");
         }
-        else
-            writer.println("#" + " iteration frac_of_alive frac_1_11 frac_2 frac_3 frac_1 frac_11 frac_31 frac_32");
-
+        else{
+            writer.println("#1\t\t2\t\t3\t\t4\t5\t6\t7\t8\t9\t10\t\t\t11");
+            writer.println("#" + "iteration\tfrac_of_alive\tfrac_1_11\tfrac_2\tfrac_3\tfrac_1\tfrac_11\tfrac_31\tfrac_32\tfrac_of_GL_alive\tfrac_of_KL_alive");
+        }
     }
     
     /**
@@ -254,6 +257,7 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
         writer.println("#" + " Symulacja");
         writer.println("#" + " N: " + data.getN());
         writer.println("#" + " Iterations: " + data.getIter());
+        writer.println("#" + " Multiruns: " + data.getMultirun_runs());
         writer.println("#" + " Probability to be alive: " + data.getProb_a());
         if (!GL_KL_MODE) {
             writer.println("#" + " Probability to be alive as GL: " + data.getProb_a_gl());
@@ -265,9 +269,12 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
         }
         writer.println("#");
         if (GL_KL_MODE) {
-            writer.println("#" + " iteration av_f_alive stdv_alive");
-        } else
-            writer.println("#" + " iteration av_f_alive stdv_alive av_f_1_11 stdv_1_11 av_f_2 stdv_2 av_f_3 stdv_3 av_f_1 stdv_1 av_f_11 stdv_11 av_f_31 stdv_31 av_f_32 stdv_32 av_f_1_11_31_alive stdv_1_11_31_alive av_f_2_32_alive stdv_2_32_alive  ");
+            writer.println("#1\t\t2\t\t3");
+            writer.println("#iteration\tav_f_alive\tstdv_alive");
+        } else{
+            writer.println("#1\t\t2\t\t3\t\t4\t\t5\t\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t\t\t19\t\t\t20\t\t21");
+            writer.println("#iteration\tav_f_alive\tstdv_alive\tav_f_1_11\tstdv_1_11\tav_f_2\tstdv_2\tav_f_3\tstdv_3\tav_f_1\tstdv_1\tav_f_11\tstdv_11\tav_f_31\tstdv_31\tav_f_32\tstdv_32\tav_f_1_11_31_alive\tstdv_1_11_31_alive\tav_f_2_32_alive\tstdv_2_32_alive\t ");
+        }
     }
     /**
      * Generuje statystki odchylenia standardowego
@@ -282,56 +289,56 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
 
         for (int i = 0; i < frac_stats[0].length; i++) {
             float[] tmp = new float[frac_stats.length];
-            writer.print(i + " ");//wypisz iteracje 
+            writer.print(+ i + "\t\t");//wypisz iteracje 
             // frac_alive
             for (int j = 0; j < frac_stats.length; j++) {
                 tmp[j] = frac_stats[j][i][0];
             }
-            writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
+            writer.print(String.format("%.4f", srednia(tmp)) + " \t\t" + String.format("%.4f", calculateSD(tmp)) + "\t\t");
             if (!GL_KL_MODE) {
-                //frac_1_11
+                // frac_1_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][1];
                 }
-                writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
-                //frac_2
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t\t" + String.format("%.4f",calculateSD(tmp)) + "\t\t");
+                // frac_2
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][2];
                 }
-                writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
-                //frac_3
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_3
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][3];
                 }
-                writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
-                //frac_1
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_1
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][4];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp)+" ");
-                //frac_11
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][5];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp)+" ");
-                //frac_31
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_31
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][6];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp)+" ");
-                //frac_32
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_32
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][7];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp) + " ");
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][8];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp) + " ");
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t\t\t" + String.format("%.4f",calculateSD(tmp)) + "\t\t\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][9];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp));
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t\t" + String.format("%.4f", calculateSD(tmp)));
             }
 
             writer.println();
@@ -352,56 +359,56 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
 
         for (int i = 0; i < frac_stats[0].length; i++) {
             float[] tmp = new float[frac_stats.length];
-            writer.print(i + " ");//wypisz iteracje 
+            writer.print('\t' + i + "\t");//wypisz iteracje 
             // frac_alive
             for (int j = 0; j < frac_stats.length; j++) {
                 tmp[j] = frac_stats[j][i][0];
             }
-            writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
+            writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f", calculateSD(tmp)) + "\t");
             if (!GL_KL_MODE) {
                 //frac_1_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][1];
                 }
-                writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
-                //frac_2
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_2
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][2];
                 }
-                writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
-                //frac_3
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_3
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][3];
                 }
-                writer.print(srednia(tmp)+" "+calculateSD(tmp)+" ");
-                //frac_1
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_1
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][4];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp)+" ");
-                //frac_11
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][5];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp)+" ");
-                //frac_31
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_31
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][6];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp)+" ");
-                //frac_32
+               writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                // frac_32
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][7];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp) + " ");
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][8];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp) + " ");
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][9];
                 }
-                writer.print(srednia(tmp) + " " + calculateSD(tmp));
+                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f", calculateSD(tmp)));
             }
 
             writer.println();
@@ -451,7 +458,7 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
             writer.close();
         }
 
-        f = new File("RESULTS" + fileName);
+        f = new File("RESULTS/" + fileName);
         f.getParentFile().mkdirs();
         try {
             writer = new PrintWriter(f);
