@@ -3,6 +3,7 @@ package ca.statistics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 
@@ -140,13 +141,13 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
                 }
             }
             pStats[i][0] = p_alive;
-            pStats[i][1] = p_1;
-            pStats[i][2] = p_11;
-            pStats[i][3] = p_1_11;
-            pStats[i][4] = p_31;
-            pStats[i][5] = p_2;
-            pStats[i][6] = p_32;
-            pStats[i][7] = p_3;
+            pStats[i][1] = p_1_11;
+            pStats[i][2] = p_2;
+            pStats[i][3] = p_3;
+            pStats[i][4] = p_1;
+            pStats[i][5] = p_11;
+            pStats[i][6] = p_31;
+            pStats[i][7] = p_32;
             pStats[i][8] = p_alive!= 0 ? (p_1_11+p_31)*p_alive : 0;
             pStats[i][9] = p_alive != 0 ? (p_2 + p_32) * p_alive : 0;
             writeToFile(i, alive, p_alive, p_1, p_11, p_1_11, p_31, p_2, p_32, p_3, GL_KL_MODE, pStats[i][8], pStats[i][9]);
@@ -174,10 +175,10 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
     private void writeToFile(int i, long alive, float p_alive, float p_1, float p_11, float p_1_11, float p_31,
             float p_2, float p_32, float p_3, boolean GL_KL_MODE, float p_1_11_31_alive, float p_2_32_alive) {
         if (GL_KL_MODE) {
-            writer.println(i + "\t\t" + String.format("%.4f",p_alive));
+            writer.println(i + "\t\t" + String.format(Locale.ROOT, "%.4f",p_alive));
         } else
-            writer.println(i + "\t\t" + String.format("%.4f", p_alive) + "\t\t" + String.format("%.4f", p_1_11) + "\t\t" + String.format("%.4f", p_2) + "\t" + String.format("%.4f", p_3) + "\t" + String.format("%.4f", p_1) + "\t" + String.format("%.4f", p_11) + "\t"
-                    + String.format("%.4f", p_31) + "\t" + String.format("%.4f", p_32) + "\t" + String.format("%.4f", p_1_11_31_alive) + "\t\t\t" + String.format("%.4f", p_2_32_alive));
+            writer.println(i + "\t\t" + String.format(Locale.ROOT, "%.4f", p_alive) + "\t\t" + String.format(Locale.ROOT, "%.4f", p_1_11) + "\t\t" + String.format(Locale.ROOT, "%.4f", p_2) + "\t" + String.format(Locale.ROOT, "%.4f", p_3) + "\t" + String.format(Locale.ROOT, "%.4f", p_1) + "\t" + String.format(Locale.ROOT, "%.4f", p_11) + "\t"
+                    + String.format(Locale.ROOT, "%.4f", p_31) + "\t" + String.format(Locale.ROOT, "%.4f", p_32) + "\t" + String.format(Locale.ROOT, "%.4f", p_1_11_31_alive) + "\t\t\t" + String.format(Locale.ROOT, "%.4f", p_2_32_alive));
     }
 
     /**
@@ -315,51 +316,51 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
             for (int j = 0; j < frac_stats.length; j++) {
                 tmp[j] = frac_stats[j][i][0];
             }
-            writer.print(String.format("%.4f", srednia(tmp)) + " \t\t" + String.format("%.4f", calculateSD(tmp)) + "\t\t");
+            writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + " \t\t" + String.format(Locale.ROOT, "%.4f", calculateSD(tmp)) + "\t\t");
             if (!GL_KL_MODE) {
                 // frac_1_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][1];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t\t" + String.format("%.4f",calculateSD(tmp)) + "\t\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t\t");
                 // frac_2
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][2];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_3
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][3];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_1
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][4];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][5];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_31
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][6];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_32
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][7];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][8];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t\t\t" + String.format("%.4f",calculateSD(tmp)) + "\t\t\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t\t\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t\t\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][9];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t\t" + String.format("%.4f", calculateSD(tmp)));
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t\t" + String.format(Locale.ROOT, "%.4f", calculateSD(tmp)));
             }
 
             writer.println();
@@ -380,56 +381,56 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
 
         for (int i = 0; i < frac_stats[0].length; i++) {
             float[] tmp = new float[frac_stats.length];
-            writer.print('\t' + i + "\t");//wypisz iteracje 
+            writer.print(+ i + "\t\t");//wypisz iteracje 
             // frac_alive
             for (int j = 0; j < frac_stats.length; j++) {
                 tmp[j] = frac_stats[j][i][0];
             }
-            writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f", calculateSD(tmp)) + "\t");
+            writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + " \t\t" + String.format(Locale.ROOT, "%.4f", calculateSD(tmp)) + "\t\t");
             if (!GL_KL_MODE) {
-                //frac_1_11
+                // frac_1_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][1];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t\t");
                 // frac_2
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][2];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_3
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][3];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_1
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][4];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_11
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][5];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_31
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][6];
                 }
-               writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 // frac_32
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][7];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][8];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f",calculateSD(tmp)) + "\t");
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t\t\t" + String.format(Locale.ROOT, "%.4f",calculateSD(tmp)) + "\t\t\t");
                 for (int j = 0; j < frac_stats.length; j++) {
                     tmp[j] = frac_stats[j][i][9];
                 }
-                writer.print(String.format("%.4f", srednia(tmp)) + "\t" + String.format("%.4f", calculateSD(tmp)));
+                writer.print(String.format(Locale.ROOT, "%.4f", srednia(tmp)) + "\t\t" + String.format(Locale.ROOT, "%.4f", calculateSD(tmp)));
             }
 
             writer.println();
@@ -438,6 +439,38 @@ public class Stats { // TODO: Dodać generowanie pliku z odchyleniem standardowy
         writer.close();
     }
 
+    public static void generatePlotFile(FromVizData data, String path) {
+        File file = new File("RESULTS/"+ path + "/plot.plt");
+        file.getParentFile().mkdirs();
+        try {
+            PrintWriter writer = new PrintWriter(file);
+            String plot = "set style data lines"+"\n"+
+            "set xrange [0:"+data.getIter()+"]"+"\n"+
+            "set yrange [0:1.0]"+"\n"+
+            "set xlabel \"iteration\""+"\n"+
+            "set ylabel \"frac of alive\""+"\n"+
+            "set label \"init prob to be alive="+data.getProb_a()+"\" at 50,0.25"+"\n"+
+            "set label \"num of experiments="+data.getMultirun_runs()+"\" at 300,0.25"+"\n"+
+            "set label \"CA: "+data.getN()+"x"+data.getN()+" cells\" at 200,0.28"+"\n"+
+            "plot 'stdV.txt' using 1:2 with lines lc 8 lw 2 title \"av-of-alive\",\\"+"\n"+
+            "'stdV.txt' using 1:2:3 with yerrorbars lc 8 title \"stdev: av-of-alive\",\\"+"\n"+
+            "'stdV.txt' using 1:4 with lines lc 7 lw 2 title \"av-of-1\",\\"+"\n"+
+            "'stdV.txt' using 1:4:5 with yerrorbars lc 7 title \"stdev: 1\",\\"+"\n"+
+            "'stdV.txt' using 1:6 with lines lc 3 lw 2 title \"av-of-2\",\\"+"\n"+
+            "'stdV.txt' using 1:6:7 with yerrorbars lc 3 title \"stdev: 2\",\\"+"\n"+
+            "'stdV.txt' using 1:8 with lines lc 4 lw 2 title \"av-of-3\",\\"+"\n"+
+            "'stdV.txt' using 1:8:9 with yerrorbars lc 4 title \"stdev: 3\",\\"+"\n"+
+            "'stdV.txt' using 1:14 with lines lc 2 lw 2 title \"av-of-31\",\\"+"\n"+
+            "'stdV.txt' using 1:14:15 with yerrorbars lc 2 title \"stdev: 31\",\\"+"\n"+
+            "'stdV.txt' using 1:16 with lines lc 9 lw 2 title \"av-of-32\",\\"+"\n"+
+            "'stdV.txt' using 1:16:17 with yerrorbars lc 9 title \"stdev: 32\""+"\n";
+            writer.println(plot);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      * Oblicza odchylenie standardowe dla podanej tablicy z liczbami

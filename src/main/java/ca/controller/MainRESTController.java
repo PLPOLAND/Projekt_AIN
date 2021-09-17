@@ -82,6 +82,7 @@ public class MainRESTController {
         seeds[0] = dane.getSeed();
         for (int i = 1; i < dane.getMultirun_runs(); i++) {
             seeds[i] = random.nextLong();
+            dane.setSeed(seeds[i]);
             tmp[i] = ca.kl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
         }
 
@@ -99,6 +100,7 @@ public class MainRESTController {
         seeds[0] = dane.getSeed();
         for (int i = 1; i < dane.getMultirun_runs(); i++) {
             seeds[i] = random.nextLong();
+            dane.setSeed(seeds[i]);
             tmp[i] = ca.gl(dane.getProb_a(), dane.getN(), dane.getIter(), seeds[i]);
         }
 
@@ -135,6 +137,7 @@ public class MainRESTController {
         seeds[0] = dane.getSeed();
         for (int i = 1; i < dane.getMultirun_runs(); i++) {
             seeds[i] = random.nextLong();
+            dane.setSeed(seeds[i]);
             tmp[i] = ca.klAndGlv2(dane.getProb_a(), dane.getN(), dane.getIter(), dane.getSeed(), dane.getProb_a_kl(),dane.getProb_Gl_tol(),dane.getProb_KL_tol(),  dane.getDebug(), dane.getProb_exp());
         }
 
