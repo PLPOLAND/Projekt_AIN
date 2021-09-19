@@ -317,6 +317,16 @@ $(document).ready(function () {
     $("#msgWindow").click(function () {
         $(this).hide(500);
     })
+
+    $("#seed_manual").change(function () {
+        if ($("#seed_manual").prop("checked")){
+            $("#seed").show(500);
+        }
+        else{
+            $("#seed").hide(500);
+
+        }
+    })
 });
 
 
@@ -443,6 +453,14 @@ function process() {
     }
     
     debugflag = $("#debug").prop("checked");
+    
+
+    if ($("#seed_manual").prop("checked")){
+        seed = $("#seed").val();
+    }
+    else{
+        seed = Math.random() * 1000000000000000;
+    }
 
     $.ajax({
         url: urlPath,
@@ -450,7 +468,7 @@ function process() {
         data: JSON.stringify({
             iter: parseInt($("#iteracji").val()),
             tab: readCells(),
-            seed: $("#seed").val(),
+            seed: seed,
             n: $("#wymiar").val(),
             prob_a: aliveProbability.val(),
             prob_a_gl: GLProbability.val(),
