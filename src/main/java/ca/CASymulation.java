@@ -20,7 +20,7 @@ import ca.statistics.Stats;
 @SpringBootApplication
 @EnableScheduling
 public class CASymulation extends SpringBootServletInitializer {
-	final static boolean DevelopmentMode = true;
+	final static boolean DevelopmentMode = false;
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -37,7 +37,7 @@ public class CASymulation extends SpringBootServletInitializer {
 				String filename = CASymulation.class.getProtectionDomain().getCodeSource().getLocation().toString()
 						.substring(6);
 				Runtime.getRuntime().exec(
-						new String[] { "cmd", "/c", "start", "cmd", "/k", "java -jar \"" + "11.jar" + "\"" });
+						new String[] { "cmd", "/c", "start", "cmd", "/k", "java -jar \"" + "CA-11.jar" + "\"" });
 			} else {
 				SpringApplication.run(CASymulation.class, args);
 			}
