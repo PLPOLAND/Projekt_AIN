@@ -1,6 +1,7 @@
 package ca.statistics;
 
 import java.util.Random;
+import java.util.Scanner;
 
 import ca.algorithms.CellularAutomata;
 import ca.controller.data.FromVizData;
@@ -17,6 +18,24 @@ public class GenerateMasiveStats {
         Stats stats = new Stats();
         Random rand = new Random(System.currentTimeMillis());
         CellularAutomata ca = new CellularAutomata();
+
+
+        int multiruns =0;
+        int iterations =0;
+        int N =0;
+
+        Scanner wejscie = new Scanner(System.in);
+        System.out.print("What is the size of CA? (N) ");
+        N = wejscie.nextInt();
+        System.out.print("How many iterations? ");
+        iterations = wejscie.nextInt();
+        System.out.print("How many multiruns? ");
+        multiruns = wejscie.nextInt();
+        wejscie.close();
+        
+
+
+
 
         double prob_a = 0.1;
         int seed;
