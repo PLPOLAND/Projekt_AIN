@@ -26,8 +26,10 @@ $(document).ready(function () {
 
     podziel_na_komorki(size);
     podziel_na_komorki_manual(sizeManual);
-    // randomujkolory();
+    
     clear(size);
+    $("#seed_manual").prop("checked",false);
+    $("#seed").hide();
 });
 function resizeKwadratyManual() {
     height_man = parseInt($("#manualCells").css("height"), 10);
